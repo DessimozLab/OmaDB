@@ -1,0 +1,1258 @@
+protein@hog_levels
+var_process <- function(variable) {#
+#
+	if(class(variable)=="list" && length(variable)!=0){#
+	 		if(depth(variable)>3){ #chromosomes#
+	 			for(i in 1:length(variable)){#
+	 				variable[[i]][[2]][[1]]=rbind(variable[[i]][[2]][[1]])		#
+	 			}#
+	 			dfs <- lapply(variable, data.frame, stringsAsFactors = FALSE)#
+	 			variable = rbind.fill(dfs)#
+	 		}#
+	 		else{#
+	 			dfs <- lapply(variable, data.frame, stringsAsFactors = FALSE)#
+	 			variable = rbind.fill(dfs)#
+	 		}	#
+	 	}#
+}
+protein = new("Protein")
+protein
+for(name in column_names){#
+	variable = var_process(content_list[[name]])#
+	slot(protein,name) <- variable#
+}
+protein = new("Protein")#
+#
+for(name in column_names){#
+	slot(protein,name) <- content_list[[name]]#
+}
+protein
+objectClass = setClass("Protein", representation=object_representation)
+objectClass
+object = objectClass()
+object
+h = "Hola"
+tolower(h)
+objectFactory <- function(url, type=apiObject) { #
+	response = GET(url)#
+	content_list = content(response, as = "parsed")#
+	column_names = names(content_list)#
+#
+	object_representation = list()#
+	variables = list()#
+#
+	for(name in column_names){		#
+			object_representation[name] = typeof(content_list[[name]])#
+	 	}#
+#
+	objectClass = setClass(type, representation=object_representation)#
+#
+	object = objectClass()#
+#
+	for(name in column_names){#
+		slot(object,name) <- content_list[[name]]#
+	}#
+ 	return(object)#
+#
+}
+getData <- function (url_field) {#
+	return objectFactory(url_field)#
+}
+getData <- function (url_field) {#
+	return(objectFactory(url_field))#
+}
+getData(protein@domains)
+objectFactory <- function(url, type="apiObject") { #
+#
+	response = GET(url)#
+	content_list = content(response, as = "parsed")#
+	column_names = names(content_list)#
+#
+	object_representation = list()#
+	variables = list()#
+#
+	for(name in column_names){		#
+			object_representation[name] = typeof(content_list[[name]])#
+	 	}#
+#
+	objectClass = setClass(type, representation=object_representation)#
+#
+	object = objectClass()#
+#
+	for(name in column_names){#
+		slot(object,name) <- content_list[[name]]#
+	}#
+ 	return(object)#
+#
+}
+getData(protein@domains)
+domains = getData(protein@domains)
+depth <- function(list) ifelse(is.list(list), 1L + max(sapply(list, depth)), 0L)#
+formatData <- function (data) {#
+	if(class(data)=="list" && length(data)!=0){#
+	 		if(depth(data)>3){ #chromosomes#
+	 			for(i in 1:length(data)){#
+	 				data[[i]][[2]][[1]]=rbind(data[[i]][[2]][[1]])		#
+	 			}#
+	 			dfs <- lapply(data, data.frame, stringsAsFactors = FALSE)#
+	 			data = rbind.fill(dfs)#
+	 		}#
+	 		else{#
+	 			dfs <- lapply(data, data.frame, stringsAsFactors = FALSE)#
+	 			data = rbind.fill(dfs)#
+	 		}	#
+	 	}#
+	 return data#
+}
+formatData <- function (data) {#
+	if(class(data)=="list" && length(data)!=0){#
+	 		if(depth(data)>3){ #chromosomes#
+	 			for(i in 1:length(data)){#
+	 				data[[i]][[2]][[1]]=rbind(data[[i]][[2]][[1]])		#
+	 			}#
+	 			dfs <- lapply(data, data.frame, stringsAsFactors = FALSE)#
+	 			data = rbind.fill(dfs)#
+	 		}#
+	 		else{#
+	 			dfs <- lapply(data, data.frame, stringsAsFactors = FALSE)#
+	 			data = rbind.fill(dfs)#
+	 		}	#
+	 	}#
+	 return(data)#
+}
+formatData(domains)
+formated = formatData(domains)
+formated$source
+formated@source
+formated@seq_id
+len(formated@regions)
+depth <- function(list) ifelse(is.list(list), 1L + max(sapply(list, depth)), 0L)#
+#
+urlGenerator <- function(type,id=NULL,detail=NULL,query_param1=NULL,query_param1_value=NULL,query_param2=NULL,query_param2_value=NULL){#
+	type = tolower(type)#
+	url_prefix = paste0(API_URL,"/",type,"/")#
+	if(!is.null(id)){ id=paste0(id,"/")}#
+	if(!is.null(detail)){ detail=paste0(detail,"/")}#
+	if(!is.null(query_param1_value)){ query_param1=paste0("?",query_param1,"=",URLencode(query_param1_value))}#
+	if(!is.null(query_param2_value)){ query_param2=paste0("&",query_param2,"=",URLencode(query_param2_value))}#
+#
+	final_url= paste0(url_prefix,id,detail,query_param1,query_param2)#
+	check_response(final_url)#
+	return(final_url)#
+#
+}#
+#
+formatData <- function (data) {#
+	if(class(data)=="list" && length(data)!=0){#
+	 		if(depth(data)>3){ #chromosomes#
+	 			for(i in 1:length(data)){#
+	 				data[[i]][[2]][[1]]=rbind(data[[i]][[2]][[1]])		#
+	 			}	#
+	 		dfs <- lapply(data, data.frame, stringsAsFactors = FALSE)#
+	 		data = rbind.fill(dfs)#
+	 	}#
+	 return(data)#
+}#
+#
+objectFactory <- function(column_names,content_list) { #
+#
+	object_representation = list()#
+	variables = list()#
+#
+	for(name in column_names){		#
+			object_representation[name] = typeof(content_list[[name]])#
+	 	}#
+#
+	objectClass = setClass(type, representation=object_representation)#
+#
+	object = objectClass()#
+#
+	for(name in column_names){#
+		slot(object,name) <- content_list[[name]]#
+	}#
+ 	return(object)#
+}#
+#
+requestFactory <- function (url) {#
+#
+	response = GET(url)#
+	content_list = content(response, as = "parsed")#
+	column_names = names(content_list)#
+#
+	if(is.null(column_names)){#
+		formatData(content_list)#
+	}#
+	else {#
+		objectFactory(column_names,content_list)#
+	}#
+}#
+#
+getAllPages <- function(url){#
+	list_of_things <- list()#
+	list_of_things[[1]] <- fromJSON(url)$results#
+	count = fromJSON(url)$count#
+	pages = count/100#
+	if (pages%%1 != 0){#
+		if(pages%%1 >= 0.5){#
+			pages= round(pages)#
+		}#
+		else{#
+			pages=round(pages+1,digits=0)#
+		}#
+	}#
+	for(i in 2:pages){#
+		new_url = paste0(url,"?page=",i)#
+		list_of_things[[i]] <- fromJSON(new_url)$results#
+	}#
+	return(list_of_things)#
+}
+}
+depth <- function(list) ifelse(is.list(list), 1L + max(sapply(list, depth)), 0L)#
+#
+urlGenerator <- function(type,id=NULL,detail=NULL,query_param1=NULL,query_param1_value=NULL,query_param2=NULL,query_param2_value=NULL){#
+	type = tolower(type)#
+	url_prefix = paste0(API_URL,"/",type,"/")#
+	if(!is.null(id)){ id=paste0(id,"/")}#
+	if(!is.null(detail)){ detail=paste0(detail,"/")}#
+	if(!is.null(query_param1_value)){ query_param1=paste0("?",query_param1,"=",URLencode(query_param1_value))}#
+	if(!is.null(query_param2_value)){ query_param2=paste0("&",query_param2,"=",URLencode(query_param2_value))}#
+#
+	final_url= paste0(url_prefix,id,detail,query_param1,query_param2)#
+	check_response(final_url)#
+	return(final_url)#
+#
+}#
+#
+formatData <- function (data) {#
+	if(class(data)=="list" && length(data)!=0){#
+	 		if(depth(data)>3){ #chromosomes#
+	 			for(i in 1:length(data)){#
+	 				data[[i]][[2]][[1]]=rbind(data[[i]][[2]][[1]])		#
+	 			}	#
+	 		dfs <- lapply(data, data.frame, stringsAsFactors = FALSE)#
+	 		data = rbind.fill(dfs)#
+	 	}	 #
+	}#
+#
+	return(data)#
+#
+}#
+#
+objectFactory <- function(column_names,content_list) { #
+#
+	object_representation = list()#
+	variables = list()#
+#
+	for(name in column_names){		#
+			object_representation[name] = typeof(content_list[[name]])#
+	 	}#
+#
+	objectClass = setClass(type, representation=object_representation)#
+#
+	object = objectClass()#
+#
+	for(name in column_names){#
+		slot(object,name) <- content_list[[name]]#
+	}#
+ 	return(object)#
+}#
+#
+requestFactory <- function (url) {#
+#
+	response = GET(url)#
+	content_list = content(response, as = "parsed")#
+	column_names = names(content_list)#
+#
+	if(is.null(column_names)){#
+		formatData(content_list)#
+	}#
+	else {#
+		objectFactory(column_names,content_list)#
+	}#
+}#
+#
+getAllPages <- function(url){#
+	list_of_things <- list()#
+	list_of_things[[1]] <- fromJSON(url)$results#
+	count = fromJSON(url)$count#
+	pages = count/100#
+	if (pages%%1 != 0){#
+		if(pages%%1 >= 0.5){#
+			pages= round(pages)#
+		}#
+		else{#
+			pages=round(pages+1,digits=0)#
+		}#
+	}#
+	for(i in 2:pages){#
+		new_url = paste0(url,"?page=",i)#
+		list_of_things[[i]] <- fromJSON(new_url)$results#
+	}#
+	return(list_of_things)#
+}
+get_protein <- function(entry_id){#
+	if(missing(entry_id)){#
+		stop("You must provide an entry id.")#
+	}#
+	url = urlGenerator(type="protein",id=entry_id)#
+	return(requestFactory(url))#
+}
+p = get_protein("YEAST58")
+API_URL = "http://omadev.cs.ucl.ac.uk/api/"
+p = get_protein("YEAST58")
+check_response <- function(url){#
+	resp=GET(url)#
+	if (http_error(resp)) {#
+    stop(#
+      sprintf(#
+        "OMA API request failed [%s]\n%s", #
+        status_code(resp),#
+        substring(fromJSON(content(resp, "text"))$detail,2) #due to utf-8 encoding#
+      ),#
+      call. = FALSE#
+    )#
+	}#
+}
+p = get_protein("YEAST58")
+depth <- function(list) ifelse(is.list(list), 1L + max(sapply(list, depth)), 0L)#
+#
+check_response <- function(url){#
+	resp=GET(url)#
+	if (http_error(resp)) {#
+    stop(#
+      sprintf(#
+        "OMA API request failed [%s]\n%s", #
+        status_code(resp),#
+        substring(fromJSON(content(resp, "text"))$detail,2) #due to utf-8 encoding#
+      ),#
+      call. = FALSE#
+    )#
+	}#
+}#
+#
+urlGenerator <- function(type,id=NULL,detail=NULL,query_param1=NULL,query_param1_value=NULL,query_param2=NULL,query_param2_value=NULL){#
+	type = tolower(type)#
+	url_prefix = paste0(API_URL,"/",type,"/")#
+	if(!is.null(id)){ id=paste0(id,"/")}#
+	if(!is.null(detail)){ detail=paste0(detail,"/")}#
+	if(!is.null(query_param1_value)){ query_param1=paste0("?",query_param1,"=",URLencode(query_param1_value))}#
+	if(!is.null(query_param2_value)){ query_param2=paste0("&",query_param2,"=",URLencode(query_param2_value))}#
+#
+	final_url= paste0(url_prefix,id,detail,query_param1,query_param2)#
+	check_response(final_url)#
+	return(final_url)#
+#
+}#
+#
+formatData <- function (data) {#
+	if(class(data)=="list" && length(data)!=0){#
+	 		if(depth(data)>3){ #chromosomes#
+	 			for(i in 1:length(data)){#
+	 				data[[i]][[2]][[1]]=rbind(data[[i]][[2]][[1]])		#
+	 			}	#
+	 		dfs <- lapply(data, data.frame, stringsAsFactors = FALSE)#
+	 		data = rbind.fill(dfs)#
+	 	}	 #
+	}#
+#
+	return(data)#
+#
+}#
+#
+objectFactory <- function(column_names,content_list,type=apiObject) { #
+#
+	object_representation = list()#
+	variables = list()#
+#
+	for(name in column_names){		#
+			object_representation[name] = typeof(content_list[[name]])#
+	 	}#
+#
+	objectClass = setClass(type, representation=object_representation)#
+#
+	object = objectClass()#
+#
+	for(name in column_names){#
+		slot(object,name) <- content_list[[name]]#
+	}#
+ 	return(object)#
+}#
+#
+requestFactory <- function (url) {#
+#
+	response = GET(url)#
+	content_list = content(response, as = "parsed")#
+	column_names = names(content_list)#
+#
+	if(is.null(column_names)){#
+		formatData(content_list)#
+	}#
+	else {#
+		objectFactory(column_names,content_list)#
+	}#
+}#
+#
+getAllPages <- function(url){#
+	list_of_things <- list()#
+	list_of_things[[1]] <- fromJSON(url)$results#
+	count = fromJSON(url)$count#
+	pages = count/100#
+	if (pages%%1 != 0){#
+		if(pages%%1 >= 0.5){#
+			pages= round(pages)#
+		}#
+		else{#
+			pages=round(pages+1,digits=0)#
+		}#
+	}#
+	for(i in 2:pages){#
+		new_url = paste0(url,"?page=",i)#
+		list_of_things[[i]] <- fromJSON(new_url)$results#
+	}#
+	return(list_of_things)#
+}
+p = get_protein("YEAST58")
+depth <- function(list) ifelse(is.list(list), 1L + max(sapply(list, depth)), 0L)#
+#
+check_response <- function(url){#
+	resp=GET(url)#
+	if (http_error(resp)) {#
+    stop(#
+      sprintf(#
+        "OMA API request failed [%s]\n%s", #
+        status_code(resp),#
+        substring(fromJSON(content(resp, "text"))$detail,2) #due to utf-8 encoding#
+      ),#
+      call. = FALSE#
+    )#
+	}#
+}#
+#
+urlGenerator <- function(type,id=NULL,detail=NULL,query_param1=NULL,query_param1_value=NULL,query_param2=NULL,query_param2_value=NULL){#
+	type = tolower(type)#
+	url_prefix = paste0(API_URL,"/",type,"/")#
+	if(!is.null(id)){ id=paste0(id,"/")}#
+	if(!is.null(detail)){ detail=paste0(detail,"/")}#
+	if(!is.null(query_param1_value)){ query_param1=paste0("?",query_param1,"=",URLencode(query_param1_value))}#
+	if(!is.null(query_param2_value)){ query_param2=paste0("&",query_param2,"=",URLencode(query_param2_value))}#
+#
+	final_url= paste0(url_prefix,id,detail,query_param1,query_param2)#
+	check_response(final_url)#
+	return(final_url)#
+#
+}#
+#
+formatData <- function (data) {#
+	if(class(data)=="list" && length(data)!=0){#
+	 		if(depth(data)>3){ #chromosomes#
+	 			for(i in 1:length(data)){#
+	 				data[[i]][[2]][[1]]=rbind(data[[i]][[2]][[1]])		#
+	 			}	#
+	 		dfs <- lapply(data, data.frame, stringsAsFactors = FALSE)#
+	 		data = rbind.fill(dfs)#
+	 	}	 #
+	}#
+#
+	return(data)#
+#
+}#
+#
+objectFactory <- function(column_names,content_list,type="apiObject") { #
+#
+	object_representation = list()#
+	variables = list()#
+#
+	for(name in column_names){		#
+			object_representation[name] = typeof(content_list[[name]])#
+	 	}#
+#
+	objectClass = setClass(type, representation=object_representation)#
+#
+	object = objectClass()#
+#
+	for(name in column_names){#
+		slot(object,name) <- content_list[[name]]#
+	}#
+ 	return(object)#
+}#
+#
+requestFactory <- function (url) {#
+#
+	response = GET(url)#
+	content_list = content(response, as = "parsed")#
+	column_names = names(content_list)#
+#
+	if(is.null(column_names)){#
+		formatData(content_list)#
+	}#
+	else {#
+		objectFactory(column_names,content_list)#
+	}#
+}#
+#
+getAllPages <- function(url){#
+	list_of_things <- list()#
+	list_of_things[[1]] <- fromJSON(url)$results#
+	count = fromJSON(url)$count#
+	pages = count/100#
+	if (pages%%1 != 0){#
+		if(pages%%1 >= 0.5){#
+			pages= round(pages)#
+		}#
+		else{#
+			pages=round(pages+1,digits=0)#
+		}#
+	}#
+	for(i in 2:pages){#
+		new_url = paste0(url,"?page=",i)#
+		list_of_things[[i]] <- fromJSON(new_url)$results#
+	}#
+	return(list_of_things)#
+}
+p = get_protein("YEAST58")
+p
+formatData(p@locus)
+getData(p@orthologs)
+getData <- function (url_field) {#
+	return(requestFactory(url_field))#
+}
+getData(p@orthologs)
+orth = getData(p@orthologs)
+formatData(orth)
+class(orth)
+length(orth)
+formatData <- function (data) {#
+	if(class(data)=="list" && length(data)!=0){#
+	 		if(depth(data)>3){ #chromosomes#
+	 			for(i in 1:length(data)){#
+	 				data[[i]][[2]][[1]]=rbind(data[[i]][[2]][[1]])		#
+	 			}	 		#
+	 		}#
+	 	dfs <- lapply(data, data.frame, stringsAsFactors = FALSE)#
+	 	data = rbind.fill(dfs)	 #
+	}#
+#
+	return(data)#
+#
+}
+formatData(orth)
+library(plyr)
+formatData(orth)
+p@orthologs = formatData(orth)
+p@orthologs
+slot(p,orthologs) = formatData(orth)
+attributes(p)
+requestFactory <- function (url,type=NULL) {#
+#
+	response = GET(url)#
+	content_list = content(response, as = "parsed")#
+	column_names = names(content_list)#
+#
+	if(is.null(column_names)){#
+		formatData(content_list)#
+	}#
+	else {#
+		objectFactory(column_names,content_list,type)#
+	}#
+}
+getData <- function(id,type){#
+	if(missing(id) || missing(type)){#
+		stop("You must provide an id and type")#
+	}#
+	url = urlGenerator(type=type,id=entry_id)#
+	return(requestFactory(url,type=type))#
+}
+group = getData("YEAST58",type="Protein")
+getData <- function(id,type){#
+	if(missing(id) || missing(type)){#
+		stop("You must provide an id and type")#
+	}#
+	url = urlGenerator(type=type,id=id)#
+	return(requestFactory(url,type=type))#
+}
+group = getData("YEAST58",type="Protein")
+group
+group = getData("YEAST58",type="Group")
+group
+attributes(group)
+mems = formatData(group$members)
+mems = formatData(group@members)
+mems
+resolveURL <- function (url_field) {#
+	return(requestFactory(url_field))#
+}
+mems[1][2]
+mems[[1]][[2]]
+mems[[2]][[2]]
+member = mems[[2]][[2]]
+resolveURL(member)
+objectFactory <- function(column_names,content_list,type) { #
+#
+	object_representation = list()#
+	variables = list()#
+#
+	for(name in column_names){		#
+			object_representation[name] = typeof(content_list[[name]])#
+	 	}#
+#
+	objectClass = setClass(type, representation=object_representation)#
+#
+	object = objectClass()#
+#
+	for(name in column_names){#
+		slot(object,name) <- content_list[[name]]#
+	}#
+ 	return(object)#
+}#
+#
+requestFactory <- function (url,type="apiObject") {#
+#
+	response = GET(url)#
+	content_list = content(response, as = "parsed")#
+	column_names = names(content_list)#
+#
+	if(is.null(column_names)){#
+		formatData(content_list)#
+	}#
+	else {#
+		objectFactory(column_names,content_list,type)#
+	}#
+}
+resolveURL(member)
+hog = getData("YEAST58",type="HOG")
+hog
+slots(hog)
+getSlots(hog)
+slotNames(hog)
+hog@root_level
+hog@levels
+levels = formatData(hog@levels)
+levels
+levels[1]
+levels[1][2]
+levels[12]
+levels[1,2]
+level = levels[1,2]
+resolveURL(level)
+hog2 = resolveURL(level)
+hog3 = resolveURL(hog2@subhogs$members_url)
+hog3 = resolveURL(hog2@subhogs)
+hog2@subhogs
+hog2@subhogs$members_url
+hog2@subhogs[[1]]$members_url
+hog3 = resolveURL(hog2@subhogs[[1]]$members_url)
+hog3
+slotNames(hog3)
+formatData(hog3$members)
+formatData(hog3@members)
+url = "http://omadev.cs.ucl.ac.uk/api/protein/6562820/"
+url = "http://omadev.cs.ucl.ac.uk/api/protein/6562820/?page=99"
+url = substr(url,1,nchar(url)-5)
+url
+url = "http://omadev.cs.ucl.ac.uk/api/protein/6562820/?page=1"
+url = substr(url,1,nchar(url)-1)
+url
+getData <- function(id==NULL,type){#
+	if(missing(type)){#
+		stop("You must provide a valid object type.")#
+	}#
+	url = urlGenerator(type=type,id=id)#
+	return(requestFactory(url,type=type))#
+}
+getData <- function(id=NULL,type){#
+	if(missing(type)){#
+		stop("You must provide a valid object type.")#
+	}#
+	url = urlGenerator(type=type,id=id)#
+	return(requestFactory(url,type=type))#
+}
+g = getData("YEAST",type="genome")
+g
+slotNames(g)
+formtData(g@chromosomes)
+formatData(g@chromosomes)
+depth(g@chromosomes)
+data=g@chromosomes
+data
+rbind(data[[0]][[2]][[1]])
+rbind(data[[1]][[2]][[1]])
+data
+data[1]
+data[1][1]
+data[1][2]
+data[1][[1]]
+data[1][[1]][[2]]
+data[1][[1]][[1]]
+formatData <- function (data) {#
+	if(class(data)=="list" && length(data)!=0){#
+	 		if(depth(data)>3){ #chromosomes#
+	 			for(i in 1:length(data)){#
+	 				data[[i]][[1]][[1]]=rbind(data[[i]][[1]][[1]])		#
+	 			}	 		#
+	 		}#
+#
+	 	dfs <- lapply(data, data.frame, stringsAsFactors = FALSE)#
+	 	data = rbind.fill(dfs)	 #
+	}#
+#
+	return(data)#
+#
+}
+formatData(g@chromosomes)
+p = getData("YEAST58",type="protein")
+p
+formatData(p@domains)
+dom = resolveURL(p@domains)
+dom
+formatData(dom)
+formatData(dom@regions)
+g
+prot = resolveURL(g@proteins_list)
+prot = resolveURL(g@proteins)
+prot
+slotNames(prot)
+getAllPages <- function(object){#
+	list_of_things <- list()#
+	list_of_things[[1]] <- object@results#
+	count = object@count#
+	pages = count/100#
+	if (pages%%1 != 0){#
+		if(pages%%1 >= 0.5){#
+			pages= round(pages)#
+		}#
+		else{#
+			pages=round(pages+1,digits=0)#
+		}#
+	}#
+#
+	base_url = substr(object@next,1,nchar(object@next)-1)#
+#
+	for(i in 2:pages){#
+		new_url = paste0(base_url,i)#
+		list_of_things[[i]] <- fromJSON(new_url)$results#
+	}#
+	return(list_of_things)#
+}
+prot
+prot[2]
+prot[[2]]
+prot@next
+names = slotNames(prot)
+names[2]
+slot = names[2]
+prot@slot
+prot@[slot2]
+slotNames(prot)
+menu(c("Yes", "No"), title="Do you want this?")
+mode = menu(c("Yes", "No"), title="Do you want this?")
+mode
+page = readline("What is the page number of interest?")
+page
+depth <- function(list) ifelse(is.list(list), 1L + max(sapply(list, depth)), 0L)#
+#
+check_response <- function(url){#
+	resp=GET(url)#
+	if (http_error(resp)) {#
+    stop(#
+      sprintf(#
+        "OMA API request failed [%s]\n%s", #
+        status_code(resp),#
+        substring(fromJSON(content(resp, "text"))$detail,2) #due to utf-8 encoding#
+      ),#
+      call. = FALSE#
+    )#
+	}#
+}#
+#
+urlGenerator <- function(type,id=NULL,detail=NULL,query_param1=NULL,query_param1_value=NULL,query_param2=NULL,query_param2_value=NULL){#
+	type = tolower(type)#
+	url_prefix = paste0(API_URL,"/",type,"/")#
+	if(!is.null(id)){ id=paste0(id,"/")}#
+	if(!is.null(detail)){ detail=paste0(detail,"/")}#
+	if(!is.null(query_param1_value)){ query_param1=paste0("?",query_param1,"=",URLencode(query_param1_value))}#
+	if(!is.null(query_param2_value)){ query_param2=paste0("&",query_param2,"=",URLencode(query_param2_value))}#
+#
+	final_url= paste0(url_prefix,id,detail,query_param1,query_param2)#
+	check_response(final_url)#
+	return(final_url)#
+#
+}#
+#
+formatData <- function (data) {#
+	if(class(data)=="list" && length(data)!=0){#
+	 		if(depth(data)>3){ #chromosomes#
+	 			for(i in 1:length(data)){#
+	 				data[[i]][[1]][[1]]=rbind(data[[i]][[1]][[1]])		#
+	 			}	 		#
+	 		}#
+#
+	 	dfs <- lapply(data, data.frame, stringsAsFactors = FALSE)#
+	 	data = rbind.fill(dfs)	 #
+	}#
+#
+	return(data)#
+#
+}#
+#
+objectFactory <- function(column_names,content_list,type) { #
+#
+	object_representation = list()#
+	variables = list()#
+#
+	for(name in column_names){		#
+			object_representation[name] = typeof(content_list[[name]])#
+	 	}#
+#
+	objectClass = setClass(type, representation=object_representation)#
+#
+	object = objectClass()#
+#
+	for(name in column_names){#
+		slot(object,name) <- content_list[[name]]#
+	}#
+ 	return(object)#
+}#
+#
+requestFactory <- function (url,type="apiObject") {#
+#
+	response = GET(url)#
+	content_list = content(response, as = "parsed")#
+	column_names = names(content_list)#
+#
+	if("count" %in% column_names){#
+		resolvePagination(url)#
+	}#
+#
+	if(is.null(column_names)){#
+		formatData(content_list)#
+	}#
+#
+	else {#
+		objectFactory(column_names,content_list,type)#
+	}#
+}#
+simpleRequest <- function (url){#
+	response = GET(url)#
+	content_list = content(response, as = "parsed")#
+	column_names = names(content_list)#
+#
+	objectFactory(column_names,content_list,type)#
+}#
+#
+resolvePagination <- function(url) {#
+#
+	 mode = menu(c("First 100", "Specific Page", "All"), title="What type of response would you like?")#
+#
+	 if(mode==1){#
+#
+	 	response = GET(url)#
+		content_list = content(response, as = "parsed")#
+		column_names = names(content_list)#
+#
+		objectFactory(column_names,content_list,type)#
+#
+	 }#
+#
+	 if(mode==2){#
+	 	page = readline("What is the page number of interest?") #
+	 	url = paste0(url,"?page=",page)#
+	 	simpleRequest(url)#
+#
+	 }#
+#
+	 if(more==3){#
+	 	getAllPages(url)#
+	 }#
+}
+prot = resolveURL(g@proteins)
+simpleRequest <- function (url){#
+	response = GET(url)#
+	content_list = content(response, as = "parsed")#
+	column_names = names(content_list)#
+#
+	objectFactory(column_names,content_list)#
+}
+prot = resolveURL(g@proteins)
+objectFactory <- function(column_names,content_list,type="apiObject") { #
+#
+	object_representation = list()#
+	variables = list()#
+#
+	for(name in column_names){		#
+			object_representation[name] = typeof(content_list[[name]])#
+	 	}#
+#
+	objectClass = setClass(type, representation=object_representation)#
+#
+	object = objectClass()#
+#
+	for(name in column_names){#
+		slot(object,name) <- content_list[[name]]#
+	}#
+ 	return(object)#
+}
+prot = resolveURL(g@proteins)
+resolvePagination <- function(url) {#
+#
+	 mode = menu(c("First 100", "Specific Page", "All"), title="What type of response would you like?")#
+#
+	 if(mode==1){#
+#
+	 	response = GET(url)#
+		content_list = content(response, as = "parsed")#
+		column_names = names(content_list)#
+#
+		objectFactory(column_names,content_list,type)#
+#
+	 }#
+#
+	 if(mode==2){#
+	 	page = readline("What is the page number of interest?") #
+	 	url = paste0(url,"?page=",page)#
+	 	simpleRequest(url)#
+#
+	 }#
+#
+	 if(mode==3){#
+	 	getAllPages(url)#
+	 }#
+}
+prot = resolveURL(g@proteins)
+prot
+formatData(prot@results)
+resolvePagination <- function(url) {#
+#
+	 mode = menu(c("First 100", "Specific Page", "All"), title="What type of response would you like?")#
+#
+	 if(mode==1){#
+#
+	 	response = GET(url)#
+		content_list = content(response, as = "parsed")#
+		column_names = names(content_list)#
+#
+		objectFactory(column_names,content_list,type)#
+#
+	 }#
+#
+	 if(mode==2){#
+	 	page = readline("What is the page number of interest?") #
+	 	new_url = paste0(url,"?page=",page)#
+	 	simpleRequest(new_url)#
+#
+	 }#
+#
+	 if(mode==3){#
+	 	getAllPages(url)#
+	 }#
+}
+prot = resolveURL(g@proteins)
+formatData(prot@results)
+url
+page="3"
+new_url = paste0(url,"?page=",page)
+new_url
+new_url = "http://omadev.cs.ucl.ac.uk/api/protein/6562820/?page=3"
+simpleRequest(new_url)
+new_url = "http://omadev.cs.ucl.ac.uk/api/genome/YEAST/proteins/?page=3"
+simpleRequest(new_url)
+depth <- function(list) ifelse(is.list(list), 1L + max(sapply(list, depth)), 0L)#
+#
+check_response <- function(url){#
+	resp=GET(url)#
+	if (http_error(resp)) {#
+    stop(#
+      sprintf(#
+        "OMA API request failed [%s]\n%s", #
+        status_code(resp),#
+        substring(fromJSON(content(resp, "text"))$detail,2) #due to utf-8 encoding#
+      ),#
+      call. = FALSE#
+    )#
+	}#
+}#
+#
+urlGenerator <- function(type,id=NULL,detail=NULL,query_param1=NULL,query_param1_value=NULL,query_param2=NULL,query_param2_value=NULL){#
+	type = tolower(type)#
+	url_prefix = paste0(API_URL,"/",type,"/")#
+	if(!is.null(id)){ id=paste0(id,"/")}#
+	if(!is.null(detail)){ detail=paste0(detail,"/")}#
+	if(!is.null(query_param1_value)){ query_param1=paste0("?",query_param1,"=",URLencode(query_param1_value))}#
+	if(!is.null(query_param2_value)){ query_param2=paste0("&",query_param2,"=",URLencode(query_param2_value))}#
+#
+	final_url= paste0(url_prefix,id,detail,query_param1,query_param2)#
+	check_response(final_url)#
+	return(final_url)#
+#
+}#
+#
+formatData <- function (data) {#
+	if(class(data)=="list" && length(data)!=0){#
+	 		if(depth(data)>3){ #chromosomes#
+	 			for(i in 1:length(data)){#
+	 				data[[i]][[1]][[1]]=rbind(data[[i]][[1]][[1]])		#
+	 			}	 		#
+	 		}#
+#
+	 	dfs <- lapply(data, data.frame, stringsAsFactors = FALSE)#
+	 	data = rbind.fill(dfs)	 #
+	}#
+#
+	return(data)#
+#
+}#
+#
+objectFactory <- function(column_names,content_list,type="apiObject") { #
+#
+	object_representation = list()#
+	variables = list()#
+#
+	for(name in column_names){		#
+			object_representation[name] = typeof(content_list[[name]])#
+	 	}#
+#
+	objectClass = setClass(type, representation=object_representation)#
+#
+	object = objectClass()#
+#
+	for(name in column_names){#
+		slot(object,name) <- content_list[[name]]#
+	}#
+ 	return(object)#
+}#
+#
+requestFactory <- function (url,type="apiObject") {#
+#
+	response = GET(url)#
+	content_list = content(response, as = "parsed")#
+	column_names = names(content_list)#
+#
+	if("count" %in% column_names){#
+		resolvePagination(url)#
+	}#
+#
+	if(is.null(column_names)){#
+		formatData(content_list)#
+	}#
+#
+	else {#
+		objectFactory(column_names,content_list,type)#
+	}#
+}#
+simpleRequest <- function (url){#
+	response = GET(url)#
+	content_list = content(response, as = "parsed")#
+	column_names = names(content_list)#
+#
+	objectFactory(column_names,content_list)#
+}#
+#
+resolvePagination <- function(url) {#
+#
+	 mode = menu(c("First 100", "Specific Page", "All"), title="What type of response would you like?")#
+#
+	 if(mode==1){#
+#
+	 	response = GET(url)#
+		content_list = content(response, as = "parsed")#
+		column_names = names(content_list)#
+#
+		objectFactory(column_names,content_list,type)#
+#
+	 }#
+#
+	 if(mode==2){#
+	 	page = readline("What is the page number of interest?") #
+	 	new_url = paste0(url,"?page=",page)#
+	 	simpleRequest(new_url)#
+#
+	 }#
+#
+	 if(mode==3){#
+	 	getAllPages(url)#
+	 }#
+}
+prot = resolveURL(g@proteins)
+formatData(prot@results)
+resolvePagination <- function(url) {#
+#
+	 mode = menu(c("First 100", "Specific Page", "All"), title="What type of response would you like?")#
+#
+	 if(mode==1){#
+		simpleRequest(url)#
+	 }#
+#
+	 if(mode==2){#
+	 	page = readline("What is the page number of interest?") #
+	 	new_url = paste0(url,"?page=",page)#
+	 	simpleRequest(new_url)#
+#
+	 }#
+#
+	 if(mode==3){#
+	 	getAllPages(url)#
+	 }	#
+}
+prot = resolveURL(g@proteins)
+4
+resolvePagination <- function(url) {#
+#
+	 mode = menu(c("First 100", "Specific Page", "All"), title="What type of response would you like?")#
+#
+	 if(mode=="1"){#
+		simpleRequest(url)#
+	 }#
+#
+	 if(mode=="2"){#
+	 	page = readline("What is the page number of interest?") #
+	 	new_url = paste0(url,"?page=",page)#
+	 	simpleRequest(new_url)#
+#
+	 }#
+#
+	 if(mode=="3"){#
+	 	getAllPages(url)#
+	 }	#
+}
+prot = resolveURL(g@proteins)
+formatData(prot@results)
+mode = menu(c("First 100", "Specific Page", "All"), title="What type of response would you like?")
+mode=="2"
+url = http://omadev.cs.ucl.ac.uk/api/genome/YEAST/proteins/
+url = "http://omadev.cs.ucl.ac.uk/api/genome/YEAST/proteins/"
+page = readline("What is the page number of interest?")
+new_url = paste0(url,"?page=",page)
+new_url
+simpleRequest(new_url)
+endpoints = c("group","xref","taxonomy","protein","genome","hog","pairs","sequence")
+any(endpoints=type
+)
+type = "gro"
+any(endpoints=type)
+any(endpoints==type
+)
+getGenomeAlignment <- function(genome_id1,genome_id2,chr1=NULL,chr2=NULL){#
+	if(missing(genome_id1) || missing(genome_id2)){#
+		stop("You must provide IDs for both genomes.")#
+	}#
+	if(!is.null(chr1) && !is.null(chr2)) {#
+		#more complex url #
+		url = paste0(api_url,"/pairs/",genome_id1,"/",genome_id2,"/?chr1=",chr1,"&chr2=",chr2)#
+	}#
+	if(!is.null(chr1) && is.null(chr2)) {#
+		#more complex url #
+		url = paste0(api_url,"/pairs/",genome_id1,"/",genome_id2,"/?chr1=",chr1)#
+	}#
+	else{#
+		url = paste0(api_url,"/pairs/",genome_id1,"/",genome_id2,"/")#
+	}#
+	return(requestFactory(url))#
+	}#
+}
+getGenomeAlignment <- function(genome_id1,genome_id2,chr1=NULL,chr2=NULL){#
+	if(missing(genome_id1) || missing(genome_id2)){#
+		stop("You must provide IDs for both genomes.")#
+	}#
+	if(!is.null(chr1) && !is.null(chr2)) {#
+		#more complex url #
+		url = paste0(api_url,"/pairs/",genome_id1,"/",genome_id2,"/?chr1=",chr1,"&chr2=",chr2)#
+	}#
+	if(!is.null(chr1) && is.null(chr2)) {#
+		#more complex url #
+		url = paste0(api_url,"/pairs/",genome_id1,"/",genome_id2,"/?chr1=",chr1)#
+	}#
+	else{#
+		url = paste0(api_url,"/pairs/",genome_id1,"/",genome_id2,"/")#
+	}#
+	return(requestFactory(url))#
+}
+pairs = getGenomeAlignment("YEAST","ASHGO")
+pairs = getGenomeAlignment("YEAST","ASHBO")
+getGenomeAlignment <- function(genome_id1,genome_id2,chr1=NULL,chr2=NULL){#
+	if(missing(genome_id1) || missing(genome_id2)){#
+		stop("You must provide IDs for both genomes.")#
+	}#
+	if(!is.null(chr1) && !is.null(chr2)) {#
+		#more complex url #
+		url = paste0(API_URL,"/pairs/",genome_id1,"/",genome_id2,"/?chr1=",chr1,"&chr2=",chr2)#
+	}#
+	if(!is.null(chr1) && is.null(chr2)) {#
+		#more complex url #
+		url = paste0(API_URL,"/pairs/",genome_id1,"/",genome_id2,"/?chr1=",chr1)#
+	}#
+	else{#
+		url = paste0(API_URL,"/pairs/",genome_id1,"/",genome_id2,"/")#
+	}#
+	return(requestFactory(url))	#
+}
+pairs = getGenomeAlignment("YEAST","ASHBO")
+pairs
+pairs = getGenomeAlignment("YEAST","ASHGO")
+pairs
+library(jsonlite)
+getGenomeAlignment <- function(genome_id1,genome_id2,chr1=NULL,chr2=NULL){#
+	if(missing(genome_id1) || missing(genome_id2)){#
+		stop("You must provide IDs for both genomes.")#
+	}#
+	if(!is.null(chr1) && !is.null(chr2)) {#
+		#more complex url #
+		url = paste0(API_URL,"/pairs/",genome_id1,"/",genome_id2,"/?chr1=",chr1,"&chr2=",chr2)#
+	}#
+	if(!is.null(chr1) && is.null(chr2)) {#
+		#more complex url #
+		url = paste0(API_URL,"/pairs/",genome_id1,"/",genome_id2,"/?chr1=",chr1)#
+	}#
+	else{#
+		url = paste0(API_URL,"/pairs/",genome_id1,"/",genome_id2,"/")#
+	}#
+	return(fromJSON(url))	#
+}
+pairs = getGenomeAlignment("YEAST","ASHGO")
+pairs
+get_taxonomy <- function(root=NULL,members) {#
+	if(missing(members)){#
+		url = url_generator(type="taxonomy",id=root,query_param1="type",query_param1_value="newick")#
+	}#
+	else{#
+		url = url_generator(type="taxonomy",id=root,query_param1="members",query_param1_value=members,query_param2="type",query_param2_value="newick")				#
+	}#
+	return(requestFactory(url))#
+}
+tax = getTaxonomy(root="Fungi")
+tax = get_taxonomy(root="Fungi")
+getTaxonomy <- function(root=NULL,members) {#
+	if(missing(members)){#
+		url = urlGenerator(type="taxonomy",id=root,query_param1="type",query_param1_value="newick")#
+	}#
+	else{#
+		url = urlGenerator(type="taxonomy",id=root,query_param1="members",query_param1_value=members,query_param2="type",query_param2_value="newick")				#
+	}#
+	return(requestFactory(url))#
+}
+tax = getTaxonomy(root="Fungi")
+tax = getTaxonomy(root="Flavobacterium indicum")
+tax
+setwd("desktop/roma")
+library(devtools)
+library(roxygen2)
+document()
+document()
+document()
+document()
+document()
+document()
+document()
+devtools:build()
+build()
+document()
+build()
+build()
+uninstall(roma)
+uninstall("roma")
+setwd("..")
+uninstall("roma")
+setwd("./roma")
+build()
+setwd("..")
+install("roma")
+setwd("./roma")
+build()

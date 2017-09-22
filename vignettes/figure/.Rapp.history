@@ -1,0 +1,1243 @@
+hg$levels
+class(hg$levels)
+hg$levels[1]
+hg$levels[[1]]
+hg$levels[2]
+hg = HOG("http://127.0.0.1:8000/api/hogs/HOG:0000365/?level=Ascomycota")
+hg
+hg = HOG(http://127.0.0.1:8000/api/hogs/HOG:0000365/members/?level=Ascomycota#
+)
+hg = HOG(http://127.0.0.1:8000/api/hogs/HOG:0000365/members/?level=Ascomycota")
+hg = HOG("http://127.0.0.1:8000/api/hogs/HOG:0000365/members/?level=Ascomycota")
+hg
+APIObject <- function(url) {#
+ response = GET(url)#
+ content_list = content(response, as = "parsed")#
+ column_names = names(content_list)#
+#
+ list_of_variables <- list()#
+ for(name in column_names){#
+ 	variable = content_list[[name]]#
+ 	#below fails for domains in protein = nested list#
+ 	if(class(variable)=="character" && startsWith(variable,"http")){#
+ 		var_response = GET(variable)#
+ 		var_content = content(var_response, as = "parsed")#
+ 		dfs <- lapply(var_content, data.frame, stringsAsFactors = FALSE) #list of dataframes#
+ 		variable = rbind.fill(dfs)#
+ 	}#
+ 	if(class(variable)=="list"){#
+ 		#nested list dealings#
+ 		for(i in 1:length(variable)){#
+ 			if(class(variable[[i]]=="list")){#
+ 				flatten(variable[[i]])#
+ 			}#
+ 		}#
+ 		dfs <- lapply(variable, data.frame, stringsAsFactors = FALSE)#
+ 		variable = rbind.fill(dfs)#
+ 	}#
+ 	list_of_variables[[name]] = variable	#
+ }#
+ value <- list_of_values#
+ attr(value, "class") <- "protein"#
+ value#
+#
+}
+protein = APIObject("http://127.0.0.1:8000/api/protein/543/")
+APIObject <- function(url) {#
+ response = GET(url)#
+ content_list = content(response, as = "parsed")#
+ column_names = names(content_list)#
+#
+ list_of_variables <- list()#
+ for(name in column_names){#
+ 	variable = content_list[[name]]#
+ 	#below fails for domains in protein = nested list#
+ 	if(class(variable)=="character" && startsWith(variable,"http")){#
+ 		var_response = GET(variable)#
+ 		var_content = content(var_response, as = "parsed")#
+ 		dfs <- lapply(var_content, data.frame, stringsAsFactors = FALSE) #list of dataframes#
+ 		variable = rbind.fill(dfs)#
+ 	}#
+ 	if(class(variable)=="list"){#
+ 		#nested list dealings#
+ 		for(var in variable){#
+ 			if(class(var=="list")){#
+ 				flatten(var)#
+ 			}#
+ 		}#
+ 		dfs <- lapply(variable, data.frame, stringsAsFactors = FALSE)#
+ 		variable = rbind.fill(dfs)#
+ 	}#
+ 	list_of_variables[[name]] = variable	#
+ }#
+ value <- list_of_values#
+ attr(value, "class") <- "protein"#
+ value#
+#
+}
+protein = APIObject("http://127.0.0.1:8000/api/protein/543/")
+protein
+APIObject <- function(url) {#
+ response = GET(url)#
+ content_list = content(response, as = "parsed")#
+ column_names = names(content_list)#
+#
+ list_of_variables <- list()#
+ for(name in column_names){#
+ 	variable = content_list[[name]]#
+ 	#below fails for domains in protein = nested list#
+ 	if(class(variable)=="character" && startsWith(variable,"http")){#
+ 		var_response = GET(variable)#
+ 		var_content = content(var_response, as = "parsed")#
+ 		dfs <- lapply(var_content, data.frame, stringsAsFactors = FALSE) #list of dataframes#
+ 		variable = rbind.fill(dfs)#
+ 	}#
+ 	if(class(variable)=="list"){#
+ 		#nested list dealings#
+ 		for(var in variable){#
+ 			if(class(var)=="list"){#
+ 				flatten(var)#
+ 			}#
+ 		}#
+ 		dfs <- lapply(variable, data.frame, stringsAsFactors = FALSE)#
+ 		variable = rbind.fill(dfs)#
+ 	}#
+ 	list_of_variables[[name]] = variable	#
+ }#
+ value <- list_of_values#
+ attr(value, "class") <- "protein"#
+ value#
+#
+}
+protein
+protein = APIObject("http://127.0.0.1:8000/api/protein/543/")
+APIObject <- function(url) {#
+ response = GET(url)#
+ content_list = content(response, as = "parsed")#
+ column_names = names(content_list)#
+#
+ list_of_variables <- list()#
+ for(name in column_names){#
+ 	variable = content_list[[name]]#
+ 	#below fails for domains in protein = nested list#
+ 	if(class(variable)=="character" && startsWith(variable,"http")){#
+ 		var_response = GET(variable)#
+ 		var_content = content(var_response, as = "parsed")#
+ 		dfs <- lapply(var_content, data.frame, stringsAsFactors = FALSE) #list of dataframes#
+ 		variable = rbind.fill(dfs)#
+ 	}#
+ 	if(class(variable)=="list"){#
+ 		#nested list dealings#
+ 		for(var in variable){#
+ 			if(class(var)=="list"){#
+ 				flatten(var)#
+ 			}#
+ 		}#
+ 		dfs <- lapply(variable, data.frame, stringsAsFactors = FALSE)#
+ 		variable = rbind.fill(dfs)#
+ 	}#
+ 	list_of_variables[[name]] = variable	#
+ }#
+ value <- list_of_variables#
+ attr(value, "class") <- "protein"#
+ value#
+#
+}
+protein = APIObject("http://127.0.0.1:8000/api/protein/543/")
+protein$domains
+var_response = GET("http://127.0.0.1:8000/api/protein/543/domains/")
+var_response
+var_content = content(var_response, as = "parsed")
+var_content
+var_response2 = GET("http://127.0.0.1:8000/api/protein/543/orthologs/")
+var_content2 = content(var_response2, as = "parsed")
+var_content2
+isNested <- function(l) {#
+  stopifnot(is.list(l))#
+  for (i in l) {#
+    if (is.list(i)) return(TRUE)#
+  }#
+  return(FALSE)#
+}
+APIObject <- function(url) {#
+ response = GET(url)#
+ content_list = content(response, as = "parsed")#
+ column_names = names(content_list)#
+#
+ list_of_variables <- list()#
+ for(name in column_names){#
+ 	variable = content_list[[name]]#
+ 	#below fails for domains in protein = nested list#
+ 	if(class(variable)=="character" && startsWith(variable,"http")){#
+ 		var_response = GET(variable)#
+ 		var_content = content(var_response, as = "parsed") #names list#
+ 		if(isNested(var_content)){#
+ 			variable = do.call(cbind, lapply(var_content, stack))#
+ 		}#
+ 		else{#
+ 			dfs <- lapply(var_content, data.frame, stringsAsFactors = FALSE) #list of dataframes#
+ 			variable = rbind.fill(dfs)#
+ 		}	#
+ 	}#
+ 	if(class(variable)=="list"){#
+ 		dfs <- lapply(variable, data.frame, stringsAsFactors = FALSE)#
+ 		variable = rbind.fill(dfs)#
+ 	}#
+ 	list_of_variables[[name]] = variable	#
+ }#
+ value <- list_of_variables#
+ attr(value, "class") <- "protein"#
+ value#
+#
+}
+pp = APIObject("http://127.0.0.1:8000/api/protein/543/")
+APIObject <- function(url) {#
+ response = GET(url)#
+ content_list = content(response, as = "parsed")#
+ column_names = names(content_list)#
+#
+ list_of_variables <- list()#
+ for(name in column_names){#
+ 	variable = content_list[[name]]#
+ 	#below fails for domains in protein = nested list#
+ 	if(class(variable)=="character" && startsWith(variable,"http")){#
+ 		var_response = GET(variable)#
+ 		var_content = content(var_response, as = "parsed") #names list#
+ 		if(isNested(var_content)){#
+ 			variable = as.data.frame( c(col = lapply(var_content, names), val = lapply(var_content,unname)) )#
+ 		}#
+ 		else{#
+ 			dfs <- lapply(var_content, data.frame, stringsAsFactors = FALSE) #list of dataframes#
+ 			variable = rbind.fill(dfs)#
+ 		}	#
+ 	}#
+ 	if(class(variable)=="list"){#
+ 		dfs <- lapply(variable, data.frame, stringsAsFactors = FALSE)#
+ 		variable = rbind.fill(dfs)#
+ 	}#
+ 	list_of_variables[[name]] = variable	#
+ }#
+ value <- list_of_variables#
+ attr(value, "class") <- "protein"#
+ value#
+#
+}
+pp = APIObject("http://127.0.0.1:8000/api/protein/543/")
+library(data.table)
+APIObject <- function(url) {#
+ response = GET(url)#
+ content_list = content(response, as = "parsed")#
+ column_names = names(content_list)#
+#
+ list_of_variables <- list()#
+ for(name in column_names){#
+ 	variable = content_list[[name]]#
+ 	#below fails for domains in protein = nested list#
+ 	if(class(variable)=="character" && startsWith(variable,"http")){#
+ 		var_response = GET(variable)#
+ 		var_content = content(var_response, as = "parsed") #names list#
+ 		if(isNested(var_content)){#
+ 			variable = rbindlist(var_content, fill=TRUE)#
+ 		}#
+ 		else{#
+ 			dfs <- lapply(var_content, data.frame, stringsAsFactors = FALSE) #list of dataframes#
+ 			variable = rbind.fill(dfs)#
+ 		}	#
+ 	}#
+ 	if(class(variable)=="list"){#
+ 		dfs <- lapply(variable, data.frame, stringsAsFactors = FALSE)#
+ 		variable = rbind.fill(dfs)#
+ 	}#
+ 	list_of_variables[[name]] = variable	#
+ }#
+ value <- list_of_variables#
+ attr(value, "class") <- "protein"#
+ value#
+#
+}
+pp = APIObject("http://127.0.0.1:8000/api/protein/543/")
+library(data.table)
+install.packages("data.table")
+library(data.table)
+APIObject <- function(url) {#
+ response = GET(url)#
+ content_list = content(response, as = "parsed")#
+ column_names = names(content_list)#
+#
+ list_of_variables <- list()#
+ for(name in column_names){#
+ 	variable = content_list[[name]]#
+ 	#below fails for domains in protein = nested list#
+ 	if(class(variable)=="character" && startsWith(variable,"http")){#
+ 		'''#
+ 		var_response = GET(variable)#
+ 		var_content = content(var_response, as = "parsed") #names list#
+ 		if(isNested(var_content)){#
+ 			variable = #
+ 		}#
+ 		else{#
+ 			dfs <- lapply(var_content, data.frame, stringsAsFactors = FALSE) #list of dataframes#
+ 			variable = rbind.fill(dfs)#
+ 		}#
+ 		'''#
+ 		variable = APIObject(variable)	#
+ 	}#
+ 	if(class(variable)=="list"){#
+ 		dfs <- lapply(variable, data.frame, stringsAsFactors = FALSE)#
+ 		variable = rbind.fill(dfs)#
+ 	}#
+ 	list_of_variables[[name]] = variable	#
+ }#
+ value <- list_of_variables#
+ attr(value, "class") <- "protein"#
+ value#
+#
+}
+APIObject <- function(url) {#
+ response = GET(url)#
+ content_list = content(response, as = "parsed")#
+ column_names = names(content_list)#
+#
+ list_of_variables <- list()#
+ for(name in column_names){#
+ 	variable = content_list[[name]]#
+ 	#below fails for domains in protein = nested list#
+ 	if(class(variable)=="character" && startsWith(variable,"http")){#
+ 		variable = APIObject(variable)	#
+ 	}#
+ 	if(class(variable)=="list"){#
+ 		dfs <- lapply(variable, data.frame, stringsAsFactors = FALSE)#
+ 		variable = rbind.fill(dfs)#
+ 	}#
+ 	list_of_variables[[name]] = variable	#
+ }#
+ value <- list_of_variables#
+ attr(value, "class") <- "protein"#
+ value#
+#
+}
+pp = APIObject("http://127.0.0.1:8000/api/protein/543/")
+pp$domains
+pp
+pp$ontology
+pp$domains$regions
+APIObject <- function(url) {#
+ response = GET(url)#
+ content_list = content(response, as = "parsed")#
+ column_names = names(content_list)#
+#
+ list_of_variables <- list()#
+ for(name in column_names){#
+ 	variable = content_list[[name]]#
+ 	#below fails for domains in protein = nested list#
+ 	if(class(variable)=="list"){#
+ 		dfs <- lapply(variable, data.frame, stringsAsFactors = FALSE)#
+ 		variable = rbind.fill(dfs)#
+ 	}#
+ 	if(class(variable)=="character" && startsWith(variable,"http")){#
+ 		variable = APIObject(variable)	#
+ 	}#
+ 	list_of_variables[[name]] = variable	#
+ }#
+ value <- list_of_variables#
+ attr(value, "class") <- "protein"#
+ value#
+#
+}
+pp = APIObject("http://127.0.0.1:8000/api/protein/543/")
+pp
+pp$ontology
+APIObject <- function(url) {#
+ response = GET(url)#
+ content_list = content(response, as = "parsed")#
+ column_names = names(content_list)#
+#
+ list_of_variables <- list()#
+ for(name in column_names){#
+ 	variable = content_list[[name]]#
+ 	if(class(variable)=="character" && startsWith(variable,"http")){#
+ 		var_response = GET(variable)#
+ 		var_content = content(var_response, as = "parsed") #names list#
+ 		if(isNested(var_content)){#
+ 			variable = APIObject(variable)	 #
+ 		}#
+ 		else{#
+ 			dfs <- lapply(var_content, data.frame, stringsAsFactors = FALSE) #list of dataframes#
+ 			variable = rbind.fill(dfs)#
+ 		}		#
+ 	}#
+#
+ 	if(class(variable)=="list"){#
+ 		dfs <- lapply(variable, data.frame, stringsAsFactors = FALSE)#
+ 		variable = rbind.fill(dfs)#
+ 	}#
+#
+ 	list_of_variables[[name]] = variable	#
+ }#
+ value <- list_of_variables#
+ attr(value, "class") <- "protein"#
+ value#
+#
+}
+pp = APIObject("http://127.0.0.1:8000/api/protein/543/")
+pp
+pp = APIObject("http://127.0.0.1:8000/api/protein/546/")
+pp
+isNested(var_content
+)
+isNested(var_content2)
+APIObject <- function(url) {#
+ response = GET(url)#
+ content_list = content(response, as = "parsed")#
+ column_names = names(content_list)#
+#
+ list_of_variables <- list()#
+ for(name in column_names){#
+ 	variable = content_list[[name]]#
+ 	if(class(variable)=="character" && startsWith(variable,"http")){#
+ 		var_response = GET(variable)#
+ 		var_content = content(var_response, as = "parsed") #names list#
+ 		if(names(.Internal(unlist(var_content, TRUE, TRUE)))){#
+ 			variable = APIObject(variable)	 #
+ 		}#
+ 		else{#
+ 			dfs <- lapply(var_content, data.frame, stringsAsFactors = FALSE) #list of dataframes#
+ 			variable = rbind.fill(dfs)#
+ 		}		#
+ 	}#
+#
+ 	if(class(variable)=="list"){#
+ 		dfs <- lapply(variable, data.frame, stringsAsFactors = FALSE)#
+ 		variable = rbind.fill(dfs)#
+ 	}#
+#
+ 	list_of_variables[[name]] = variable	#
+ }#
+ value <- list_of_variables#
+ attr(value, "class") <- "protein"#
+ value#
+#
+}
+pp = APIObject("http://127.0.0.1:8000/api/protein/543/")
+depth <- function(this) ifelse(is.list(this), 1L + max(sapply(this, depth)), 0L)
+APIObject <- function(url) {#
+ response = GET(url)#
+ content_list = content(response, as = "parsed")#
+ column_names = names(content_list)#
+#
+ list_of_variables <- list()#
+ for(name in column_names){#
+ 	variable = content_list[[name]]#
+ 	if(class(variable)=="character" && startsWith(variable,"http")){#
+ 		var_response = GET(variable)#
+ 		var_content = content(var_response, as = "parsed") #names list#
+ 		if(depth(var_content)){#
+ 			variable = APIObject(variable)	 #
+ 		}#
+ 		else{#
+ 			dfs <- lapply(var_content, data.frame, stringsAsFactors = FALSE) #list of dataframes#
+ 			variable = rbind.fill(dfs)#
+ 		}		#
+ 	}#
+#
+ 	if(class(variable)=="list"){#
+ 		dfs <- lapply(variable, data.frame, stringsAsFactors = FALSE)#
+ 		variable = rbind.fill(dfs)#
+ 	}#
+#
+ 	list_of_variables[[name]] = variable	#
+ }#
+ value <- list_of_variables#
+ attr(value, "class") <- "protein"#
+ value#
+#
+}
+pp = APIObject("http://127.0.0.1:8000/api/protein/543/")
+pp
+depth(var_content)
+depth(var_content2)
+APIObject <- function(url) {#
+ response = GET(url)#
+ content_list = content(response, as = "parsed")#
+ column_names = names(content_list)#
+#
+ list_of_variables <- list()#
+ for(name in column_names){#
+ 	variable = content_list[[name]]#
+ 	if(class(variable)=="character" && startsWith(variable,"http")){#
+ 		var_response = GET(variable)#
+ 		var_content = content(var_response, as = "parsed") #names list#
+ 		if(depth(var_content)>2){#
+ 			variable = APIObject(variable)	 #
+ 		}#
+ 		else{#
+ 			dfs <- lapply(var_content, data.frame, stringsAsFactors = FALSE) #list of dataframes#
+ 			variable = rbind.fill(dfs)#
+ 		}		#
+ 	}#
+#
+ 	if(class(variable)=="list"){#
+ 		dfs <- lapply(variable, data.frame, stringsAsFactors = FALSE)#
+ 		variable = rbind.fill(dfs)#
+ 	}#
+#
+ 	list_of_variables[[name]] = variable	#
+ }#
+ value <- list_of_variables#
+ attr(value, "class") <- "protein"#
+ value#
+#
+}
+pp = APIObject("http://127.0.0.1:8000/api/protein/543/")
+pp
+gg = APIObject("http://127.0.0.1:8000/api/genome/YEAST/")
+APIObject <- function(url,pages) {#
+ response = GET(url)#
+ content_list = content(response, as = "parsed")#
+ column_names = names(content_list)#
+#
+ list_of_variables <- list()#
+ if("count" %in% column_names){#
+ 	variable = "Access Denied"#
+ 	}#
+ else{#
+ 	for(name in column_names){#
+ 	variable = content_list[[name]]#
+ 	if(class(variable)=="character" && startsWith(variable,"http")){#
+ 		var_response = GET(variable)#
+ 		var_content = content(var_response, as = "parsed") #names list#
+ 		if(depth(var_content)>2){ #
+ 			##checking for pagination. TO DO: parse all the pages#
+ 			if(names(var_content)[1]=="count"){#
+ 				if(pages=="all"){#
+ 					dfs <- get_all_pages(variable)#
+					variable = rbind.fill(dfs)#
+ 				}#
+ 				else{#
+ 					variable=variable#
+ 				}#
+ 			}#
+ 			else{#
+ 				variable = APIObject(variable)	 #
+ 			}#
+ 		}#
+ 	else if(depth(content_list)>2){ #immediately paginated responses e.g. list of all hogs #
+#
+ 	}#
+ 	else{#
+ 			dfs <- lapply(var_content, data.frame, stringsAsFactors = FALSE) #list of dataframes#
+ 			variable = rbind.fill(dfs)#
+ 		}		#
+ 	}#
+#
+ 	if(class(variable)=="list"){#
+ 		if(depth(variable)>3){ #chromosomes#
+ 			for(i in 1:length(variable)){#
+ 				variable[[i]][[2]][[1]]=rbind(variable[[i]][[2]][[1]])		#
+ 			}#
+ 			dfs <- lapply(variable, data.frame, stringsAsFactors = FALSE)#
+ 			variable = rbind.fill(dfs)#
+ 		}#
+ 		else{#
+ 			dfs <- lapply(variable, data.frame, stringsAsFactors = FALSE)#
+ 			variable = rbind.fill(dfs)#
+ 		}	#
+ 	}#
+ }#
+ 	list_of_variables[[name]] = variable	#
+ }#
+ value <- list_of_variables#
+ attr(value, "class") <- "apiobject"#
+ value#
+#
+}
+library(httr)#
+library(plyr)#
+url_generator <- function(type,id=NULL,detail=NULL,query_param1=NULL,query_param1_value=NULL,query_param2=NULL,query_param2_value=NULL){#
+	url_prefix = paste0(api_url,"/",type,"/")#
+	if(!is.null(id)){ id=paste0(id,"/")}#
+	if(!is.null(detail)){ detail=paste0(detail,"/")}#
+	if(!is.null(query_param1_value)){ query_param1=paste0("?",query_param1,"=",URLencode(query_param1_value))}#
+	if(!is.null(query_param2_value)){ query_param2=paste0("&",query_param2,"=",URLencode(query_param2_value))}#
+#
+	final_url= paste0(url_prefix,id,detail,query_param1,query_param2)#
+	check_response(final_url)#
+	return(final_url)#
+#
+}#
+#
+get_all_pages <- function(url){#
+	list_of_things <- list()#
+	list_of_things[[1]] <- fromJSON(url)$results#
+	count = fromJSON(url)$count#
+	pages = count/100#
+	if (pages%%1 != 0){#
+		if(pages%%1 >= 0.5){#
+		pages= round(pages)#
+		}#
+		else{#
+			pages=round(pages+1,digits=0)#
+		}#
+	}#
+	for(i in 2:pages){#
+		new_url = paste0(url,"?page=",i)#
+		list_of_things[[i]] <- fromJSON(new_url)$results#
+	}#
+	return(list_of_things)#
+}#
+#
+depth <- function(list) ifelse(is.list(this), 1L + max(sapply(this, depth)), 0L)
+gg = APIObject("http://127.0.0.1:8000/api/genome/YEAST/")
+depth <- function(list) ifelse(is.list(list), 1L + max(sapply(list, depth)), 0L)
+gg = APIObject("http://127.0.0.1:8000/api/genome/YEAST/")
+gg = APIObject("http://127.0.0.1:8000/api/hogs/",pages="all")
+gg
+APIObject <- function(url,pages=NULL) {#
+ response = GET(url)#
+ content_list = content(response, as = "parsed")#
+ column_names = names(content_list)#
+#
+ list_of_variables <- list()#
+ if("count" %in% column_names){#
+ 	list_of_variables[['message']] = "Access Denied"#
+ 	}#
+ else{#
+ 	for(name in column_names){#
+ 	variable = content_list[[name]]#
+ 	if(class(variable)=="character" && startsWith(variable,"http")){#
+ 		var_response = GET(variable)#
+ 		var_content = content(var_response, as = "parsed") #names list#
+ 		if(depth(var_content)>2){ #
+ 			##checking for pagination. TO DO: parse all the pages#
+ 			if(names(var_content)[1]=="count"){#
+ 				if(pages=="all"){#
+ 					dfs <- get_all_pages(variable)#
+					variable = rbind.fill(dfs)#
+ 				}#
+ 				else{#
+ 					variable=variable#
+ 				}#
+ 			}#
+ 			else{#
+ 				variable = APIObject(variable)	 #
+ 			}#
+ 		}#
+ 	else if(depth(content_list)>2){ #immediately paginated responses e.g. list of all hogs #
+#
+ 	}#
+ 	else{#
+ 			dfs <- lapply(var_content, data.frame, stringsAsFactors = FALSE) #list of dataframes#
+ 			variable = rbind.fill(dfs)#
+ 		}		#
+ 	}#
+#
+ 	if(class(variable)=="list"){#
+ 		if(depth(variable)>3){ #chromosomes#
+ 			for(i in 1:length(variable)){#
+ 				variable[[i]][[2]][[1]]=rbind(variable[[i]][[2]][[1]])		#
+ 			}#
+ 			dfs <- lapply(variable, data.frame, stringsAsFactors = FALSE)#
+ 			variable = rbind.fill(dfs)#
+ 		}#
+ 		else{#
+ 			dfs <- lapply(variable, data.frame, stringsAsFactors = FALSE)#
+ 			variable = rbind.fill(dfs)#
+ 		}	#
+ 	}#
+ }#
+ 	list_of_variables[[name]] = variable	#
+ }#
+ value <- list_of_variables#
+ attr(value, "class") <- "apiobject"#
+ value#
+#
+}
+gg = APIObject("http://127.0.0.1:8000/api/hogs/",pages="all")
+gg
+gg = APIObject("http://127.0.0.1:8000/api/groups/",pages="all")
+gg
+gg = APIObject("http://127.0.0.1:8000/api/genome/",pages="all")
+gg = APIObject("http://127.0.0.1:8000/api/genomes/",pages="all")
+gg
+gg = APIObject("http://127.0.0.1:8000/api/genomes/",pages="all")
+gg
+gg = APIObject("http://127.0.0.1:8000/api/genome/",pages="all")
+gg
+api_url = "http://127.0.0.1:8000/api"#
+#
+check_response <- function(url){#
+	resp=GET(url)#
+	if (http_error(resp)) {#
+    stop(#
+      sprintf(#
+        "OMA API request failed [%s]\n%s", #
+        status_code(resp),#
+        substring(fromJSON(content(resp, "text"))$detail,2) #due to utf-8 encoding#
+      ),#
+      call. = FALSE#
+    )#
+	}#
+}
+get_hog <- function(hog_id,level,members) {#
+	if(hog_id=="all"){ #list of all hogs#
+		if(missing(level)){#
+			url = url_generator(type="hogs")#
+		}#
+		else{ #list of all the hogs with a certain level#
+			url = url_generator(type="hogs",query_param1="level",query_param1_value=level)#
+		} 	#
+	}#
+	else { #specific hog#
+		if(missing(members)){#
+			url = url_generator(type="hogs",id=hog_id)#
+			if(missing(level)){ #list of all levels for hog#
+				url=url#
+			}#
+			else{#
+				url = url_generator(type="hogs",id=hog_id,query_param1="level",query_param1_value=level)#
+			}#
+		}#
+		else{#
+			if(missing(level)){ #
+				url = url_generator(type="hogs",id=hog_id,detail="members")#
+			}#
+			else{ #members at a level#
+				url = url_generator(type="hogs",id=hog_id,detail="members",query_param1="level",query_param1_value=level)#
+			}#
+		}#
+	}#
+#
+	return(APIObject(url))	#
+#
+}
+hg = get_hog(hog_id = "HOG:0000365", level = "Taphrinomycotina", members)
+hg
+hg = get_hog(hog_id = "HOG:0000365", level = "Taphrinomycotina", members="all")
+hg
+hg = get_hog(hog_id = "HOG:0000365", level = "Taphrinomycotina")
+hg
+hg = get_hog(hog_id = "HOG:0000365")
+hg
+hg = get_hog(hog_id = "HOG:0000365", level = "Taphrinomycotina")
+hg
+hg = get_hog(hog_id = "HOG:0000365", level = "Taphrinomycotina", members="all")
+hg
+get_protein <- function(entry_id,info){#
+	if(missing(info)){#
+		url = url_generator(type="protein",id=entry_id)#
+	}#
+	else{#
+		url = url_generator(type="protein",id=entry_id,detail=info)#
+	}#
+	return(APIObject(url))#
+}
+protein = get_protein(entry)
+get_protein <- function(entry_id){#
+	url = url_generator(type="protein",id=entry_id)#
+	return(APIObject(url))#
+}
+protein = get_protein(entry_id="543")
+protein$sequence
+protein
+APIObject <- function(url,pages=NULL) {#
+ response = GET(url)#
+ content_list = content(response, as = "parsed")#
+ column_names = names(content_list)#
+#
+ list_of_variables <- list()#
+ if("count" %in% column_names){#
+ 	list_of_variables[['message']] = "Access Denied." # things that would throttle the server like list of all the hogs or all the groups or all the genomes#
+ 	}#
+ else{#
+ 	for(name in column_names){#
+ 	variable = content_list[[name]]#
+ 	if(class(variable)=="character" && startsWith(variable,"http")){#
+ 		var_response = GET(variable)#
+ 		var_content = content(var_response, as = "parsed") #names list#
+ 		if(depth(var_content)>2){ #
+ 			##checking for pagination. TO DO: parse all the pages#
+ 			if(names(var_content)[1]=="count"){#
+ 				if(pages=="all"){#
+ 					dfs <- get_all_pages(variable)#
+					variable = rbind.fill(dfs)#
+ 				}#
+ 				else{#
+ 					variable=variable#
+ 				}#
+ 			}#
+ 			else{#
+ 				variable = APIObject(variable)	 #
+ 			}#
+ 		}#
+ 	else{#
+ 			dfs <- lapply(var_content, data.frame, stringsAsFactors = FALSE) #list of dataframes#
+ 			variable = rbind.fill(dfs)#
+ 		}		#
+ 	}#
+#
+ 	if(class(variable)=="list"){#
+ 		if(depth(variable)>3){ #chromosomes#
+ 			for(i in 1:length(variable)){#
+ 				variable[[i]][[2]][[1]]=rbind(variable[[i]][[2]][[1]])		#
+ 			}#
+ 			dfs <- lapply(variable, data.frame, stringsAsFactors = FALSE)#
+ 			variable = rbind.fill(dfs)#
+ 		}#
+ 		else{#
+ 			dfs <- lapply(variable, data.frame, stringsAsFactors = FALSE)#
+ 			variable = rbind.fill(dfs)#
+ 		}	#
+ 	}#
+ 	list_of_variables[[name]] = variable#
+ }#
+ }#
+#
+ value <- list_of_variables#
+ attr(value, "class") <- "apiobject"#
+ value#
+#
+}
+protein = get_protein(entry_id="543")
+protein$sequence
+hg_members=get_hog(hog_id="HOG:0000365",members)
+hg_members=get_hog(hog_id="HOG:0000365",members="all")
+hg_members
+hg=get_hog(hog_id="HOG:0000365",members="all")
+members = hg$members
+members[1,2]
+members[1,3]
+members[4,2]
+sequences = list()
+for(i in 1:len(hg$members)){#
+	sequences[[i]] = APIObject(hg$members[i,2])$sequence#
+}
+for(i in 1:length(hg$members)){#
+	sequences[[i]] = APIObject(hg$members[i,2])$sequence#
+}
+sequences
+ontologies = list()
+ontologies = list()#
+for(i in 1:length(hg$members)){#
+	ontologies[[i]] = APIObject(hg$members[i,2])$ontology#
+}
+ontologies
+ontologies = list()
+ontologies = list()#
+for(i in 1:length(hg$members)){#
+	ontologies[[i]] = APIObject(hg$members[i,'entry_url'])$ontology#
+}
+ontologies = list()
+ontologies = list()#
+for(i in 1:length(hg$members)){#
+	ontologies[[i]] = APIObject(hg$members[i,'entry_url'])$ontology#
+}
+ontologies = list()
+ontologies = list()#
+for(i in 1:length(hg$members)){#
+	ontologies[[i]] = APIObject(hg$members[i,'entry_url'])$ontology#
+}
+ontologies
+get_genome_alignment <- function(genome_id1,genome_id2,chr1,chr2){#
+	if(missing(chr1) & missing(chr2)) {#
+		#more complex url#
+		url = paste0(api_url,"/pairs/",genome_id1,"/",genome_id2,"/")#
+	}#
+	else{#
+		url = paste0(api_url,"/pairs/",genome_id1,"/",genome_id2,"/?chr1=",chr1,"&chr2=",chr2)#
+	}#
+	return(APIObject(url))#
+}#
+#
+get_taxonomy <- function(type,members) {#
+	if(missing(members)){#
+		if(type=="newick"){#
+			url = url_generator(type="taxonomy",query_param1="type",query_param1_value="newick")#
+		}#
+		else#
+		{#
+			url = url_generator(type="taxonomy")#
+		}#
+	}#
+	else{#
+		#induced taxonomy, memebrs needs to be list of taxon_ids#
+		if(type==NULL){#
+			url = url_generator(type="taxonomy",query_param1="members",query_param1_value=members)#
+		}#
+		else#
+		{#
+			url = url_generator(type="taxonomy",query_param1="members",query_param1_value=members,query_param2="type",query_param2_value="newick")			#
+		}	#
+	}#
+	return(APIObject(url))#
+}
+tx = get_taxonomy(type="newick")
+tx
+get_group <- function(group_id, close.groups) {#
+	if(group_id=="all") {#
+		url = url_generator(type="groups")#
+	}#
+	else {#
+		url = url_generator(type="groups",id=group_id)#
+		if(close.groups!=NULL){#
+			url = url_generator(type="groups",id=group_id,detail="close_groups")#
+			}	#
+		}#
+		}#
+	return(APIObject(url))	#
+	}
+get_group <- function(group_id, close.groups) {#
+	if(group_id=="all") {#
+		url = url_generator(type="groups")#
+	}#
+	else {#
+		url = url_generator(type="groups",id=group_id)#
+		if(close.groups!=NULL){#
+			url = url_generator(type="groups",id=group_id,detail="close_groups")#
+			}	#
+		}#
+	return(APIObject(url))	#
+	}
+group<-get_group("1")
+group<-get_group("1"get_group <- function(group_id, close.groups=NULL) {#
+	if(group_id=="all") {#
+		url = url_generator(type="groups")#
+	}#
+	else {#
+		url = url_generator(type="groups",id=group_id)#
+		if(close.groups!=NULL){#
+			url = url_generator(type="groups",id=group_id,detail="close_groups")#
+			}	#
+		}#
+	return(APIObject(url))	#
+	})
+get_group <- function(group_id, close.groups=NULL) {#
+	if(group_id=="all") {#
+		url = url_generator(type="groups")#
+	}#
+	else {#
+		url = url_generator(type="groups",id=group_id)#
+		if(close.groups!=NULL){#
+			url = url_generator(type="groups",id=group_id,detail="close_groups")#
+			}	#
+		}#
+	return(APIObject(url))	#
+	}
+group<-get_group("1")
+get_group <- function(group_id, close.groups) {#
+	if(group_id=="all") {#
+		url = url_generator(type="groups")#
+	}#
+	else {#
+		url = url_generator(type="groups",id=group_id)#
+		if(missing(close.groups)){#
+			url = url_generator(type="groups",id=group_id,detail="close_groups")#
+			}	#
+		}#
+	return(APIObject(url))	#
+	}
+group<-get_group("1")
+group
+get_group <- function(group_id, close.groups) {#
+	if(group_id=="all") {#
+		url = url_generator(type="groups")#
+	}#
+	else {#
+		if(!missing(close.groups)){#
+			url = url_generator(type="groups",id=group_id,detail="close_groups")#
+			}#
+		else{#
+			url = url_generator(type="groups",id=group_id)#
+		}	#
+		}#
+	return(APIObject(url))	#
+	}
+group
+group<-get_group("1")
+group
+get_group <- function(group_id) {#
+	if(group_id=="all") {#
+		url = url_generator(type="groups")#
+	}#
+	else {#
+		url = url_generator(type="groups",id=group_id)#
+		}#
+	return(APIObject(url))	#
+	}
+group<-get_group("1")
+group
+Error: could not find function "install
+uninstall("omadb")
+library(httr)#
+library(plyr)#
+library(jsonlite)#
+#
+api_url = "http://127.0.0.1:8000/api"#
+#
+check_response <- function(url){#
+	resp=GET(url)#
+	if (http_error(resp)) {#
+    stop(#
+      sprintf(#
+        "OMA API request failed [%s]\n%s", #
+        status_code(resp),#
+        substring(fromJSON(content(resp, "text"))$detail,2) #due to utf-8 encoding#
+      ),#
+      call. = FALSE#
+    )#
+	}#
+}#
+#
+url_generator <- function(type,id=NULL,detail=NULL,query_param1=NULL,query_param1_value=NULL,query_param2=NULL,query_param2_value=NULL){#
+	url_prefix = paste0(api_url,"/",type,"/")#
+	if(!is.null(id)){ id=paste0(id,"/")}#
+	if(!is.null(detail)){ detail=paste0(detail,"/")}#
+	if(!is.null(query_param1_value)){ query_param1=paste0("?",query_param1,"=",URLencode(query_param1_value))}#
+	if(!is.null(query_param2_value)){ query_param2=paste0("&",query_param2,"=",URLencode(query_param2_value))}#
+#
+	final_url= paste0(url_prefix,id,detail,query_param1,query_param2)#
+	check_response(final_url)#
+	return(final_url)#
+#
+}#
+#
+get_all_pages <- function(url){#
+	list_of_things <- list()#
+	list_of_things[[1]] <- fromJSON(url)$results#
+	count = fromJSON(url)$count#
+	pages = count/100#
+	if (pages%%1 != 0){#
+		if(pages%%1 >= 0.5){#
+		pages= round(pages)#
+		}#
+		else{#
+			pages=round(pages+1,digits=0)#
+		}#
+	}#
+	for(i in 2:pages){#
+		new_url = paste0(url,"?page=",i)#
+		list_of_things[[i]] <- fromJSON(new_url)$results#
+	}#
+	return(list_of_things)#
+}#
+#
+depth <- function(list) ifelse(is.list(list), 1L + max(sapply(list, depth)), 0L)#
+#
+# Object constructor that accounts for most if not all formats data should come in#
+#
+APIObject <- function(url,pages=NULL) {#
+ response = GET(url)#
+ content_list = content(response, as = "parsed")#
+ column_names = names(content_list)#
+#
+ list_of_variables <- list()#
+ if("count" %in% column_names){#
+ 	list_of_variables[['message']] = "Access Denied." # things that would throttle the server like list of all the hogs or all the groups or all the genomes#
+ 	}#
+ else{#
+ 	for(name in column_names){#
+ 	variable = content_list[[name]]#
+ 	if(class(variable)=="character" && startsWith(variable,"http")){#
+ 		var_response = GET(variable)#
+ 		var_content = content(var_response, as = "parsed") #names list#
+ 		if(depth(var_content)>2){ #
+ 			##checking for pagination. TO DO: parse all the pages#
+ 			if(names(var_content)[1]=="count"){#
+ 				if(!is.null(pages)){#
+ 					dfs <- get_all_pages(variable)#
+					variable = rbind.fill(dfs)#
+ 				}#
+ 				else{#
+ 					variable=variable#
+ 				}#
+ 			}#
+ 			else{#
+ 				variable = APIObject(variable)	 #
+ 			}#
+ 		}#
+ 	else{#
+ 			dfs <- lapply(var_content, data.frame, stringsAsFactors = FALSE) #list of dataframes#
+ 			variable = rbind.fill(dfs)#
+ 		}		#
+ 	}#
+#
+ 	if(class(variable)=="list"){#
+ 		if(depth(variable)>3){ #chromosomes#
+ 			for(i in 1:length(variable)){#
+ 				variable[[i]][[2]][[1]]=rbind(variable[[i]][[2]][[1]])		#
+ 			}#
+ 			dfs <- lapply(variable, data.frame, stringsAsFactors = FALSE)#
+ 			variable = rbind.fill(dfs)#
+ 		}#
+ 		else{#
+ 			dfs <- lapply(variable, data.frame, stringsAsFactors = FALSE)#
+ 			variable = rbind.fill(dfs)#
+ 		}	#
+ 	}#
+ 	list_of_variables[[name]] = variable#
+ }#
+ }#
+#
+ value <- list_of_variables#
+ attr(value, "class") <- "apiobject"#
+ value#
+#
+}
+get_genome_alignment <- function(genome_id1,genome_id2,chr1,chr2){#
+	if(missing(chr1) & missing(chr2)) {#
+		#more complex url #
+		url = paste0(api_url,"/pairs/",genome_id1,"/",genome_id2,"/")#
+	}#
+	else{#
+		url = paste0(api_url,"/pairs/",genome_id1,"/",genome_id2,"/?chr1=",chr1,"&chr2=",chr2)#
+	}#
+	return(APIObject(url,pages="all"))#
+}
+get_genome_alignment("YEAST","ASHGO")
+vp = get_genome_alignment("YEAST","ASHGO")
+vp
+get_genome_alignment <- function(genome_id1,genome_id2,chr1,chr2){#
+	if(missing(chr1) & missing(chr2)) {#
+		#more complex url #
+		url = paste0(api_url,"/pairs/",genome_id1,"/",genome_id2,"/")#
+	}#
+	else{#
+		url = paste0(api_url,"/pairs/",genome_id1,"/",genome_id2,"/?chr1=",chr1,"&chr2=",chr2)#
+	}#
+	return(APIObject(url))#
+}
+vp = get_genome_alignment("YEAST","ASHGO")
+vp
+vp = get_genome_alignment("YEAST","ASHGO")
+head(vp)
+url = http://127.0.0.1:8000/api/pairs/YEAST/ASHGO/
+url="http://127.0.0.1:8000/api/pairs/YEAST/ASHGO/"
+response=GET(ucl)
+response=GET(url)
+content_list = content(response, as = "parsed")
+head(content_list)
+depth(content_list)
+content_list[[1]]
+dfs <- lapply(var_content[[1]], data.frame, stringsAsFactors = FALSE)
+dfs <- lapply(content_list[[1]], data.frame, stringsAsFactors = FALSE)
+dfs
+variable = rbind.fill(dfs)
+variable
+dfs
+flatten(dfs)
+depth(dfs[1])
+flatten(dfs[1])
+class(dfs[1])
+dfs
+lapply(dfs[1], data.frame, stringsAsFactors = FALSE)
+lapply(dfs[[1]], data.frame, stringsAsFactors = FALSE)
+variable
+head(content_list)
+content_list[[1]][[1]]
+data.frame(content_list[[1]][[1]])
+data.frame(content_list[[1]][[2]])
+rbind(data.frame(content_list[[1]][[2]]),data.frame(content_list[[1]][[1]]))
+head(vp)
+vp[1]
+vp[[1]]
+dim(vp)
+get_genome_alignment <- function(genome_id1,genome_id2,chr1,chr2){#
+	if(missing(chr1) & missing(chr2)) {#
+		#more complex url #
+		url = paste0(api_url,"/pairs/",genome_id1,"/",genome_id2,"/")#
+	}#
+	else{#
+		url = paste0(api_url,"/pairs/",genome_id1,"/",genome_id2,"/?chr1=",chr1,"&chr2=",chr2)#
+	}#
+	return(fromJSON(url))
+}
+vp = get_genome_alignment("YEAST","ASHGO")
+vp
+get_taxonomy <- function(root=NULL,members) {#
+	if(missing(members)){#
+		if(type=="newick"){#
+			url = url_generator(type="taxonomy",id=root,query_param1="type",query_param1_value="newick")#
+		}#
+		else#
+		{#
+			url = url_generator(type="taxonomy",id=root)#
+		}#
+	}#
+	else{#
+		#induced taxonomy, members needs to be string of taxon ids separated by commas#
+		if(is.null(type)){#
+			url = url_generator(type="taxonomy",id=root,query_param1="members",query_param1_value=members)#
+		}#
+		else#
+		{#
+			url = url_generator(type="taxonomy",id=root,query_param1="members",query_param1_value=members,query_param2="type",query_param2_value="newick")			#
+		}	#
+	}#
+	return(APIObject(url))#
+}
+tx = get_taxonomy()
+get_taxonomy <- function(root=NULL,members) {#
+	if(missing(members)){#
+		url = url_generator(type="taxonomy",id=root,query_param1="type",query_param1_value="newick")#
+	}#
+	else{#
+		url = url_generator(type="taxonomy",id=root,query_param1="members",query_param1_value=members,query_param2="type",query_param2_value="newick")				#
+	}#
+	return(APIObject(url))#
+}
+tx = get_taxonomy()
+tx
+tx = get_taxonomy()
+tx
+tx$root_taxon
+get_group <- function(group_id) {#
+	if(missing(group_id)){#
+		stop("You must provide a group id.")#
+	}#
+	if(group_id=="all") {#
+		url = url_generator(type="groups")#
+	}#
+	else {#
+		url = url_generator(type="groups",id=group_id)#
+		}#
+	return(APIObject(url))	#
+}
+g=get_group()
+packagesVersion("jsonlite")
+packageVersion("jsonlite")
+packageVersion("httr")
+packageVersion("rjsonio")
+library(omadb)
+protein=get_protein("YEAST69")
+protein=get_protein("YEAST90")
+protein$sequence
+?get_protein
+library(biocLite)
+library(bioclite)
+biocLite("roma")
+library("biocLite")
+source("https://bioconductor.org/biocLite.R")
+biocLite()
+biocLite(roma)
+biocLite("roma")
+R CMD build omadb
+install.packagesd("Biocheck")
+install.packages("BioBheck")
+setwd("desktop")
+library(devtools)
+install("roma")
+library(roma)
+browseVignettes("roma")
+library(rmarkdown)
+setwd("./roma/vignettes/figure/my_vignette.Rmd")
+setwd("./roma")
+setwd("./vignettes")
+setwd("./figures")
+setwd("./figure")
+rmarkdown::render('my-vignette.Rmd')
+devtools::build_vignettes()
+browseVignettes("roma")
+uninstall("roma")
+uninstall(roma)
+library(devtools)
+uninstall("roma")
+setwd("desktop")

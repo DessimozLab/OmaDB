@@ -1,0 +1,104 @@
+---
+title: "Get started with Roma"
+author: "Klara Kaleb"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Get started with Roma}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+This little vignette shows you how to get started with the `roma` package.
+
+## The getters
+The package has a few "getter"-functions that are used to retrieve data from OMA database.
+Those are: `getXref()`, `getGenomeAlignment()`, `getTaxonomy()`, nd the `getData()` functions. 
+
+###getXref
+This function searches the OMA database for entries containing the pattern defined and returns the results in a dataframe. Hence, it is usually a good starting place.
+
+```{r, warning=FALSE, message=FALSE}
+library(roma)
+
+results <- getXref(pattern="MAL")
+
+results
+```
+
+###getGenomeAlignment
+This function serves to obtain the orthologs for 2 whole genomes. The result is a dataframe containing information on each member in the pair and their relationship. 
+
+```{r, warning=FALSE, message=FALSE}
+library(roma)
+
+alignment <- getGenomeAlignment(genome_id1 = "YEAST", genome_id2 = "ASHGO")
+
+head(alignment)
+
+```
+
+###getTaxonomy
+This function serves to obtain the taxonomic tree from the database in the newick format that can be plugged into phylo.io for visualisation. One can either obtain a full taxonomic tree in the current database, the induced taxonomy from specifying the members parameter to a list of members of interest of specify the root of the desired tree.
+
+
+###getData
+This function serves to obtain the information for a single entry in a database - either a group, hog, protein or a genome. The data type is specified by setting the "type" argument and a specific entry by its ID - below are the possible ID's for different object type.
+
+* Protein
+	* oma id 
+	* canonical id
+	* entry number - release specific
+
+* Genome
+	* NCBI taxon id
+	* UniProt species code
+
+* Group
+	* group number
+	* group fingerprint
+	* id of one of its members
+
+* HOG
+	* hog_id
+	* id of one of its members
+
+The result is an S4 Object, attributes of which can be accessed via @. Below is an example of obtaining information for a specific OMA group.
+
+```{r, warning=FALSE, message=FALSE}
+library(roma)
+
+group <- getData(type="Group",id="YEAST58")
+
+
+```
+
+## Other useful functions
+
+###resolveURL
+In most cases there is great quantity of information available for a given entry and this impacts the data retrival time. Due to this, the information available for such entries in split into a number of endpoints and these are included appropriatelly as redirects. This function allows the user to obtain further information behind those urls. 
+
+###formatData
+When an object is created from the corresponding response to a request, its data is returned in the simplest most form to speed up loading time. This sometimes results in very long named lists which can be a challenge to read - the purpose of this function is to format those lists in an appropriate dataframe. 
+
+One can see some of the mentioned functions in action in the below example of trying to obtain the list of orthologs for a protein entry.
+
+```{r, warning=FALSE, message=FALSE}
+library(roma)
+
+protein <- getData(type="Protein",id="YEAST58")
+
+attributes(protein)
+
+protein$orthologs
+
+orthologs = resolveURL(protein$orthologs)
+
+head(orthologs)
+
+formatted_orthologs = formatData(orthologs)
+
+```
+
+For further information please visit ([OMA REST API DOCUMENTATION](http://omadev.cs.ucl.ac.uk/api/docs)).
+

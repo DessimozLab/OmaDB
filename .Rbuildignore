@@ -1,0 +1,9 @@
+^.*\.Rproj$
+^\.Rproj\.user$
+
+.DS_Store
+.Rapp.history
+.gitignore
+R/.DS_Store
+man/.DS_Store
+tests/.DS_Store
