@@ -4,7 +4,7 @@ Version: 0.99.0
 Author: Klara Kaleb 
 Maintainer: Klara Kaleb <klarakaleb@outlook.com>
 Description: A package for the orthology prediction data download from OMA database.
-Depends: R (>= 3.3.2), jsonlite (>= 1.5), httr (>= 1.2.1),plyr(>= 1.8.4), utils
+Depends: R (>= 3.4), jsonlite (>= 1.5), httr (>= 1.2.1),plyr(>= 1.8.4), utils
 Imports: jsonlite, httr, plyr
 License: GPL-2
 LazyData: true
@@ -12,4 +12,4 @@ RoxygenNote: 6.0.1.9000
 Suggests: knitr,
     rmarkdown
 VignetteBuilder: knitr
-biocViews: Software, Comparative Genomics, Functional Genomics, Genetics, Annotation, GO
+biocViews: Software, Comparative Genomics, Functional Genomics, Genetics, Annotation, GO, FunctionalPrediction

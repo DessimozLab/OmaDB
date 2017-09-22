@@ -13,7 +13,7 @@ This little vignette shows you how to get started with the `roma` package.
 
 ## The getters
 The package has a few "getter"-functions that are used to retrieve data from OMA database.
-Those are: `getXref()`, `getGenomeAlignment()`, `getTaxonomy()`, nd the `getData()` functions. 
+Those are: `getXref()`, `getGenomeAlignment()`, `getTaxonomy()`, and the `getData()` functions. 
 
 ###getXref
 This function searches the OMA database for entries containing the pattern defined and returns the results in a dataframe. Hence, it is usually a good starting place.
