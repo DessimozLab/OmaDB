@@ -1,51 +1,65 @@
-source("R/config.R")
+
+API_URL = "https://omadev.cs.ucl.ac.uk/api"
 
 depth <- function(list) ifelse(is.list(list), 1L + max(sapply(list, depth)), 0L)
 
-check_response <- function(url){
-	resp=httr::GET(url)
-	if (httr::http_error(resp)) {
-    stop(
-      sprintf(
-        "OMA API request failed [%s]\n%s", 
-        httr::status_code(resp),
-        substring(httr::fromJSON(httr::content(resp, "text"))$detail,2) #due to utf-8 encoding
-      ),
-      call. = FALSE
-    )
-	}
-}
-
-urlGenerator <- function(type,id=NULL,detail=NULL,query_param1=NULL,query_param1_value=NULL,query_param2=NULL,query_param2_value=NULL){
+urlGenerator <- function(type,id=NULL,detail=NULL,query_param1=NULL,query_param1_value=NULL,query_param2=NULL,query_param2_value=NULL,query_param3=NULL,query_param3_value=NULL){
 	type = tolower(type)
 	
-	if(!any(endpoints==type)){
-		stop("You must provide a valid endpoint.")
-	}
-
 	url_prefix = paste0(API_URL,"/",type,"/")
 	if(!is.null(id)){ id=paste0(id,"/")}
 	if(!is.null(detail)){ detail=paste0(detail,"/")}
 	if(!is.null(query_param1_value)){ query_param1=paste0("?",query_param1,"=",URLencode(query_param1_value))}
 	if(!is.null(query_param2_value)){ query_param2=paste0("&",query_param2,"=",URLencode(query_param2_value))}
+	if(!is.null(query_param3_value)){ query_param3=paste0("&",query_param3,"=",URLencode(query_param3_value))}
 
-	final_url= paste0(url_prefix,id,detail,query_param1,query_param2)
-	check_response(final_url)
-	
+	final_url= paste0(url_prefix,id,detail,query_param1,query_param2,query_param3)
+
 	return(final_url)
 
 }
 
 simpleRequest <- function (url){
-	response = httr::GET(url)
-	content_list = httr::content(response, as = "parsed")
-	column_names = names(content_list)
 
-	objectFactory(column_names,content_list)
+	response = httr::GET(url)
+
+	out <- tryCatch(
+	{		
+		content_list = httr::content(response, as = "parsed")
+		column_names = names(content_list)
+
+		objectFactory(column_names,content_list)
+	}, 
+	error= function(cond) {
+            message(paste("THE OMA REST API request failed:", url))
+            message("Here's the original error message:")
+            
+			response_message = httr::http_status(response)$message
+			
+            message(response_message)
+            
+            return(NA)
+        },
+
+    warning=function(cond) {
+            message(paste("URL caused a warning:", url))
+            message("Here's the original warning message:")
+            
+            response_message = httr::http_status(response)$message
+
+            message(response_message)
+ 
+            return(NULL)
+        }
+   
+   	)
+
+	return(out)
+	
 }
 
 
-objectFactory <- function(column_names,content_list,type) { 
+objectFactory <- function(column_names,content_list) { 
 
 	list_of_variables = list()
 	
@@ -55,58 +69,77 @@ objectFactory <- function(column_names,content_list,type) {
 
  	value <- list_of_variables
  
- 	attr(value, "class") <- "apiobject"
+ 	attr(value, "class") <- "OMAObject"
  	value
 
 }
 
-requestFactory <- function (url,type,pagination=TRUE) {
+requestFactory <- function (url) {
 
 	response = httr::GET(url)
-	content_list = httr::content(response, as = "parsed")
-	column_names = names(content_list)
 
-	if("count" %in% column_names){
-		resolvePagination(url,pagination)
-	}
+	out<- tryCatch(
+	{
+		content_list = httr::content(response, as = "parsed")
+		column_names = names(content_list)
 
-	if(is.null(column_names)){
-		formatData(content_list)
-	}
+		if(is.null(column_names)){
+			if(length(content_list)==1){
+				column_names = names(content_list[[1]])
 
-	else {
-		objectFactory(column_names,content_list,type)
-	}
-}
+				objectFactory(column_names,content_list[[1]])
+				}
+			
+			else{
 
-resolvePagination <- function(url,pagination) {
-	 
-	 if(pagination){
-		simpleRequest(url)
-	 }
-
-	 else{
-	 	getAllPages(url)
-	 }	
-}
-
-get_all_pages <- function(url){
-	list_of_things <- list()
-	list_of_things[[1]] <- jsonlite::fromJSON(url)$results
-	count = jsonlite::fromJSON(url)$count
-	pages = count/100
-	if (pages%%1 != 0){
-		if(pages%%1 >= 0.5){
-			pages= round(pages)
+				formatData(content_list)
+			}
+			
 		}
-		else{
-			pages=round(pages+1,digits=0)
+
+		else {
+			objectFactory(column_names,content_list)
 		}
-	}
-	for(i in 2:pages){
-		new_url = paste0(url,"?page=",i)
-		list_of_things[[i]] <- jsonlite::fromJSON(new_url)$results
-	}
-	return(list_of_things)
+	},
+		
+		error= function(cond) {
+            message(paste("THE OMA REST API request failed:", url))
+            message("Here's the original error message:")
+            
+			response_message = httr::http_status(response)$message
+			
+            message(response_message)
+            
+            return(NA)
+        },
+
+    	warning=function(cond) {
+            message(paste("URL caused a warning:", url))
+            message("Here's the original warning message:")
+            
+            response_message = httr::http_status(response)$message
+
+            message(response_message)
+ 
+            return(NULL)
+        }	
+
+		)
+	
+	return(out)
 }
+
+
+check_response <- function(url){
+
+		response = httr::GET(url)
+
+		if(httr::http_status(response)$category != "Success"){
+			message = httr::http_status(response)$message
+		
+			stop(paste("THE OMA REST API request failed:", url,"\nHere's the original error message:", message))
+
+		}
+}
+
 

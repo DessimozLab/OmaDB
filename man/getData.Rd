@@ -9,7 +9,7 @@ getData(type, id = NULL)
 \arguments{
 \item{type}{the type for the entry to be returned - either protein, genome, group or hog}
 
-\item{id}{an identifier for the entry to be returned. For more information, see the vignette.}
+\item{id}{an identifier for the entry to be returned. For more information, see the "Get started with Roma" vignette.}
 }
 \value{
 an object containing the JSON keys as attributes

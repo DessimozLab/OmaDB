@@ -29,5 +29,5 @@ getGenomeAlignment <- function(genome_id1,genome_id2,chr1=NULL,chr2=NULL){
 		url = paste0(API_URL,"/pairs/",genome_id1,"/",genome_id2,"/")
 	}
 	
-	return(jsonlite::fromJSON(url))	
+	return(requestFactory(url))	
 }

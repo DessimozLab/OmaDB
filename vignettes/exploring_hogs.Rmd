@@ -1,0 +1,86 @@
+---
+title: "Exploring Hierarchical orthologous groups"
+author: "Klara Kaleb"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Exploring Hierarchical orthologous groups}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+This little vignette shows you how to get started with the data available for HOGs in the `roma` package.
+
+## The HOGs
+
+Hierarchical orthologous groups (also known as HOGs) are sets of genes that are defined with respect to particular taxonomic ranges of interest[1]. They group genes that have descended from a single common ancestral genes in that taxonomic range. 
+
+HOGs hold a lot of useful information and have many applications in various contexts, including inference of gene function, study of gene evolution dynamics and comparative genomics. Each HOG has a taxonomic range - within it, a given HOG can branch into constructs known as subHOGs which arise in an event of gene duplication.
+
+HOGs can be retrived either by their hog id or by one of their members. Let's say we are interested in a gene that goes by the name of HUMAN22168 - below is the way to access its HOG.
+
+```{r, warning=FALSE, message=FALSE}
+library(roma)
+
+hog <- getHOG(id="HUMAN22168")
+
+attributes(hog)
+
+hog$hog_id
+
+length(hog$parent_hogs)
+
+hog$parent_hogs[[1]]$parent_hogs
+
+length(hog$children_hogs)
+
+hog$children_hogs[[1]]$hog_id
+
+hog$children_hogs[[2]]$hog_id
+
+roma::resolveURL(hog$children_hogs[[1]]$levels_url)$level
+
+
+```
+The above constructs an object holding information for the information available for a HOG in the current OMA database. We can recognise that  HOG:0261495.1a is a subhog of its parent hog HOG:0261495 and that it further splits into 2 children subhogs, HOG:0261495.1a.1a and HOG:0261495.1a.1b respectively. We can also see that this split occured at the Neognathae level. 
+
+We have just detected a gene duplication - it would be interesting to see if there is any gene differentiation as a consenquence. We can check this by looking at the member protein annotations for each subhog_id and perform a GO enrichment analysis on this by utilising the Bioconductor package topGO.
+
+```{r, warning=FALSE, message=FALSE}
+library(roma)
+library(topGO)
+
+hog <- getHOG(id="HUMAN22168")
+
+children = hog$children_hogs
+
+
+#creating a list of omaid's for the protein members
+proteins_list = list()
+
+for(child in children){
+	child_hog = resolveURL(child$levels_url)
+	members = resolveURL(child_hog$members_url)$members
+	for(i in range(length(members))){
+		proteins_list[[i]] = members[[i]]$omaid
+	}
+}
+
+#let's check the go annotations for each
+
+object_list = list()
+
+for(protein in proteins_list){
+	object_list[[protein]] = getData(type="protein",id=protein)
+}
+
+# We can now directly use the above data to construct a topGO object for further analysis (such as GO enrichment)
+
+annotations = formatTopGO(object_list,format="geneID2GO")
+
+topGO = getTopGO(annotations, myInterestingGenes = list(proteins_list[[1]]), format = "geneID2GO")
+
+
+```
+
+(1) Altenhoff, A., Gil, M., Gonnet, G., & Dessimoz, C. (2013). Inferring Hierarchical Orthologous Groups from Orthologous Gene Pairs PLoS ONE, 8 DOI: 10.1371/journal.pone.0053786

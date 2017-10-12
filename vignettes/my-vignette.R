@@ -18,6 +18,8 @@ library(roma)
 
 group <- getData(type="Group",id="YEAST58")
 
+group$fingerprint
+
 
 
 ## ---- warning=FALSE, message=FALSE---------------------------------------

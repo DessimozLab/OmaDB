@@ -4,12 +4,10 @@
 \alias{resolveURL}
 \title{Get the Further Information behind the URL Function}
 \usage{
-resolveURL(url_field, pagination = TRUE)
+resolveURL(url_field)
 }
 \arguments{
 \item{url_field}{the url of interest}
-
-\item{pagination}{boolean for which the default is TRUE}
 }
 \value{
 an object containing JSON keys as attributes
