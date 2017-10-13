@@ -35,7 +35,6 @@ mapSequence <- function(query,search,full_length=FALSE){
 		}
 	}
 	
-	check_response(url)
 
 	return(requestFactory(url))
 }

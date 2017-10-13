@@ -1,5 +1,5 @@
 
-API_URL = "https://omadev.cs.ucl.ac.uk/api"
+API_URL = "https://omabrowser.org/api"
 
 depth <- function(list) ifelse(is.list(list), 1L + max(sapply(list, depth)), 0L)
 
@@ -9,9 +9,9 @@ urlGenerator <- function(type,id=NULL,detail=NULL,query_param1=NULL,query_param1
 	url_prefix = paste0(API_URL,"/",type,"/")
 	if(!is.null(id)){ id=paste0(id,"/")}
 	if(!is.null(detail)){ detail=paste0(detail,"/")}
-	if(!is.null(query_param1_value)){ query_param1=paste0("?",query_param1,"=",URLencode(query_param1_value))}
-	if(!is.null(query_param2_value)){ query_param2=paste0("&",query_param2,"=",URLencode(query_param2_value))}
-	if(!is.null(query_param3_value)){ query_param3=paste0("&",query_param3,"=",URLencode(query_param3_value))}
+	if(!is.null(query_param1_value)){ query_param1=paste0("?",query_param1,"=",utils::URLencode(query_param1_value))}
+	if(!is.null(query_param2_value)){ query_param2=paste0("&",query_param2,"=",utils::URLencode(query_param2_value))}
+	if(!is.null(query_param3_value)){ query_param3=paste0("&",query_param3,"=",utils::URLencode(query_param3_value))}
 
 	final_url= paste0(url_prefix,id,detail,query_param1,query_param2,query_param3)
 

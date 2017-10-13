@@ -1,3 +1,264 @@
+get_group <- function(group_id, close.groups) {#
+	if(group_id=="all") {#
+		url = url_generator(type="groups")#
+	}#
+	else {#
+		url = url_generator(type="groups",id=group_id)#
+		if(missing(close.groups)){#
+			url = url_generator(type="groups",id=group_id,detail="close_groups")#
+			}	#
+		}#
+	return(APIObject(url))	#
+	}
+group<-get_group("1")
+group
+get_group <- function(group_id, close.groups) {#
+	if(group_id=="all") {#
+		url = url_generator(type="groups")#
+	}#
+	else {#
+		if(!missing(close.groups)){#
+			url = url_generator(type="groups",id=group_id,detail="close_groups")#
+			}#
+		else{#
+			url = url_generator(type="groups",id=group_id)#
+		}	#
+		}#
+	return(APIObject(url))	#
+	}
+group
+group<-get_group("1")
+group
+get_group <- function(group_id) {#
+	if(group_id=="all") {#
+		url = url_generator(type="groups")#
+	}#
+	else {#
+		url = url_generator(type="groups",id=group_id)#
+		}#
+	return(APIObject(url))	#
+	}
+group<-get_group("1")
+group
+Error: could not find function "install
+uninstall("omadb")
+library(httr)#
+library(plyr)#
+library(jsonlite)#
+#
+api_url = "http://127.0.0.1:8000/api"#
+#
+check_response <- function(url){#
+	resp=GET(url)#
+	if (http_error(resp)) {#
+    stop(#
+      sprintf(#
+        "OMA API request failed [%s]\n%s", #
+        status_code(resp),#
+        substring(fromJSON(content(resp, "text"))$detail,2) #due to utf-8 encoding#
+      ),#
+      call. = FALSE#
+    )#
+	}#
+}#
+#
+url_generator <- function(type,id=NULL,detail=NULL,query_param1=NULL,query_param1_value=NULL,query_param2=NULL,query_param2_value=NULL){#
+	url_prefix = paste0(api_url,"/",type,"/")#
+	if(!is.null(id)){ id=paste0(id,"/")}#
+	if(!is.null(detail)){ detail=paste0(detail,"/")}#
+	if(!is.null(query_param1_value)){ query_param1=paste0("?",query_param1,"=",URLencode(query_param1_value))}#
+	if(!is.null(query_param2_value)){ query_param2=paste0("&",query_param2,"=",URLencode(query_param2_value))}#
+#
+	final_url= paste0(url_prefix,id,detail,query_param1,query_param2)#
+	check_response(final_url)#
+	return(final_url)#
+#
+}#
+#
+get_all_pages <- function(url){#
+	list_of_things <- list()#
+	list_of_things[[1]] <- fromJSON(url)$results#
+	count = fromJSON(url)$count#
+	pages = count/100#
+	if (pages%%1 != 0){#
+		if(pages%%1 >= 0.5){#
+		pages= round(pages)#
+		}#
+		else{#
+			pages=round(pages+1,digits=0)#
+		}#
+	}#
+	for(i in 2:pages){#
+		new_url = paste0(url,"?page=",i)#
+		list_of_things[[i]] <- fromJSON(new_url)$results#
+	}#
+	return(list_of_things)#
+}#
+#
+depth <- function(list) ifelse(is.list(list), 1L + max(sapply(list, depth)), 0L)#
+#
+# Object constructor that accounts for most if not all formats data should come in#
+#
+APIObject <- function(url,pages=NULL) {#
+ response = GET(url)#
+ content_list = content(response, as = "parsed")#
+ column_names = names(content_list)#
+#
+ list_of_variables <- list()#
+ if("count" %in% column_names){#
+ 	list_of_variables[['message']] = "Access Denied." # things that would throttle the server like list of all the hogs or all the groups or all the genomes#
+ 	}#
+ else{#
+ 	for(name in column_names){#
+ 	variable = content_list[[name]]#
+ 	if(class(variable)=="character" && startsWith(variable,"http")){#
+ 		var_response = GET(variable)#
+ 		var_content = content(var_response, as = "parsed") #names list#
+ 		if(depth(var_content)>2){ #
+ 			##checking for pagination. TO DO: parse all the pages#
+ 			if(names(var_content)[1]=="count"){#
+ 				if(!is.null(pages)){#
+ 					dfs <- get_all_pages(variable)#
+					variable = rbind.fill(dfs)#
+ 				}#
+ 				else{#
+ 					variable=variable#
+ 				}#
+ 			}#
+ 			else{#
+ 				variable = APIObject(variable)	 #
+ 			}#
+ 		}#
+ 	else{#
+ 			dfs <- lapply(var_content, data.frame, stringsAsFactors = FALSE) #list of dataframes#
+ 			variable = rbind.fill(dfs)#
+ 		}		#
+ 	}#
+#
+ 	if(class(variable)=="list"){#
+ 		if(depth(variable)>3){ #chromosomes#
+ 			for(i in 1:length(variable)){#
+ 				variable[[i]][[2]][[1]]=rbind(variable[[i]][[2]][[1]])		#
+ 			}#
+ 			dfs <- lapply(variable, data.frame, stringsAsFactors = FALSE)#
+ 			variable = rbind.fill(dfs)#
+ 		}#
+ 		else{#
+ 			dfs <- lapply(variable, data.frame, stringsAsFactors = FALSE)#
+ 			variable = rbind.fill(dfs)#
+ 		}	#
+ 	}#
+ 	list_of_variables[[name]] = variable#
+ }#
+ }#
+#
+ value <- list_of_variables#
+ attr(value, "class") <- "apiobject"#
+ value#
+#
+}
+get_genome_alignment <- function(genome_id1,genome_id2,chr1,chr2){#
+	if(missing(chr1) & missing(chr2)) {#
+		#more complex url #
+		url = paste0(api_url,"/pairs/",genome_id1,"/",genome_id2,"/")#
+	}#
+	else{#
+		url = paste0(api_url,"/pairs/",genome_id1,"/",genome_id2,"/?chr1=",chr1,"&chr2=",chr2)#
+	}#
+	return(APIObject(url,pages="all"))#
+}
+get_genome_alignment("YEAST","ASHGO")
+vp = get_genome_alignment("YEAST","ASHGO")
+vp
+get_genome_alignment <- function(genome_id1,genome_id2,chr1,chr2){#
+	if(missing(chr1) & missing(chr2)) {#
+		#more complex url #
+		url = paste0(api_url,"/pairs/",genome_id1,"/",genome_id2,"/")#
+	}#
+	else{#
+		url = paste0(api_url,"/pairs/",genome_id1,"/",genome_id2,"/?chr1=",chr1,"&chr2=",chr2)#
+	}#
+	return(APIObject(url))#
+}
+vp = get_genome_alignment("YEAST","ASHGO")
+vp
+vp = get_genome_alignment("YEAST","ASHGO")
+head(vp)
+url = http://127.0.0.1:8000/api/pairs/YEAST/ASHGO/
+url="http://127.0.0.1:8000/api/pairs/YEAST/ASHGO/"
+response=GET(ucl)
+response=GET(url)
+content_list = content(response, as = "parsed")
+head(content_list)
+depth(content_list)
+content_list[[1]]
+dfs <- lapply(var_content[[1]], data.frame, stringsAsFactors = FALSE)
+dfs <- lapply(content_list[[1]], data.frame, stringsAsFactors = FALSE)
+dfs
+variable = rbind.fill(dfs)
+variable
+dfs
+flatten(dfs)
+depth(dfs[1])
+flatten(dfs[1])
+class(dfs[1])
+dfs
+lapply(dfs[1], data.frame, stringsAsFactors = FALSE)
+lapply(dfs[[1]], data.frame, stringsAsFactors = FALSE)
+variable
+head(content_list)
+content_list[[1]][[1]]
+data.frame(content_list[[1]][[1]])
+data.frame(content_list[[1]][[2]])
+rbind(data.frame(content_list[[1]][[2]]),data.frame(content_list[[1]][[1]]))
+head(vp)
+vp[1]
+vp[[1]]
+dim(vp)
+get_genome_alignment <- function(genome_id1,genome_id2,chr1,chr2){#
+	if(missing(chr1) & missing(chr2)) {#
+		#more complex url #
+		url = paste0(api_url,"/pairs/",genome_id1,"/",genome_id2,"/")#
+	}#
+	else{#
+		url = paste0(api_url,"/pairs/",genome_id1,"/",genome_id2,"/?chr1=",chr1,"&chr2=",chr2)#
+	}#
+	return(fromJSON(url))
+}
+vp = get_genome_alignment("YEAST","ASHGO")
+vp
+get_taxonomy <- function(root=NULL,members) {#
+	if(missing(members)){#
+		if(type=="newick"){#
+			url = url_generator(type="taxonomy",id=root,query_param1="type",query_param1_value="newick")#
+		}#
+		else#
+		{#
+			url = url_generator(type="taxonomy",id=root)#
+		}#
+	}#
+	else{#
+		#induced taxonomy, members needs to be string of taxon ids separated by commas#
+		if(is.null(type)){#
+			url = url_generator(type="taxonomy",id=root,query_param1="members",query_param1_value=members)#
+		}#
+		else#
+		{#
+			url = url_generator(type="taxonomy",id=root,query_param1="members",query_param1_value=members,query_param2="type",query_param2_value="newick")			#
+		}	#
+	}#
+	return(APIObject(url))#
+}
+tx = get_taxonomy()
+get_taxonomy <- function(root=NULL,members) {#
+	if(missing(members)){#
+		url = url_generator(type="taxonomy",id=root,query_param1="type",query_param1_value="newick")#
+	}#
+	else{#
+		url = url_generator(type="taxonomy",id=root,query_param1="members",query_param1_value=members,query_param2="type",query_param2_value="newick")				#
+	}#
+	return(APIObject(url))#
+}
 tx = get_taxonomy()
 tx
 tx = get_taxonomy()
@@ -215,394 +476,218 @@ formatData <- function (data) {#
 }
 f = formatData(content_list)
 head(f)
-libary(reshape1)
-libary(reshape2)
-library(reshape2)
-cancer_data = read.table("full_cancer_out")
-head(cancer_data)
-md <- melt(cancer_data, id.vars = c("specimen_id"))
-md
-head(md)
-head(cancer_our)
-head(cancer_out)
-head(cancer_data)
-libary(reshape)
-library(reshape)
-md <- melt(cancer_data, id= c("specimen_id"))
-md <- melt(cancer_data, id= c("specimen_id","gene_name"))
-head(md)
-mydata = cast(md,value~gene_name)
-head(mydata)
-mydata = cast(md,value~gene_name+specimen_id)
-head(mydata)
-mydata = cast(md,specimen_id+value~gene_name)
-head(mydata)
-mydata = cast(md,gene_name~value)
-head(mydata)
-mydata = cast(md,gene_name~value+specimen_id)
-head(mydata)
-mydata = cast(md,value+specimen_id~gene_name)
-head(mydata)
-md <- melt(cancer_data, id= c("specimen_id","value"))
-head(md)
-mydata = cast(md,value+specimen_id~gene_name)
-md <- melt(cancer_data, id= c("specimen_id"))
-md <- melt(cancer_data, id= c("specimen_id","gene_name"))
-head(md)
-library(reshape2)
-md <- melt(cancer_data)
-head(md)
-length(mydata)
-head(f)
-mydata = read.table("cancer_out")
-mydata
-mydata
-mydata = read.table("full_cancer_out")
-mydata
-cor(mydata)
-cormat <- round(cor(mydata),2)
-head(cormat)
-library(reshape2)
-melted_cormat <- melt(cormat)
-melted_cormat
-library(ggplot2)
-ggplot(data = melted_cormat, aes(x=Var1, y=Var2, fill=value)) + #
-  geom_tile()
-ggplot(data = melted_cormat, aes(x=X1, y=X2, fill=value)) + #
-  geom_tile()
-# Get lower triangle of the correlation matrix#
-  get_lower_tri<-function(cormat){#
-    cormat[upper.tri(cormat)] <- NA#
-    return(cormat)#
-  }#
-  # Get upper triangle of the correlation matrix#
-  get_upper_tri <- function(cormat){#
-    cormat[lower.tri(cormat)]<- NA#
-    return(cormat)#
-  }
-upper_tri <- get_upper_tri(cormat)#
-upper_tri
-melted_cormat <- melt(upper_tri, na.rm = TRUE)
-ggplot(data = melted_cormat, aes(Var2, Var1, fill = value))+#
- geom_tile(color = "white")+#
- scale_fill_gradient2(low = "blue", high = "red", mid = "white", #
-   midpoint = 0, limit = c(-1,1), space = "Lab", #
-   name="Pearson\nCorrelation") +#
-  theme_minimal()+ #
- theme(axis.text.x = element_text(angle = 45, vjust = 1, #
-    size = 12, hjust = 1))+#
- coord_fixed()
-ggplot(data = melted_cormat, aes(X2, X1, fill = value))+#
- geom_tile(color = "white")+#
- scale_fill_gradient2(low = "blue", high = "red", mid = "white", #
-   midpoint = 0, limit = c(-1,1), space = "Lab", #
-   name="Pearson\nCorrelation") +#
-  theme_minimal()+ #
- theme(axis.text.x = element_text(angle = 45, vjust = 1, #
-    size = 12, hjust = 1))+#
- coord_fixed()
-ggplot(data = melted_cormat, aes(X2, X1, fill = value))+#
- geom_tile(color = "white")+#
- scale_fill_gradient2(low = "blue", high = "red", mid = "white", #
-   midpoint = 0, limit = c(-1,1), space = "Lab", #
-   name="Pearson\nCorrelation") +#
-  theme_minimal()+ #
- theme(axis.text.x = element_text(angle = 45, vjust = 1, #
-    size = 12, hjust = 1))+#
- coord_fixed()
-reorder_cormat <- function(cormat){#
-# Use correlation between variables as distance#
-dd <- as.dist((1-cormat)/2)#
-hc <- hclust(dd)#
-cormat <-cormat[hc$order, hc$order]#
-}
-cormat <- reorder_cormat(cormat)#
-upper_tri <- get_upper_tri(cormat)#
-# Melt the correlation matrix#
-melted_cormat <- melt(upper_tri, na.rm = TRUE)#
-# Create a ggheatmap#
-ggheatmap <- ggplot(melted_cormat, aes(Var2, Var1, fill = value))+#
- geom_tile(color = "white")+#
- scale_fill_gradient2(low = "blue", high = "red", mid = "white", #
-   midpoint = 0, limit = c(-1,1), space = "Lab", #
-    name="Pearson\nCorrelation") +#
-  theme_minimal()+ # minimal theme#
- theme(axis.text.x = element_text(angle = 45, vjust = 1, #
-    size = 12, hjust = 1))+#
- coord_fixed()#
-# Print the heatmap#
-print(ggheatmap)
-cormat <- reorder_cormat(cormat)#
-upper_tri <- get_upper_tri(cormat)#
-# Melt the correlation matrix#
-melted_cormat <- melt(upper_tri, na.rm = TRUE)#
-# Create a ggheatmap#
-ggheatmap <- ggplot(melted_cormat, aes(X2, X1, fill = value))+#
- geom_tile(color = "white")+#
- scale_fill_gradient2(low = "blue", high = "red", mid = "white", #
-   midpoint = 0, limit = c(-1,1), space = "Lab", #
-    name="Pearson\nCorrelation") +#
-  theme_minimal()+ # minimal theme#
- theme(axis.text.x = element_text(angle = 45, vjust = 1, #
-    size = 12, hjust = 1))+#
- coord_fixed()#
-# Print the heatmap#
-print(ggheatmap)
-ggplot(data = melted_cormat, aes(Var2, Var1, fill = value))+#
- geom_tile(color = "white")+#
- scale_fill_gradient2(low = "blue", high = "red", mid = "white", #
-   midpoint = 0, limit = c(-1,1), space = "Lab", #
-   name="Pearson\nCorrelation") +#
-  theme_minimal()+ #
- theme(axis.text.x = element_text(angle = 45, vjust = 1, #
-    size = 12, hjust = 1))+#
- coord_fixed()
-ggplot(data = melted_cormat, aes(X2, X1, fill = value))+#
- geom_tile(color = "white")+#
- scale_fill_gradient2(low = "blue", high = "red", mid = "white", #
-   midpoint = 0, limit = c(-1,1), space = "Lab", #
-   name="Pearson\nCorrelation") +#
-  theme_minimal()+ #
- theme(axis.text.x = element_text(angle = 45, vjust = 1, #
-    size = 12, hjust = 1))+#
- coord_fixed()
-ggplot(data = melted_cormat, aes(X2, X1, fill = value))+#
- geom_tile(color = "white")+#
- scale_fill_gradient2(low = "blue", high = "red", mid = "white", #
-   midpoint = 0, limit = c(-1,1), space = "Lab", #
-   name="Pearson\nCorrelation") +#
-  theme_minimal()+ #
- theme(axis.text.x = element_text(angle = 45, vjust = 1, #
-    size = 12, hjust = 1))+#
- coord_fixed()
-melted_cormat <- melt(upper_tri, na.rm = TRUE)
-ggplot(data = melted_cormat, aes(Var2, Var1, fill = value))+#
- geom_tile(color = "white")+#
- scale_fill_gradient2(low = "blue", high = "red", mid = "white", #
-   midpoint = 0, limit = c(-1,1), space = "Lab", #
-   name="Pearson\nCorrelation") +#
-  theme_minimal()+ #
- theme(axis.text.x = element_text(angle = 45, vjust = 1, #
-    size = 12, hjust = 1))+#
- coord_fixed()
-ggplot(data = melted_cormat, aes(X2, X1, fill = value))+#
- geom_tile(color = "white")+#
- scale_fill_gradient2(low = "blue", high = "red", mid = "white", #
-   midpoint = 0, limit = c(-1,1), space = "Lab", #
-   name="Pearson\nCorrelation") +#
-  theme_minimal()+ #
- theme(axis.text.x = element_text(angle = 45, vjust = 1, #
-    size = 12, hjust = 1))+#
- coord_fixed()
-cormat <- round(cor(mydata),2)
-melted_cormat <- melt(cormat)
-get_lower_tri<-function(cormat){#
-    cormat[upper.tri(cormat)] <- NA#
-    return(cormat)#
-  }#
-  # Get upper triangle of the correlation matrix#
-  get_upper_tri <- function(cormat){#
-    cormat[lower.tri(cormat)]<- NA#
-    return(cormat)#
-  }
-upper_tri <- get_upper_tri(cormat)#
-upper_tri
-library(reshape2)#
-melted_cormat <- melt(upper_tri, na.rm = TRUE)#
-# Heatmap#
-library(ggplot2)#
-ggplot(data = melted_cormat, aes(X2, X1, fill = value))+#
- geom_tile(color = "white")+#
- scale_fill_gradient2(low = "blue", high = "red", mid = "white", #
-   midpoint = 0, limit = c(-1,1), space = "Lab", #
-   name="Pearson\nCorrelation") +#
-  theme_minimal()+ #
- theme(axis.text.x = element_text(angle = 45, vjust = 1, #
-    size = 12, hjust = 1))+#
- coord_fixed()
-library(httr)
-resp = GET("https://omadev.cs.ucl.ac.uk/api/sequence/?query=MNDPSLLGYPNVGPQQQQQQQQQQHAGLLGKGTPNALQQQLHMNQLTGIPPPGLMNNSDVHTSSNNNSRQLLDQLAN")
-resp
-response = resp
-content_list = httr::content(response, as = "parsed")#
-		column_names = names(content_list)
-objectFactory <- function(column_names,content_list,type) { #
-#
-	list_of_variables = list()#
-	for(name in column_names){#
- 		list_of_variables[[name]] = content_list[[name]]#
- 	}#
-#
- 	value <- list_of_variables#
- 	attr(value, "class") <- "apiobject"#
- 	value#
-#
-}
-objectFactory(column_names,content_list)
-obj = objectFactory(column_names,content_list)
-obj$targets
-formatData <- function (data,url==NULL) {#
-	if(class(data)=="list" && length(data)!=0){#
-	 		if(depth(data)>3){ #chromosomes#
-	 			for(i in 1:length(data)){#
-	 				#chromosomes#
-	 				data[[i]][[2]][[1]]=rbind(data[[i]][[2]][[1]])#
-#
-	 				#genomealignment#
-	 				data[[i]][[1]][[7]]=rbind(data[[i]][[1]][[7]])#
-	 				data[[i]][[2]][[7]]=rbind(data[[i]][[2]][[7]])			#
-	 			}#
-	 		}#
-#
-	 		dfs <- lapply(data, data.frame, stringsAsFactors = FALSE)#
-	 		data = plyr::rbind.fill(dfs)#
-	 		return(data)#
-	}#
-#
-}
-formatData <- function (data,url==NULL) {#
-	if(class(data)=="list" && length(data)!=0){#
-	 		if(depth(data)>3){ #chromosomes#
-	 			for(i in 1:length(data)){#
-	 				#chromosomes#
-	 				data[[i]][[2]][[1]]=rbind(data[[i]][[2]][[1]])#
-#
-	 				#genomealignment#
-	 				data[[i]][[1]][[7]]=rbind(data[[i]][[1]][[7]])#
-	 				data[[i]][[2]][[7]]=rbind(data[[i]][[2]][[7]])			#
-	 			}#
-	 		dfs <- lapply(data, data.frame, stringsAsFactors = FALSE)#
-	 		data = plyr::rbind.fill(dfs)#
-	 		return(data)#
-	}#
-#
-}
-df = formatData(obj$targets)
-df = formatData(formatData <- function (data) {#
-	if(class(data)=="list" && length(data)!=0){#
-	 		if(depth(data)>3){ #chromosomes#
-	 			for(i in 1:length(data)){#
-	 				#chromosomes#
-	 				data[[i]][[2]][[1]]=rbind(data[[i]][[2]][[1]])#
-#
-	 				#genomealignment#
-	 				data[[i]][[1]][[7]]=rbind(data[[i]][[1]][[7]])#
-	 				data[[i]][[2]][[7]]=rbind(data[[i]][[2]][[7]])			#
-	 			}#
-	 		dfs <- lapply(data, data.frame, stringsAsFactors = FALSE)#
-	 		data = plyr::rbind.fill(dfs)#
-	 		return(data)#
-	}#
-#
-}obj$targets)
-formatData <- function (data) {#
-	if(class(data)=="list" && length(data)!=0){#
-	 		if(depth(data)>3){ #chromosomes#
-	 			for(i in 1:length(data)){#
-	 				#chromosomes#
-	 				data[[i]][[2]][[1]]=rbind(data[[i]][[2]][[1]])#
-#
-	 				#genomealignment#
-	 				data[[i]][[1]][[7]]=rbind(data[[i]][[1]][[7]])#
-	 				data[[i]][[2]][[7]]=rbind(data[[i]][[2]][[7]])			#
-	 			}#
-	 		dfs <- lapply(data, data.frame, stringsAsFactors = FALSE)#
-	 		data = plyr::rbind.fill(dfs)#
-	 		return(data)#
-	}#
-#
-}
-df = formatData(obj$targets)
-df = formatData(obj$targets)
-}
-formatData <- function (data) {#
-	if(class(data)=="list" && length(data)!=0){#
-	 		if(depth(data)>3){ #chromosomes#
-	 			for(i in 1:length(data)){#
-	 				#chromosomes#
-	 				data[[i]][[2]][[1]]=rbind(data[[i]][[2]][[1]])#
-#
-	 				#genomealignment#
-	 				data[[i]][[1]][[7]]=rbind(data[[i]][[1]][[7]])#
-	 				data[[i]][[2]][[7]]=rbind(data[[i]][[2]][[7]])			#
-	 			}#
-#
-	 		}#
-	 		dfs <- lapply(data, data.frame, stringsAsFactors = FALSE)#
-	 		data = plyr::rbind.fill(dfs)#
-	 		return(data)#
-	}#
-#
-}
-df = formatData(obj$targets)
-depth <- function(list) ifelse(is.list(list), 1L + max(sapply(list, depth)), 0L)
-df = formatData(obj$targets)
-df
-biocLite(topGO)
-source("https://bioconductor.org/biocLite.R")
-biocLite("topGO")
-geneID2GO <- readMappings(file = system.file("examples/geneid2go.map", package = "topGO"))
-library(topGO)
-geneID2GO <- readMappings(file = system.file("examples/geneid2go.map", package = "topGO"))
-str(head(geneID2GO))
-GO2geneID <- inverseList(geneID2GO)
-str(head(GO2geneID))
-head(geneID2GO)
-class(geneID2GO)$`068724`
-class(geneID2GO)$068724
-class(geneID2GO$`068724`)
-typeof(geneID2GO)
-sampleGOdata
-data(gpdata.gs)
-browseVigenttes("roma")
-browseVigenettes("roma")
-browseVignettes("roma")
-browseVignettes(roma)
-biocLite(ggtree)
-biocLite("ggtree")
-nwk="((sba:0.03984952076326608861,(sca:0.24212307199678842484,(cgl:0.29957965624763355228,(((kla:0.32829009627835226137,ago:0.35217085340006204497):0.05741546733669361524,(skl:0.15813405639248145906,kwa:0.25658337062111585825):0.04348414441988464330):0.03689776646512240438,(yli:1.00856143917930674014,(((lel:0.28806785996189482324,(cal:0.11643570498932501178,ctr:0.12746420698315982789):0.08774131940069260227):0.12449843844102517765,pst:0.20187483296288805112):0.04951181210826986756,(pgu:0.32083506939774530942,dha:0.19121342958249643029):0.04448806563879210280):0.37619889625745939199):0.45090563411571948915):0.08921537612721808230):0.03625000527459597971):0.17548658899657892940):0.01414267170946369515,((sce:0.02228625922028022385,spa:0.01687593406907536564):0.01282179619059338992,smi:0.03661027033511007195):0.01331228080676675335,sku:0.04268512407808848497):0.0;"
-phylip <- ggtree::read.phylip(nwk)
-phylip <- read.phylip(nwk)
-install.packages("api")
-install.packages("ape")
-library(ape)
-my.phylo <- read.tree("((sba:0.03984952076326608861,(sca:0.24212307199678842484,(cgl:0.29957965624763355228,(((kla:0.32829009627835226137,ago:0.35217085340006204497):0.05741546733669361524,(skl:0.15813405639248145906,kwa:0.25658337062111585825):0.04348414441988464330):0.03689776646512240438,(yli:1.00856143917930674014,(((lel:0.28806785996189482324,(cal:0.11643570498932501178,ctr:0.12746420698315982789):0.08774131940069260227):0.12449843844102517765,pst:0.20187483296288805112):0.04951181210826986756,(pgu:0.32083506939774530942,dha:0.19121342958249643029):0.04448806563879210280):0.37619889625745939199):0.45090563411571948915):0.08921537612721808230):0.03625000527459597971):0.17548658899657892940):0.01414267170946369515,((sce:0.02228625922028022385,spa:0.01687593406907536564):0.01282179619059338992,smi:0.03661027033511007195):0.01331228080676675335,sku:0.04268512407808848497):0.0;")
-my.phylo <- read.tree("newick.txt")
-my.phylo <- read.tree("newick.txt")
-write.tree(my.phylo)
-my.phylo
-ggtree(my.phylo)
-library(ggtree)
-ggtree(my.phylo)
-nwk = "((sba:0.03984952076326608861,(sca:0.24212307199678842484,(cgl:0.29957965624763355228,(((kla:0.32829009627835226137,ago:0.35217085340006204497):0.05741546733669361524,(skl:0.15813405639248145906,kwa:0.25658337062111585825):0.04348414441988464330):0.03689776646512240438,(yli:1.00856143917930674014,(((lel:0.28806785996189482324,(cal:0.11643570498932501178,ctr:0.12746420698315982789):0.08774131940069260227):0.12449843844102517765,pst:0.20187483296288805112):0.04951181210826986756,(pgu:0.32083506939774530942,dha:0.19121342958249643029):0.04448806563879210280):0.37619889625745939199):0.45090563411571948915):0.08921537612721808230):0.03625000527459597971):0.17548658899657892940):0.01414267170946369515,((sce:0.02228625922028022385,spa:0.01687593406907536564):0.01282179619059338992,smi:0.03661027033511007195):0.01331228080676675335,sku:0.04268512407808848497):0.0;"
-my.phylo <- read.tree(nwk)
-biocLite("geneplast")
-library(geneplast)
-data(gpdata.gs)
-library(ggtree)
-library(devtools)
-library(roxygen2)
-library(roxygen)
-install.packages("roxygen2")
-library(roxygen2)
 setwd("desktop")
-setwd("./roma")
-document()
-document()
-install.packages("testhat")
-setwd("..")
-devtools:install("roma")
-devtools::install("roma")
-devtools:uninstall("roma")
-devtools::uninstall("roma")
 devtools::install("roma")
 library(roma)
-?getTopGO
-?formatTopGO
-?getTree
-?getTr
-devtools::uninstall("roma")
-setwd("./roma")
-roxygen2::document()
+geneList = list(getData(type="protein",id="YEAST58"),getData(type="protein",id="YEAST00059"))#
+#' annotations = formatTopGO(geneList,format="geneID2GO")'
+annotations
+annotations = formatTopGO(geneList,format="geneID2GO")
+setwd("roma")
+library(devtools)
+library(roxygen)
 library(roxygen2)
 document()
+annotations
+library(topGO)
+getTopGO(annotations=annotations, myInterestingGenes = list("YEAST00058"), format = "geneID2GO")
+setwd("..")
+devtools::build_vignettes("roma")
+library(roma)
+hog <- getHOG(id="HUMAN22168")#
+#
+children = hog$children_hogs
+proteins_list = list()#
+#
+for(child in children){#
+	child_hog = resolveURL(child$levels_url)#
+	members = resolveURL(child_hog$members_url)$members#
+	for(member in members){#
+		proteins_list = member$omaid#
+	}#
+}
+proteins_list
+proteins_list = list()#
+#
+for(child in children){#
+	child_hog = resolveURL(child$levels_url)#
+	members = resolveURL(child_hog$members_url)$members#
+	for(member in members){#
+		proteins_list[[member]] = member$omaid#
+	}#
+}
+proteins_list = list()#
+#
+for(child in children){#
+	child_hog = resolveURL(child$levels_url)#
+	members = resolveURL(child_hog$members_url)$members#
+	for(i in range(length(members))){#
+		proteins_list[[i]] = members[[i]]$omaid#
+	}#
+}
+proteins_list
+devtools::build_vignettes("roma")
+object_list = list()#
+#
+for(protein in proteins_list){#
+	object_list[[protein]] = getData(type="protein",id=protein)#
+}
+object_list
+for(i in range(length(proteins_list))){#
+	object_list[[i]] = getData(type="protein",id=proteins_list[[i]])#
+}
+object_list = list()#
+#
+for(i in range(length(proteins_list))){#
+	object_list[[i]] = getData(type="protein",id=proteins_list[[i]])#
+}
+object_list
+length(object_list)
+length(proteins_list)
+proteins_list = list()#
+#
+for(child in children){#
+	child_hog = resolveURL(child$levels_url)#
+	members = resolveURL(child_hog$members_url)$members#
+	for(i in range(length(members))){#
+		proteins_list[[i]] = members[[i]]$omaid#
+	}#
+}
+length(proteins_list)
+object_list = list()#
+#
+for(i in range(length(proteins_list))){#
+	object_list[[i]] = getData(type="protein",id=proteins_list[[i]])#
+}
+length(object_list)
+annotations = formatTopGO(object_list,format="geneID2GO")
+objects_list
+object_list
+length(object_list)
+str(object_list)
+str(proteins_list)
+object_list = list()#
+#
+for(i in range(length(proteins_list))){#
+	object_list[[i]] = getData(type="protein",id=proteins_list[[i]])#
+}
+str(object_list)
+object_list[[1]] = getData(type="protein",id=proteins_list[[1]])
+str(object_list)
+annotations = formatTopGO(object_list,format="geneID2GO")
+annotations
+topGO = getTopGO(annotations, myInterestingGenes = list(proteins_list[[1]]), format = "geneID2GO")
+library(roma)#
+library(topGO)#
+#
+hog <- getHOG(id="HUMAN22168")#
+#
+children = hog$children_hogs#
+#creating a list of omaid's for the protein members#
+proteins_list = list()#
+#
+for(child in children){#
+	child_hog = resolveURL(child$levels_url)#
+	members = resolveURL(child_hog$members_url)$members#
+	for(i in range(length(members))){#
+		proteins_list[[i]] = members[[i]]$omaid#
+	}#
+}#
+#
+#let's check the go annotations for each#
+#
+object_list = list()#
+#
+for(i in range(length(proteins_list))){#
+	object_list[[i]] = getData(type="protein",id=proteins_list[[i]])#
+}
+object_list
+devtools::build_vignettes("roma")
+library(rmarkdown)
+library(knitr)
+devtools::build_vignettes("roma")
+browseVignettes("roma")
+devtools::install("roma")
+browseVignettes("roma")
+browseVignettes("roma")
+browseVignettes("roma")
+devtools::build_vignettes("roma")
+devtools::build_vignettes("roma")
+devtools::build_vignettes("roma/sequence_mapping.Rmd")
+devtools::build_vignettes("roma./sequence_mapping.Rmd")
+setwd("")
+devtools::build_vignettes("roma/vignettes/sequence_mapping.Rmd")
+devtools::build_vignettes("roma/vignettes/")
+devtools::build_vignettes("roma/vignettes/")
+devtools::build_vignettes("roma")
+library(roma)#
+library(topGO)#
+#
+hog <- getHOG(id="HUMAN22168")#
+#
+children = hog$children_hogs
+proteins_list = list()#
+#
+for(child in children){#
+	child_hog = resolveURL(child$levels_url)#
+	members = resolveURL(child_hog$members_url)$members#
+	for(i in range(length(members))){#
+		proteins_list[[i]] = members[[i]]$omaid#
+	}#
+}
+proteins_list
+object_list = list()#
+#
+for(i in range(length(proteins_list))){#
+	object_list[[i]] = getData(type="protein",id=proteins_list[[i]])#
+}
+object_list
+object_list = list()#
+#
+for(i in range(length(proteins_list))){#
+	object_list[[i]] = getData(type="protein",id=proteins_list[[i]])#
+	i++#
+}
+object_list = list()#
+#
+for(i in range(length(proteins_list))){#
+	object_list[[i]] = getData(type="protein",id=proteins_list[[i]])#
+	i+=i#
+}
+object_list = list()#
+#
+for(i in range(length(proteins_list))){#
+	object_list[[i]] = getData(type="protein",id=proteins_list[[i]])#
+	i=i+1#
+}
+object_list
+proteins_list
+object_list = list()
+for(i in range(length(proteins_list))){#
+	object_list[[i]] = getData(type="protein",id=proteins_list[[i]])#
+	i=i+1#
+}
+length(object_list)
+str(object_list)
+object_list[[1]] = getData(type="protein",id=proteins_list[[1]])
+object_list[[1]]
+browseVignettes("roma")
+content_list
+lista[[i]]<-"klara"
+lista<-list()
+lista[[i]]<-"klara"
+lista[[ii]]<-"gab"
+lista[["ii"]]<-"gab"
+lista[[i]]<-"klara"
+lista
+"ii" in names(lista)
+"ii" %in% names(lista)
+setwd("./roma")
+document()
+document()
+document()
+document()
+biocLite("BiocCheck")
+source("https://bioconductor.org/biocLite.R")#
+biocLite("BiocCheck")
+library(BiocCheck)
