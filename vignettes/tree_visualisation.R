@@ -3,9 +3,7 @@ library(roma)
 
 taxonomy = getTaxonomy(root="Alveolata")
 
-write.table(taxonomy$newick, "newick.txt")
-
-tree_object = getTree("newick.txt")
+tree_object = getTree(taxonomy$newick)
 
 ggtree::ggtree(tree_object)
 

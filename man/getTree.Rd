@@ -7,7 +7,7 @@
 getTree(newick)
 }
 \arguments{
-\item{newick}{the txt file containing the newick of interest.}
+\item{newick}{the newick of interest}
 }
 \value{
 an tree object
@@ -17,6 +17,5 @@ The function to obtain the tree object from newick stored in a text file.
 }
 \examples{
 taxonomy = getTaxonomy(root="Alveolata")
-write(taxonomy$newick, "newick.txt")
-getTree("newick.txt")
+getTree(newick=taxonomy$newick)
 }

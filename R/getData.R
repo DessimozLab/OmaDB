@@ -7,17 +7,27 @@
 #' @return an object containing the JSON keys as attributes
 #' @export
 #' @examples
-#' getData(type = "Protein", id="YEAST00001")
-#' getData(type = "Group", id="YEAST00001")
+#' getData(type = "protein", id="YEAST00001")
+#' getData(type = "group", id="YEAST00001")
 
 
 getData <- function(type, id=NULL){
-	if(missing(type)){
+
+	type = tolower(type)
+
+	if(missing(type) || !(type %in% list("group","protein","genome"))){
 		stop("You must provide a valid object type.")
 	}
-	url = urlGenerator(type=type,id=id)
-	
-	check_response(url)
 
+	if(missing(id) || grepl(",",id) || length(id)!= 1){
+		stop("You must provide a valid object id.")
+	}
+
+		
+	url = urlGenerator(type=type,id=id)
+		
 	return(requestFactory(url))
+	
+
+	
 }

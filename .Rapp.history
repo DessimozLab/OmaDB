@@ -1,693 +1,1256 @@
-get_group <- function(group_id, close.groups) {#
-	if(group_id=="all") {#
-		url = url_generator(type="groups")#
-	}#
-	else {#
-		url = url_generator(type="groups",id=group_id)#
-		if(missing(close.groups)){#
-			url = url_generator(type="groups",id=group_id,detail="close_groups")#
-			}	#
-		}#
-	return(APIObject(url))	#
-	}
-group<-get_group("1")
-group
-get_group <- function(group_id, close.groups) {#
-	if(group_id=="all") {#
-		url = url_generator(type="groups")#
-	}#
-	else {#
-		if(!missing(close.groups)){#
-			url = url_generator(type="groups",id=group_id,detail="close_groups")#
-			}#
-		else{#
-			url = url_generator(type="groups",id=group_id)#
-		}	#
-		}#
-	return(APIObject(url))	#
-	}
-group
-group<-get_group("1")
-group
-get_group <- function(group_id) {#
-	if(group_id=="all") {#
-		url = url_generator(type="groups")#
-	}#
-	else {#
-		url = url_generator(type="groups",id=group_id)#
-		}#
-	return(APIObject(url))	#
-	}
-group<-get_group("1")
-group
-Error: could not find function "install
-uninstall("omadb")
-library(httr)#
-library(plyr)#
-library(jsonlite)#
-#
-api_url = "http://127.0.0.1:8000/api"#
-#
-check_response <- function(url){#
-	resp=GET(url)#
-	if (http_error(resp)) {#
-    stop(#
-      sprintf(#
-        "OMA API request failed [%s]\n%s", #
-        status_code(resp),#
-        substring(fromJSON(content(resp, "text"))$detail,2) #due to utf-8 encoding#
-      ),#
-      call. = FALSE#
-    )#
-	}#
-}#
-#
-url_generator <- function(type,id=NULL,detail=NULL,query_param1=NULL,query_param1_value=NULL,query_param2=NULL,query_param2_value=NULL){#
-	url_prefix = paste0(api_url,"/",type,"/")#
-	if(!is.null(id)){ id=paste0(id,"/")}#
-	if(!is.null(detail)){ detail=paste0(detail,"/")}#
-	if(!is.null(query_param1_value)){ query_param1=paste0("?",query_param1,"=",URLencode(query_param1_value))}#
-	if(!is.null(query_param2_value)){ query_param2=paste0("&",query_param2,"=",URLencode(query_param2_value))}#
-#
-	final_url= paste0(url_prefix,id,detail,query_param1,query_param2)#
-	check_response(final_url)#
-	return(final_url)#
-#
-}#
-#
-get_all_pages <- function(url){#
-	list_of_things <- list()#
-	list_of_things[[1]] <- fromJSON(url)$results#
-	count = fromJSON(url)$count#
-	pages = count/100#
-	if (pages%%1 != 0){#
-		if(pages%%1 >= 0.5){#
-		pages= round(pages)#
+getGRanges(mems$members)
+apply(mems$members['locus.strand'], 1, function(x) substring(as.character(x),0,1) )
+df['locus.strand'] = apply(df['locus.strand'], 1, function(x) {#
+		if(length(as.character(x))=2){#
+			(substring(as.character(x),0,1)#
 		}#
 		else{#
-			pages=round(pages+1,digits=0)#
+			x = "+"#
 		}#
-	}#
-	for(i in 2:pages){#
-		new_url = paste0(url,"?page=",i)#
-		list_of_things[[i]] <- fromJSON(new_url)$results#
-	}#
-	return(list_of_things)#
-}#
+		} #
+		)
+df['locus.strand'] = apply(df['locus.strand'], 1, function(x) {#
+		if(length(as.character(x))=2){#
+			x = substring(as.character(x),0,1)#
+		}#
+		else{#
+			x = "+"#
+		}#
+		} #
+		)
+df['locus.strand'] = apply(df['locus.strand'], 1, function(x) if(x=="1"){x=="+"})
+df['locus.strand']
+df = mems$members
+df['locus.strand'] = apply(df['locus.strand'], 1, function(x) if(x=="1"){x=="+"})
+df['locus.strand']
+getGRanges <- function(df){#
 #
-depth <- function(list) ifelse(is.list(list), 1L + max(sapply(list, depth)), 0L)#
+	df$locus.strand[df$locus.strand == "1"] <- "+"#
+	df$locus.strand[df$locus.strand == "-1"] <- "-"#
 #
-# Object constructor that accounts for most if not all formats data should come in#
+	grange = GenomicRanges::makeGRangesFromDataFrame(df,start.field = "start", #
+		end.field = "end", seqnames.field="omaid")#
 #
-APIObject <- function(url,pages=NULL) {#
- response = GET(url)#
- content_list = content(response, as = "parsed")#
- column_names = names(content_list)#
+	return(grange)#
+}
+getGRanges(mems$members)
+df
+df$omaid
+class(df$omaid)
+df$omaid[1]
+object_list = list()#
 #
- list_of_variables <- list()#
- if("count" %in% column_names){#
- 	list_of_variables[['message']] = "Access Denied." # things that would throttle the server like list of all the hogs or all the groups or all the genomes#
+	for(id in df$omaid){#
+		object_list = c(object_list,getData('protein','id'))#
+	}
+object_list = list()#
+#
+	for(id in df$omaid){#
+		object_list = c(object_list,getData('protein',id))#
+	}
+object_list = list()#
+#
+	for(id in df$omaid){#
+		object_list[df$omaid] = getData('protein','id')#
+	}
+object_list = list()#
+#
+	for(id in df$omaid){#
+		object_list[df$omaid] = getData('protein',id)#
+	}
+object_list = list()#
+#
+	for(id in df$omaid){#
+		object_list[[df$omaid]] = getData('protein',id)#
+	}
+object_list = list()#
+#
+	for(id in df$omaid){#
+		object_list[[id]] = getData('protein',id)#
+	}
+getObjectAttributes <- function (obj){#
+	for(name in attributes(obj)$names){#
+#
+ 		class_name = class(obj[[name]])#
+#
+ 		if(class_name=="character" && startsWith(value[[name]],'https://')){#
+ 			class_name = "URL"#
+#
+ 		}#
+ 		print(paste(name, ":", class_name))#
  	}#
- else{#
- 	for(name in column_names){#
- 	variable = content_list[[name]]#
- 	if(class(variable)=="character" && startsWith(variable,"http")){#
- 		var_response = GET(variable)#
- 		var_content = content(var_response, as = "parsed") #names list#
- 		if(depth(var_content)>2){ #
- 			##checking for pagination. TO DO: parse all the pages#
- 			if(names(var_content)[1]=="count"){#
- 				if(!is.null(pages)){#
- 					dfs <- get_all_pages(variable)#
-					variable = rbind.fill(dfs)#
- 				}#
- 				else{#
- 					variable=variable#
- 				}#
- 			}#
- 			else{#
- 				variable = APIObject(variable)	 #
+}
+g = getData("group","YEAST58")
+getObjectAttributes(getData("group","YEAST58"))
+getObjectAttributes <- function (obj){#
+	for(name in attributes(obj)$names){#
+#
+ 		class_name = class(obj[[name]])#
+#
+ 		if(class_name=="character" && startsWith(obj[[name]],'https://')){#
+ 			class_name = "URL"#
+#
+ 		}#
+ 		print(paste(name, ":", class_name))#
+ 	}#
+}
+getObjectAttributes(getData("group","YEAST58"))
+getObjectAttributes <- function (obj){#
+	for(name in attributes(obj)$names){#
+#
+ 		class_name = class(obj[[name]])#
+#
+ 		if(class_name=="character" && startsWith(obj[[name]],'https://')){#
+ 			class_name = "URL"#
+#
+ 		}#
+ 		print(paste(name, ":", class_name))
+}
+getObjectAttributes <- function (obj){#
+	for(name in attributes(obj)$names){#
+#
+ 		class_name = class(obj[[name]])#
+#
+ 		if(class_name=="character" && startsWith(obj[[name]],'https://')){#
+ 			class_name = "URL"#
+#
+ 		}#
+ 		print(paste(name, ":", class_name))
+}
+getObjectAttributes <- function (obj){#
+	for(name in attributes(obj)$names){#
+#
+ 		class_name = class(obj[[name]])#
+#
+ 		if(class_name=="character" && startsWith(obj[[name]],'https://')){#
+ 			class_name = "URL"#
+#
+ 		}#
+ 		print(paste(name, ":", class_name))#
+ 	}#
+}
+getObjectAttributes(getData("group","YEAST58"))
+objectFactory <- function(column_names,content_list) { #
+#
+	list_of_variables = list()#
+	for(name in column_names){#
+#
+		content = content_list[[name]]#
+#
+ 		if(class(content)=="list"){#
+ 			if(is.null(names(content))){#
+ 				if(length(content)>1){#
+ 					content = formatData(content)#
+ 				}				#
  			}#
  		}#
- 	else{#
- 			dfs <- lapply(var_content, data.frame, stringsAsFactors = FALSE) #list of dataframes#
- 			variable = rbind.fill(dfs)#
- 		}		#
- 	}#
 #
- 	if(class(variable)=="list"){#
- 		if(depth(variable)>3){ #chromosomes#
- 			for(i in 1:length(variable)){#
- 				variable[[i]][[2]][[1]]=rbind(variable[[i]][[2]][[1]])		#
- 			}#
- 			dfs <- lapply(variable, data.frame, stringsAsFactors = FALSE)#
- 			variable = rbind.fill(dfs)#
+ 		if(name=="chromosomes"){#
+ 			content = GenomicRanges::makeGRangesFromDataFrame(formatData(content_list[[name]]$chromosomes),#
+ 				start.field = "entry_ranges.1", end.field = "entry_ranges.2", seqnames.field="id", ignore.strand=TRUE)#
  		}#
- 		else{#
- 			dfs <- lapply(variable, data.frame, stringsAsFactors = FALSE)#
- 			variable = rbind.fill(dfs)#
- 		}	#
+#
+ 		if(name == "locus"){#
+ 		 	content = GenomicRanges::GRanges(#
+ 		 		seqnames = content_list[['omaid']],#
+ 		 		ranges = IRanges::IRanges(content$start,content$end),#
+ 		 		strand = content$strand)#
+ 		}#
+#
+ 		if(name=="sequence"){#
+ 			content = Biostrings::AAString(content)#
+ 		}#
+#
+ 		if(name=="cdna"){#
+ 			content = Biostrings::DNAString(content)#
+ 		}#
+#
+ 		list_of_variables[[name]] = content#
  	}#
- 	list_of_variables[[name]] = variable#
- }#
- }#
 #
- value <- list_of_variables#
- attr(value, "class") <- "apiobject"#
- value#
+ 	value <- list_of_variables#
+ 	return(value)#
 #
 }
-get_genome_alignment <- function(genome_id1,genome_id2,chr1,chr2){#
-	if(missing(chr1) & missing(chr2)) {#
-		#more complex url #
-		url = paste0(api_url,"/pairs/",genome_id1,"/",genome_id2,"/")#
-	}#
-	else{#
-		url = paste0(api_url,"/pairs/",genome_id1,"/",genome_id2,"/?chr1=",chr1,"&chr2=",chr2)#
-	}#
-	return(APIObject(url,pages="all"))#
-}
-get_genome_alignment("YEAST","ASHGO")
-vp = get_genome_alignment("YEAST","ASHGO")
-vp
-get_genome_alignment <- function(genome_id1,genome_id2,chr1,chr2){#
-	if(missing(chr1) & missing(chr2)) {#
-		#more complex url #
-		url = paste0(api_url,"/pairs/",genome_id1,"/",genome_id2,"/")#
-	}#
-	else{#
-		url = paste0(api_url,"/pairs/",genome_id1,"/",genome_id2,"/?chr1=",chr1,"&chr2=",chr2)#
-	}#
-	return(APIObject(url))#
-}
-vp = get_genome_alignment("YEAST","ASHGO")
-vp
-vp = get_genome_alignment("YEAST","ASHGO")
-head(vp)
-url = http://127.0.0.1:8000/api/pairs/YEAST/ASHGO/
-url="http://127.0.0.1:8000/api/pairs/YEAST/ASHGO/"
-response=GET(ucl)
-response=GET(url)
-content_list = content(response, as = "parsed")
-head(content_list)
-depth(content_list)
-content_list[[1]]
-dfs <- lapply(var_content[[1]], data.frame, stringsAsFactors = FALSE)
-dfs <- lapply(content_list[[1]], data.frame, stringsAsFactors = FALSE)
-dfs
-variable = rbind.fill(dfs)
-variable
-dfs
-flatten(dfs)
-depth(dfs[1])
-flatten(dfs[1])
-class(dfs[1])
-dfs
-lapply(dfs[1], data.frame, stringsAsFactors = FALSE)
-lapply(dfs[[1]], data.frame, stringsAsFactors = FALSE)
-variable
-head(content_list)
-content_list[[1]][[1]]
-data.frame(content_list[[1]][[1]])
-data.frame(content_list[[1]][[2]])
-rbind(data.frame(content_list[[1]][[2]]),data.frame(content_list[[1]][[1]]))
-head(vp)
-vp[1]
-vp[[1]]
-dim(vp)
-get_genome_alignment <- function(genome_id1,genome_id2,chr1,chr2){#
-	if(missing(chr1) & missing(chr2)) {#
-		#more complex url #
-		url = paste0(api_url,"/pairs/",genome_id1,"/",genome_id2,"/")#
-	}#
-	else{#
-		url = paste0(api_url,"/pairs/",genome_id1,"/",genome_id2,"/?chr1=",chr1,"&chr2=",chr2)#
-	}#
-	return(fromJSON(url))
-}
-vp = get_genome_alignment("YEAST","ASHGO")
-vp
-get_taxonomy <- function(root=NULL,members) {#
-	if(missing(members)){#
-		if(type=="newick"){#
-			url = url_generator(type="taxonomy",id=root,query_param1="type",query_param1_value="newick")#
-		}#
-		else#
-		{#
-			url = url_generator(type="taxonomy",id=root)#
-		}#
-	}#
-	else{#
-		#induced taxonomy, members needs to be string of taxon ids separated by commas#
-		if(is.null(type)){#
-			url = url_generator(type="taxonomy",id=root,query_param1="members",query_param1_value=members)#
-		}#
-		else#
-		{#
-			url = url_generator(type="taxonomy",id=root,query_param1="members",query_param1_value=members,query_param2="type",query_param2_value="newick")			#
-		}	#
-	}#
-	return(APIObject(url))#
-}
-tx = get_taxonomy()
-get_taxonomy <- function(root=NULL,members) {#
-	if(missing(members)){#
-		url = url_generator(type="taxonomy",id=root,query_param1="type",query_param1_value="newick")#
-	}#
-	else{#
-		url = url_generator(type="taxonomy",id=root,query_param1="members",query_param1_value=members,query_param2="type",query_param2_value="newick")				#
-	}#
-	return(APIObject(url))#
-}
-tx = get_taxonomy()
-tx
-tx = get_taxonomy()
-tx
-tx$root_taxon
-get_group <- function(group_id) {#
-	if(missing(group_id)){#
-		stop("You must provide a group id.")#
-	}#
-	if(group_id=="all") {#
-		url = url_generator(type="groups")#
-	}#
-	else {#
-		url = url_generator(type="groups",id=group_id)#
-		}#
-	return(APIObject(url))	#
-}
-g=get_group()
-packagesVersion("jsonlite")
-packageVersion("jsonlite")
-packageVersion("httr")
-packageVersion("rjsonio")
-library(omadb)
-protein=get_protein("YEAST69")
-protein=get_protein("YEAST90")
-protein$sequence
-?get_protein
-library(biocLite)
-library(bioclite)
-biocLite("roma")
-library("biocLite")
-source("https://bioconductor.org/biocLite.R")
-biocLite()
-biocLite(roma)
-biocLite("roma")
-R CMD build omadb
-install.packagesd("Biocheck")
-install.packages("BioBheck")
-library(httr)
-library(plyr)
-url
-url = http://omadev.cs.ucl.ac.uk/api/pairs/YEAST/ASHGO/
-url = "http://omadev.cs.ucl.ac.uk/api/pairs/YEAST/ASHGO/"
+getObjectAttributes(getData("group","YEAST58"))
+df
+object_list = list()#
+#
+	for(id in df$omaid){#
+		object_list[[id]] = getData('protein',id)#
+	}
+getData('protein',id)
+object_list = list()#
+#
+	for(id in df$entry_nr){#
+		object_list[[id]] = getData('protein',id)#
+	}
+ddf
+df
+object_list = list()#
+#
+	for(url in df$entry_url){#
+		object_list = resolveURL(url)#
+	}
+url = "https://omabrowser.org/api/protein/6511604/"
 response = httr::GET(url)#
-	content_list = httr::content(response, as = "parsed")#
-	column_names = names(content_list)
-dfs <- lapply(content_list, data.frame, stringsAsFactors = FALSE)
-head(dfs)
-final = rbind.fill(dfs)
-head(final)
+#
+		content_list = httr::content(response, as = "parsed")#
+		column_names = names(content_list)
+column_names
+str(content_lsit)
+str(content_list)
+objectFactory(column_names,content_list)
+list_of_variables = list()
+for(name in column_names){#
+#
+		content = content_list[[name]]#
+#
+ 		if(class(content)=="list"){#
+ 			if(is.null(names(content))){#
+ 				if(length(content)>1){#
+ 					content = formatData(content)#
+ 				}				#
+ 			}#
+ 		}#
+#
+ 		if(name=="chromosomes"){#
+ 			content = GenomicRanges::makeGRangesFromDataFrame(formatData(content_list[[name]]$chromosomes),#
+ 				start.field = "entry_ranges.1", end.field = "entry_ranges.2", seqnames.field="id", ignore.strand=TRUE)#
+ 		}#
+#
+ 		if(name == "locus"){#
+ 		 	content = GenomicRanges::GRanges(#
+ 		 		seqnames = content_list[['omaid']],#
+ 		 		ranges = IRanges::IRanges(content$start,content$end),#
+ 		 		strand = content$strand)#
+ 		}#
+#
+ 		if(name=="sequence"){#
+ 			content = Biostrings::AAString(content)#
+ 		}#
+#
+ 		if(name=="cdna"){#
+ 			content = Biostrings::DNAString(content)#
+ 		}#
+#
+ 		list_of_variables[[name]] = content#
+ 	}
+column_names
+for(name in column_names){#
+#
+		content = content_list[[name]]#
+#
+ 		if(class(content)=="list"){#
+ 			if(is.null(names(content))){#
+ 				if(length(content)>1){#
+ 					content = formatData(content)#
+ 				}				#
+ 			}#
+ 		}#
+}
+if(name=="chromosomes"){#
+ 			content = GenomicRanges::makeGRangesFromDataFrame(formatData(content_list[[name]]$chromosomes),#
+ 				start.field = "entry_ranges.1", end.field = "entry_ranges.2", seqnames.field="id", ignore.strand=TRUE)#
+ 		}
+for(name in column_names){#
+#
+		content = content_list[[name]]#
+#
+ 		if(name=="chromosomes"){#
+ 			content = GenomicRanges::makeGRangesFromDataFrame(formatData(content_list[[name]]$chromosomes),#
+ 				start.field = "entry_ranges.1", end.field = "entry_ranges.2", seqnames.field="id", ignore.strand=TRUE)#
+ 		}#
+}
+for(name in column_names){#
+#
+		content = content_list[[name]]#
+#
+ 		if(name == "locus"){#
+ 		 	content = GenomicRanges::GRanges(#
+ 		 		seqnames = content_list[['omaid']],#
+ 		 		ranges = IRanges::IRanges(content$start,content$end),#
+ 		 		strand = content$strand)#
+ 		}#
+}
+for(name in column_names){#
+#
+		content = content_list[[name]]#
+#
+if(name=="sequence"){#
+ 			content = Biostrings::AAString(content)#
+ 		}#
+}
+for(name in column_names){#
+#
+		content = content_list[[name]]#
+#
+if(name=="cdna"){#
+ 			content = Biostrings::DNAString(content)#
+ 		}#
+}
+content_list$cdna
+for(name in column_names){#
+#
+		content = content_list[[name]]#
+#
+if(name=="cdna" && !(grepl("X",content))){#
+ 			content = Biostrings::DNAString(content)#
+ 		}#
+}
+objectFactory <- function(column_names,content_list) { #
+#
+	list_of_variables = list()#
+	for(name in column_names){#
+#
+		content = content_list[[name]]#
+#
+ 		if(class(content)=="list"){#
+ 			if(is.null(names(content))){#
+ 				if(length(content)>1){#
+ 					content = formatData(content)#
+ 				}				#
+ 			}#
+ 		}#
+#
+ 		if(name=="chromosomes"){#
+ 			content = GenomicRanges::makeGRangesFromDataFrame(formatData(content_list[[name]]$chromosomes),#
+ 				start.field = "entry_ranges.1", end.field = "entry_ranges.2", seqnames.field="id", ignore.strand=TRUE)#
+ 		}#
+#
+ 		if(name == "locus"){#
+ 		 	content = GenomicRanges::GRanges(#
+ 		 		seqnames = content_list[['omaid']],#
+ 		 		ranges = IRanges::IRanges(content$start,content$end),#
+ 		 		strand = content$strand)#
+ 		}#
+#
+ 		if(name=="sequence"){#
+ 			content = Biostrings::AAString(content)#
+ 		}#
+#
+ 		if(name=="cdna" && !(grepl("X",content))){#
+ 			content = Biostrings::DNAString(content)#
+ 		}#
+#
+ 		list_of_variables[[name]] = content#
+ 	}#
+#
+ 	value <- list_of_variables#
+ 	return(value)#
+#
+}
+object_list = list()#
+#
+	for(url in df$entry_url){#
+		object_list = resolveURL(url)#
+	}
+object_list
+object_list = list()#
+#
+	for(id in df$omaid){#
+		object_list[id] = getData("protein",id)#
+	}
+object_list = list()#
+#
+	for(id in df$omaid){#
+		object_list[[id]] = getData("protein",id)#
+	}
+object_list
+getAnnotations <- function(df){#
+#
+	object_list = list()#
+#
+	for(id in df$omaid){#
+		object_list[[id]] = getData("protein",id)#
+	}#
+#
+	annotations = formatTopGO(object_list,format="geneID2GO")#
+#
+	return(annotations)#
+#
+}
+getAnnotations(df)
+getSequences <- function(df){#
+#
+	object_list = list()#
+#
+	for(id in df$omaid){#
+		object_list[[id]] = getData("protein",id)#
+	}#
+#
+	sequences = list()#
+ 	for(object in object_list){#
+		sequences[[object$omaid]] = object$sequence#
+	}#
+	return(sequences)#
+#
+}
+getSequences(df)
+g = getData("genome","YEAST")
+url = "https://omabrowser.org/api/genome/YEAST/"
+response = httr::GET(url)#
+#
+		content_list = httr::content(response, as = "parsed")#
+		column_names = names(content_list)
+list_of_variables = list()#
+	for(name in column_names){#
+#
+		content = content_list[[name]]#
+#
+ 		if(class(content)=="list"){#
+ 			if(is.null(names(content))){#
+ 				if(length(content)>1){#
+ 					content = formatData(content)#
+ 				}				#
+ 			}#
+ 		}#
+#
+ 		if(name=="chromosomes"){#
+ 			content = GenomicRanges::makeGRangesFromDataFrame(formatData(content_list[[name]]$chromosomes),#
+ 				start.field = "entry_ranges.1", end.field = "entry_ranges.2", seqnames.field="id", ignore.strand=TRUE)#
+ 		}#
+#
+ 		if(name == "locus"){#
+ 		 	content = GenomicRanges::GRanges(#
+ 		 		seqnames = content_list[['omaid']],#
+ 		 		ranges = IRanges::IRanges(content$start,content$end),#
+ 		 		strand = content$strand)#
+ 		}#
+#
+ 		if(name=="sequence"){#
+ 			content = Biostrings::AAString(content)#
+ 		}#
+#
+ 		if(name=="cdna" && !(grepl("X",content))){#
+ 			content = Biostrings::DNAString(content)#
+ 		}#
+#
+ 		list_of_variables[[name]] = content#
+ 	}
+content = content_list[['chromosomes']]
+content
+if(class(content)=="list"){#
+ 			if(is.null(names(content))){#
+ 				if(length(content)>1){#
+ 					content = formatData(content)#
+ 				}				#
+ 			}#
+ 		}
+content
+content_list = content_list[['chromosomes']]
 content_list
-content_list[1]
-dfs <- lapply(content_list, data.frame, stringsAsFactors = FALSE)
-dfs[1]
-depth(content_list)
-depth <- function(list) ifelse(is.list(list), 1L + max(sapply(list, depth)), 0L)
-depth(content_list)
-dfe = dfs[[1]]
-dfe[[1]]
-lista = content_list[[1]]
-lista
-rbind(lista)
-lista
-lista[[1]]
-lista[1]
-depth(lista[1])
-depth(lista[1][1])
-lista[1][1]
-lista[[1]][[1]
-]
-depth(lista[[1]][[1]])
-depth(lista[[1]][[5]])
-lista[[1]][[4]]
-lista[[1]][[7]]
-depth(lista[[1]][[7]])
+"entry_ranges" %in% names(content_list[[1]][[1]])
+"entry_ranges" %in% names(content_list[[1]])
 formatData <- function (data) {#
 	if(class(data)=="list" && length(data)!=0){#
-	 		if(depth(data)>3){#
-	 			resolveNesting()#
-	 		}#
-#
-	 		dfs <- lapply(data, data.frame, stringsAsFactors = FALSE)#
-	 		data = plyr::rbind.fill(dfs)#
-	 		return(data)#
-	}#
-#
-}#
-#
-resolveNesting <- function (data) {#
-	for(i in 1:length(data)){#
-		for(j in 1:length(data[i])){#
-			if(depth(data[i][j]==1)){#
-				data[i][j]=plyr::rbind(data[i][j])#
-			}#
-		}		#
-	}#
-}
-f = formatData(content_list)
-formatData <- function (data) {#
-	if(class(data)=="list" && length(data)!=0){#
-	 		if(depth(data)>3){#
-	 			resolveNesting(data)#
-	 		}#
-#
-	 		dfs <- lapply(data, data.frame, stringsAsFactors = FALSE)#
-	 		data = plyr::rbind.fill(dfs)#
-	 		return(data)#
-	}#
-#
-}
-f = formatData(content_list)
-resolveNesting <- function (data) {#
-	for(i in 1:length(data)){#
-		for(j in 1:length(data[i])){#
-			if(depth(data[[i]][[j]]==1)){#
-				data[[i]][[j]]=plyr::rbind(data[[i]][[j]])#
-			}#
-		}		#
-	}#
-}
-f = formatData(content_list)
-resolveNesting <- function (data) {#
-	for(i in 1:length(data)){#
-		for(j in 1:length(data[i])){#
-			if(depth(data[[i]][[j]])==1){#
-				data[[i]][[j]]=plyr::rbind(data[[i]][[j]])#
-			}#
-		}		#
-	}#
-}
-f = formatData(content_list)
-head(df)
-head(f)
-formatData <- function (data) {#
-	if(class(data)=="list" && length(data)!=0){#
-	 		if(depth(data)>3){ #
-	 			for(i in 1:length(data)){#
-	 				resolveNesting(data)		#
-	 			}#
-	 		formatData(data)#
-	 		}#
-#
-	 		dfs <- lapply(data, data.frame, stringsAsFactors = FALSE)#
-	 		data = plyr::rbind.fill(dfs)#
-	 		return(data)#
-	}#
-#
-}#
-#
- resolveNesting <- function (data) {#
- 	for(i in 1:length(data)){#
- 		for(j in 1:length(data[i])){#
- 			for(k in 1:length(data[i][j])){#
- 				if(depth(data[[i]][[j]][[k]])==1){#
- 				data[[i]][[j]][[k]]=plyr::rbind(data[[i]][[j]][[k]])#
- 			}#
- 		}		#
- 	}#
- 	}#
-}
-f = formatData(content_list)
-formatData <- function (data) {#
-	if(class(data)=="list" && length(data)!=0){#
-	 		if(depth(data)>3){ #
-	 			for(i in 1:length(data)){#
-	 				resolveNesting(data)		#
-	 			}#
-	 		}#
-#
-	 		dfs <- lapply(data, data.frame, stringsAsFactors = FALSE)#
-	 		data = plyr::rbind.fill(dfs)#
-	 		return(data)#
-	}#
-#
-}#
-#
- resolveNesting <- function (data) {#
- 	for(i in 1:length(data)){#
- 		for(j in 1:length(data[i])){#
- 			for(k in 1:length(data[i][j])){#
- 				if(depth(data[[i]][[j]][[k]])==1){#
- 				data[[i]][[j]][[k]]=plyr::rbind(data[[i]][[j]][[k]])#
- 			}#
- 		}		#
- 	}#
- 	}#
-}
-f = formatData(content_list)
-head(f)
-depth(lista[[1]][[7]])
-lista[[1]][[7]]
-rbind(lista[[1]][[7]])
-lista[[1]][[7]]=rbind(lista[[1]][[7]])
-lista[[1]][[7]]
-length(lista)
-length(lista[[1]][[7]])
-formatData <- function (data) {#
-	if(class(data)=="list" && length(data)!=0){#
-	 		if(depth(data)>3){ #chromosomes#
-	 			for(i in 1:length(data)){#
-	 				#chromosomes#
-	 				data[[i]][[2]][[1]]=rbind(data[[i]][[2]][[1]])#
-#
-	 				#genomealignment#
+	 	if("entry_1" %in% names(data[[1]])){#
+	 		for(i in seq_along(data)){	 				#
 	 				data[[i]][[1]][[7]]=rbind(data[[i]][[1]][[7]])#
-	 				data[[i]][[2]][[7]]=rbind(data[[i]][[2]][[7]])			#
+					data[[i]][[2]][[7]]=rbind(data[[i]][[2]][[7]])	 								 						#
 	 			}#
-	 		}#
+	 	}#
 #
+	 	if("entry_ranges" %in% names(data[[1]])){#
+	 		for(i in seq_along(info)){	 #
+					info[[i]][[2]][[1]]=rbind(info[[i]][[2]][[1]])#
+	 			}#
+#
+	 		data = info#
+#
+	 		}#
 	 		dfs <- lapply(data, data.frame, stringsAsFactors = FALSE)#
 	 		data = plyr::rbind.fill(dfs)#
 	 		return(data)#
 	}#
 #
 }
-f = formatData(content_list)
-head(f)
-setwd("desktop")
-devtools::install("roma")
+g = getData("genome","YEAST")
+if(class(content)=="list"){#
+ 			if(is.null(names(content))){#
+ 				if(length(content)>1){#
+ 					content = formatData(content)#
+ 				}				#
+ 			}#
+ 		}
+content
+content_list
+"entry_ranges" %in% names(content_list[[1]])
+formatData <- function (data) {#
+	if(class(data)=="list" && length(data)!=0){#
+	 	if("entry_1" %in% names(data[[1]])){#
+	 		for(i in seq_along(data)){	 				#
+	 				data[[i]][[1]][[7]]=rbind(data[[i]][[1]][[7]])#
+					data[[i]][[2]][[7]]=rbind(data[[i]][[2]][[7]])	 								 						#
+	 			}#
+	 	}#
+#
+	 	if("entry_ranges" %in% names(data[[1]])){#
+	 		for(i in seq_along(data)){	 #
+					info[[i]][[2]][[1]]=rbind(info[[i]][[2]][[1]])#
+	 			}#
+#
+	 		}#
+	 		dfs <- lapply(data, data.frame, stringsAsFactors = FALSE)#
+	 		data = plyr::rbind.fill(dfs)#
+	 		return(data)#
+	}#
+#
+}
+formatData(content_list)
+formatData <- function (data) {#
+	if(class(data)=="list" && length(data)!=0){#
+	 	if("entry_1" %in% names(data[[1]])){#
+	 		for(i in seq_along(data)){	 				#
+	 				data[[i]][[1]][[7]]=rbind(data[[i]][[1]][[7]])#
+					data[[i]][[2]][[7]]=rbind(data[[i]][[2]][[7]])	 								 						#
+	 			}#
+	 	}#
+#
+	 	if("entry_ranges" %in% names(data[[1]])){#
+	 		for(i in seq_along(data)){	 #
+					data[[i]][[2]][[1]]=rbind(data[[i]][[2]][[1]])#
+	 			}#
+#
+	 		}#
+	 		dfs <- lapply(data, data.frame, stringsAsFactors = FALSE)#
+	 		data = plyr::rbind.fill(dfs)#
+	 		return(data)#
+	}#
+#
+}
+formatData(content_list)
+formatData <- function (data) {#
+	if(class(data)=="list" && length(data)!=0){#
+	 	if("entry_1" %in% names(data[[1]])){#
+	 		for(i in seq_along(data)){	 				#
+	 				data[[i]][[1]][[7]]=rbind(data[[i]][[1]][[7]])#
+					data[[i]][[2]][[7]]=rbind(data[[i]][[2]][[7]])	 								 						#
+	 			}#
+	 	}#
+#
+	 	if("entry_ranges" %in% names(data[[1]])){#
+	 		for(i in seq_along(data)){	 #
+					data[[i]][[2]][[1]]=rbind(data[[i]][[2]][[1]])#
+	 			}#
+#
+	 		}#
+	 		dfs <- lapply(data, data.frame, stringsAsFactors = FALSE)#
+	 		data = plyr::rbind.fill(dfs)#
+	 		return(data)#
+	}#
+#
+}
+g = getData("genome","YEAST")
+content_list = httr::content(response, as = "parsed")#
+		column_names = names(content_list)
+objectFactory(column_names,content_list)
+content
+content = content_list[['chromosomes']]
+if(class(content)=="list"){#
+ 			if(is.null(names(content))){#
+ 				if(length(content)>1){#
+ 					content = formatData(content)#
+ 				}				#
+ 			}#
+ 		}
+content
+name = 'chromosomes'
+if(name=="chromosomes"){#
+ 			content = GenomicRanges::makeGRangesFromDataFrame(formatData(content_list[[name]]$chromosomes),#
+ 				start.field = "entry_ranges.1", end.field = "entry_ranges.2", seqnames.field="id", ignore.strand=TRUE)#
+ 		}
+objectFactory <- function(column_names,content_list) { #
+#
+	list_of_variables = list()#
+	for(name in column_names){#
+#
+		content = content_list[[name]]#
+#
+ 		if(class(content)=="list"){#
+ 			if(is.null(names(content))){#
+ 				if(length(content)>1){#
+ 					content = formatData(content)#
+ 				}				#
+ 			}#
+ 		}#
+#
+ 		if(name=="chromosomes"){#
+ 			content = GenomicRanges::makeGRangesFromDataFrame(content,#
+ 				start.field = "entry_ranges.1", #
+ 				end.field = "entry_ranges.2", seqnames.field="id", #
+ 				ignore.strand=TRUE)#
+ 		}#
+#
+ 		if(name == "locus"){#
+ 		 	content = GenomicRanges::GRanges(#
+ 		 		seqnames = content_list[['omaid']],#
+ 		 		ranges = IRanges::IRanges(content$start,content$end),#
+ 		 		strand = content$strand)#
+ 		}#
+#
+ 		if(name=="sequence"){#
+ 			content = Biostrings::AAString(content)#
+ 		}#
+#
+ 		if(name=="cdna" && !(grepl("X",content))){#
+ 			content = Biostrings::DNAString(content)#
+ 		}#
+#
+ 		list_of_variables[[name]] = content#
+ 	}#
+#
+ 	value <- list_of_variables#
+ 	return(value)#
+#
+}
+objectFactory(column_names,content_list)
+g = getData("genome","YEAST")
+g
+g = getData("genome","HUMAN")
+g
+g = getData("genome","ASHGO")
+g
+g['lineage']
+getAttribute <- function (obj,attribute){#
+	return(obj[attribute])#
+}getAttribute <- function (obj,attribute){#
+	return(obj[attribute])#
+}
+getAttribute <- function (obj,attribute){#
+	return(obj[attribute])#
+}
+getAttribute(g,'chromosmes')
+getAttribute(g,'chromosomes')
+library(roma)#
+#
+hog <- getHOG(id="HUMAN22168")#
+#
+getObjectAttributes(hog)#
+#
+hog_id = getAttribute(hog,'hog_id')#
+#
+parent_hogs = getAttribute(hog,'parent_hogs')#
+#
+length(parent_hogs)#
+#
+getAttribute(parent_hogs[[1]],'hog_id')#
+#
+children_hogs = getAttribute(hog,'children_hogs')#
+#
+children_hog_id_1  = getAttribute(children_hogs[[1]],'hog_id')#
+children_hog_id_1#
+#
+children_hog_id_2  = getAttribute(children_hogs[[2]],'hog_id')#
+children_hog_id_2#
+#
+children_hog_1 = getHOG(id=children_hog_1)#
+#
+getAttribute(children_hog,"level")
+children_hogs = getAttribute(hog,'children_hogs')
+children_hogs
+children_hogs[[1]]
+children_hogs[[1,]]
+children_hogs[[,1]]
+children_hog_id_1  = children_hogs$hog_id[[1]]
+children_hog_id_1
+children_hogs$hog_id
+hog
+children_hogs = getAttribute(hog,'children_hogs')
+children_hogs
+members = getAttribute(getData("group","YEAST58"),'members')
+members
+getAttribute <- function (obj,attribute){#
+	return(obj[[attribute]])#
+}
+members = getAttribute(getData("group","YEAST58"),'members')
+members
+children_hog_id_1  = children_hogs$hog_id[[1]]#
+children_hog_id_1
+hog <- getHOG(id="HUMAN22168")#
+#
+getObjectAttributes(hog)#
+#
+hog_id = getAttribute(hog,'hog_id')#
+#
+parent_hogs = getAttribute(hog,'parent_hogs')#
+#
+length(parent_hogs)#
+#
+getAttribute(parent_hogs[[1]],'hog_id')#
+#
+children_hogs = getAttribute(hog,'children_hogs')#
+#
+children_hog_id_1  = children_hogs$hog_id[[1]]#
+children_hog_id_1
+children_hog_id_2  = children_hogs$hog_id[[2]]#
+children_hog_id_2#
+#
+children_hog_1 = getHOG(id=children_hog_1)#
+#
+getAttribute(children_hog,"level")
+children_hog_1 = getHOG(id=children_hog_id_1)#
+#
+getAttribute(children_hog_1,"level")
+hog <- getHOG(id="HUMAN22168")#
+#
+getObjectAttributes(hog)#
+#
+hog_id = getAttribute(hog,'hog_id')#
+#
+parent_hogs = getAttribute(hog,'parent_hogs')#
+#
+length(parent_hogs)#
+#
+getAttribute(parent_hogs[[1]],'hog_id')#
+#
+children_hogs = getAttribute(hog,'children_hogs')#
+#
+child_hog_id_1  = children_hogs$hog_id[[1]]#
+child_hog_id_1#
+#
+child_hog_id_2  = children_hogs$hog_id[[2]]#
+child_hog_id_2#
+#
+child_hog_1 = getHOG(id=child_hog_id_1)#
+#
+getAttribute(child_hog_1,"level")
+child_hog_1_members = getHOG(id = child_hog_id_1, members=TRUE)#
+child_hog_2_members = getHOG(id = child_hog_id_2, members=TRUE)
+child_hog_2_members
+getHOG <- function(id, level=NULL, members=FALSE){#
+	if(class(members)!="logical"){#
+		stop("Members parameter is of type boolean.")#
+	}#
+	if(missing(id)){#
+		stop("You must provide a valid HOG ID.")#
+	}#
+	if(!is.null(level)){#
+		if(members==FALSE){#
+		url = urlGenerator(type="hog",id=id,query_param1="level",query_param1_value=level)#
+		}#
+		else{#
+		url = urlGenerator(type="hog",id=id,detail="members",query_param1 ="level",query_param1_value=level)#
+	}#
+	}#
+	else{#
+		if(class(level)=="integer"){#
+			stop("You must provide a valid identifier for a taxonomic level - it can only be idneitifed via its full capitalised name.")#
+		}#
+#
+		if(members==FALSE){#
+		url = urlGenerator(type="hog",id=id)#
+		}#
+		else{#
+		url = urlGenerator(type="hog",id=id,detail="members")#
+	}#
+	}#
+	return(requestFactory(url))#
+}
+child_hog_1_members = getHOG(id = child_hog_id_1, members=TRUE)#
+child_hog_2_members = getHOG(id = child_hog_id_2, members=TRUE)
+child_hog_2_members
+depth(child_hog_2_members$members)
+objectFactory <- function(column_names,content_list) { #
+#
+	list_of_variables = list()#
+	for(name in column_names){#
+#
+		content = content_list[[name]]#
+#
+ 		if(class(content)=="list"){#
+ 			if(is.null(names(content))){#
+ 				if(depth(content)>2){#
+ 					content = formatData(content)#
+ 				}				#
+ 			}#
+ 		}#
+#
+ 		if(name=="chromosomes"){#
+ 			content = GenomicRanges::makeGRangesFromDataFrame(content,#
+ 				start.field = "entry_ranges.1", #
+ 				end.field = "entry_ranges.2", seqnames.field="id", #
+ 				ignore.strand=TRUE)#
+ 		}#
+#
+ 		if(name == "locus"){#
+ 		 	content = GenomicRanges::GRanges(#
+ 		 		seqnames = content_list[['omaid']],#
+ 		 		ranges = IRanges::IRanges(content$start,content$end),#
+ 		 		strand = content$strand)#
+ 		}#
+#
+ 		if(name=="sequence"){#
+ 			content = Biostrings::AAString(content)#
+ 		}#
+#
+ 		if(name=="cdna" && !(grepl("X",content))){#
+ 			content = Biostrings::DNAString(content)#
+ 		}#
+#
+ 		list_of_variables[[name]] = content#
+ 	}#
+#
+ 	value <- list_of_variables#
+ 	return(value)#
+#
+}
+child_hog_1_members = getHOG(id = child_hog_id_1, members=TRUE)#
+child_hog_2_members = getHOG(id = child_hog_id_2, members=TRUE)
+child_hog_2_members
+annotations_1 = getOntologies(child_hog_1_members)#
+annotations_2 = getOntologies(child_hog_2_members)
+getOntologies <- function(df){#
+#
+	object_list = list()#
+#
+	for(id in df$omaid){#
+		object_list[[id]] = getData("protein",id)#
+	}#
+#
+	annotations = formatTopGO(object_list,format="geneID2GO")#
+#
+	return(annotations)#
+#
+}
+annotations_1 = getOntologies(child_hog_1_members)#
+annotations_2 = getOntologies(child_hog_2_members)
+annotations_2
+annotations_1
+annotations_1 = getOntologies(child_hog_1_members$members)#
+annotations_2 = getOntologies(child_hog_2_members$members)
+annotations_2
+annotations_1
+annotations = c(annotations_1,annotations_2)
+annotaions
+annotations
+topGO = getTopGO(annotations, myInterestingGenes = names(annotaions_1), format = "geneID2GO")
+topGO = getTopGO(annotations, myInterestingGenes = names(annotations_1), format = "geneID2GO")
+library(topGP)
+library(topG))
+library(topGO)
+library(topG))
+topGO = getTopGO(annotations, myInterestingGenes = names(annotations_1), format = "geneID2GO")
+df
+object_list = vapply(df$omaid, getData("protein", x))
+object_list = vapply(df$omaid, function (x) getData(type = "protein", x))
+object_list = apply(df$omaid, function (x) getData(type = "protein", x))
+object_list = apply(df$omaid, FUN = function (x) getData(type = "protein", x))
+object_list = apply(df$omaid, MARGIN=1, FUN = function (x) getData(type = "protein", x))
+object_list = lapply(df$omaid, MARGIN=1, FUN = function (x) getData(type = "protein", x))
+object_list = lapply(df$omaid,FUN = function (x) getData(type = "protein", x))
+objectFactory <- function(column_names,content_list) { #
+#
+	list_of_variables = list()#
+	for(name in column_names){#
+#
+		content = content_list[[name]]#
+#
+ 		if(class(content)=="list"){#
+ 			if(is.null(names(content))){#
+ 				if(depth(content)>2){#
+ 					content = formatData(content)#
+ 				}				#
+ 			}#
+ 		}#
+#
+ 		if(name=="chromosomes"){#
+ 			content = GenomicRanges::makeGRangesFromDataFrame(content,#
+ 				start.field = "entry_ranges.1", #
+ 				end.field = "entry_ranges.2", seqnames.field="id", #
+ 				ignore.strand=TRUE)#
+ 		}#
+#
+ 		if(name == "locus"){#
+ 		 	content = GenomicRanges::GRanges(#
+ 		 		seqnames = content_list[['omaid']],#
+ 		 		ranges = IRanges::IRanges(content$start,content$end),#
+ 		 		strand = content$strand)#
+ 		}#
+#
+ 		if(name=="sequence"){#
+ 			content = Biostrings::AAString(content)#
+ 		}#
+#
+ 		if(name=="cdna" && !(grepl("X",content))){#
+ 			content = Biostrings::DNAString(content)#
+ 		}#
+#
+ 		list_of_variables[[name]] = content#
+ 	}#
+#
+ 	value <- list_of_variables#
+ 	return(value)#
+#
+}
+object_list = lapply(df$omaid,FUN = function (x) getData(type = "protein", x))
+object_list = vapply(df$omaid,FUN = function (x) getData(type = "protein", x))
+class(df$omaid)
+df$omaid
+object_list = lapply(df$omaid,FUN = function (x) getData(type = "protein", id = x))
+getData(type="protein",id="PICPG00513")
+url = https://omabrowser.org/api/protein/PICPG00513/
+getData(type="protein",id="PICPG00513
+)
+""
+''
+")
+url = "https://omabrowser.org/api/protein/PICPG00513/#
+"
+response = httr::GET(url)#
+#
+		content_list = httr::content(response, as = "parsed")#
+		column_names = names(content_list)
+content_list
+response = httr::GET(url)#
+#
+		content_list = httr::content(response, as = "parsed")#
+		column_names = names(content_list)
+url = trim(url)
+url
+url = "https://omabrowser.org/api/protein/PICPG00513/"
+response = httr::GET(url)#
+#
+		content_list = httr::content(response, as = "parsed")#
+		column_names = names(content_list)
+column_names
+objectFactory(column_names,content_list)
 library(roma)
-geneList = list(getData(type="protein",id="YEAST58"),getData(type="protein",id="YEAST00059"))#
-#' annotations = formatTopGO(geneList,format="geneID2GO")'
+geneList = list(getData(type="protein",id="YEAST58"),getData(type="protein",id="YEAST00059"))
+formatTopGO <- function(geneList,format){#
+#
+	if(missing(geneList)|| class(geneList)!="list"){#
+		stop("You must provide a valid list of genes.")#
+	}#
+	geneID2GO = list()#
+	for(protein in geneList){#
+		if(startsWith(protein['ontology'][[1]],"https://")){#
+			protein['ontology'][[1]] = resolveURL(protein['ontology'][[1]])#
+		}#
+#
+	    protein_annotations = {}#
+#
+		for (GO_term in protein['ontology'][[1]]['GO_term']){#
+			protein_annotations <- GO_term #
+		}#
+#
+		geneID2GO[[protein$omaid]] = as.list(protein_annotations)#
+	}#
+#
+	if(format=="geneID2GO"){#
+			return(geneID2GO)#
+			}#
+	if(format=="GO2geneID"){#
+			return(topGO::inverseList(geneID2GO))#
+			}#
+	else{#
+		stop("Invalid format. Must be either 'GO2geneID' or 'geneID2GO'")#
+	}#
+#
+}
+annotations = formatTopGO(geneList,format="geneID2GO")
+annotations
+formatTopGO <- function(geneList,format){#
+#
+	if(missing(geneList)|| class(geneList)!="list"){#
+		stop("You must provide a valid list of genes.")#
+	}#
+	geneID2GO = list()#
+	for(protein in geneList){#
+		if(startsWith(protein['ontology'][[1]],"https://")){#
+			protein['ontology'][[1]] = resolveURL(protein['ontology'][[1]])#
+		}#
+#
+	    protein_annotations = {}#
+#
+		for (GO_term in protein['ontology'][[1]]['GO_term']){#
+			protein_annotations <- GO_term #
+		}#
+#
+		geneID2GO[[protein$omaid]] = protein_annotations#
+	}#
+#
+	if(format=="geneID2GO"){#
+			return(geneID2GO)#
+			}#
+	if(format=="GO2geneID"){#
+			return(topGO::inverseList(geneID2GO))#
+			}#
+	else{#
+		stop("Invalid format. Must be either 'GO2geneID' or 'geneID2GO'")#
+	}#
+#
+}
+annotations = formatTopGO(geneList,format="geneID2GO")
+annotations
+getTopGO(annotations=annotations, myInterestingGenes = list("YEAST00058"), format = "geneID2GO")
+formatTopGO <- function(geneList,format){#
+#
+	geneID2GO = list()#
+#
+	for(protein in geneList){#
+		if(startsWith(protein['ontology'][[1]],"https://")){#
+			protein['ontology'][[1]] = resolveURL(protein['ontology'][[1]])#
+		}#
+#
+		protein_annotations = {}#
+#
+		for (GO_term in protein['ontology'][[1]]['GO_term']){#
+			protein_annotations <- GO_term #
+		}#
+#
+		geneID2GO[[protein$omaid]] = protein_annotations#
+	}#
+#
+	if(format=="geneID2GO"){#
+			return(geneID2GO)#
+			}#
+	if(format=="GO2geneID"){#
+			return(topGO::inverseList(geneID2GO))#
+			}#
+	else{#
+		stop("Invalid format. Must be either 'GO2geneID' or 'geneID2GO'")#
+	}#
+#
+}
+annotations = formatTopGO(geneList,format="geneID2GO")
 annotations
 annotations = formatTopGO(geneList,format="geneID2GO")
-setwd("roma")
-library(devtools)
-library(roxygen)
-library(roxygen2)
-document()
 annotations
-library(topGO)
+formatTopGO <- function(geneList,format){#
+#
+	if(missing(geneList)|| class(geneList)!="list"){#
+		stop("You must provide a valid list of genes.")#
+	}#
+	geneID2GO = list()#
+	for(protein in geneList){#
+		if(startsWith(protein['ontology'][[1]],"https://")){#
+			protein['ontology'][[1]] = resolveURL(protein['ontology'][[1]])#
+		}#
+#
+	    protein_annotations = protein['ontology'][[1]]['GO_term']#
+#
+		geneID2GO[[protein$omaid]] = protein_annotations#
+	}#
+#
+	if(format=="geneID2GO"){#
+			return(geneID2GO)#
+			}#
+	if(format=="GO2geneID"){#
+			return(topGO::inverseList(geneID2GO))#
+			}#
+	else{#
+		stop("Invalid format. Must be either 'GO2geneID' or 'geneID2GO'")#
+	}#
+#
+}
+annotations = formatTopGO(geneList,format="geneID2GO")
+annotations
 getTopGO(annotations=annotations, myInterestingGenes = list("YEAST00058"), format = "geneID2GO")
-setwd("..")
-devtools::build_vignettes("roma")
-library(roma)
-hog <- getHOG(id="HUMAN22168")#
+formatTopGO <- function(geneList,format){#
 #
-children = hog$children_hogs
-proteins_list = list()#
+	if(missing(geneList)|| class(geneList)!="list"){#
+		stop("You must provide a valid list of genes.")#
+	}#
+	geneID2GO = list()#
+	for(protein in geneList){#
+		if(startsWith(protein['ontology'][[1]],"https://")){#
+			protein['ontology'][[1]] = resolveURL(protein['ontology'][[1]])#
+		}#
 #
-for(child in children){#
-	child_hog = resolveURL(child$levels_url)#
-	members = resolveURL(child_hog$members_url)$members#
-	for(member in members){#
-		proteins_list = member$omaid#
+	    protein_annotations = lappy(protein['ontology'][[1]]['GO_term'], FUN = function(x) x)#
+#
+		geneID2GO[[protein$omaid]] = protein_annotations#
+	}#
+#
+	if(format=="geneID2GO"){#
+			return(geneID2GO)#
+			}#
+	if(format=="GO2geneID"){#
+			return(topGO::inverseList(geneID2GO))#
+			}#
+	else{#
+		stop("Invalid format. Must be either 'GO2geneID' or 'geneID2GO'")#
+	}#
+#
+}
+getTopGO(annotations=annotations, myInterestingGenes = list("YEAST00058"), format = "geneID2GO")
+annotations = formatTopGO(geneList,format="geneID2GO")
+formatTopGO <- function(geneList,format){#
+#
+	if(missing(geneList)|| class(geneList)!="list"){#
+		stop("You must provide a valid list of genes.")#
+	}#
+	geneID2GO = list()#
+	for(protein in geneList){#
+		if(startsWith(protein['ontology'][[1]],"https://")){#
+			protein['ontology'][[1]] = resolveURL(protein['ontology'][[1]])#
+		}#
+#
+	    protein_annotations = lapply(protein['ontology'][[1]]['GO_term'], FUN = function(x) x)#
+#
+		geneID2GO[[protein$omaid]] = protein_annotations#
+	}#
+#
+	if(format=="geneID2GO"){#
+			return(geneID2GO)#
+			}#
+	if(format=="GO2geneID"){#
+			return(topGO::inverseList(geneID2GO))#
+			}#
+	else{#
+		stop("Invalid format. Must be either 'GO2geneID' or 'geneID2GO'")#
+	}#
+#
+}
+annotations = formatTopGO(geneList,format="geneID2GO")
+getTopGO(annotations=annotations, myInterestingGenes = list("YEAST00058"), format = "geneID2GO")
+formatTopGO <- function(geneList,format){#
+#
+	if(missing(geneList)|| class(geneList)!="list"){#
+		stop("You must provide a valid list of genes.")#
+	}#
+	geneID2GO = list()#
+	for(protein in geneList){#
+		if(startsWith(protein['ontology'][[1]],"https://")){#
+			protein['ontology'][[1]] = resolveURL(protein['ontology'][[1]])#
+		}#
+#
+	    protein_annotations = {}#
+#
+		for (GO_term in protein['ontology'][[1]]['GO_term']){#
+			protein_annotations <- GO_term #
+		}#
+#
+		geneID2GO[[protein$omaid]] = protein_annotations#
+	}#
+#
+	if(format=="geneID2GO"){#
+			return(geneID2GO)#
+			}#
+	if(format=="GO2geneID"){#
+			return(topGO::inverseList(geneID2GO))#
+			}#
+	else{#
+		stop("Invalid format. Must be either 'GO2geneID' or 'geneID2GO'")#
+	}#
+#
+}
+annotations = formatTopGO(geneList,format="geneID2GO")
+getTopGO(annotations=annotations, myInterestingGenes = list("YEAST00058"), format = "geneID2GO")
+formatTopGO <- function(geneList,format){#
+#
+	if(missing(geneList)|| class(geneList)!="list"){#
+		stop("You must provide a valid list of genes.")#
+	}#
+#
+	geneID2GO = list()#
+#
+	for(protein in geneList){#
+		if(startsWith(protein['ontology'][[1]],"https://")){#
+			protein['ontology'][[1]] = resolveURL(protein['ontology'][[1]])#
+		}#
+#
+		protein_annotations = {}#
+#
+		for (GO_term in protein['ontology'][[1]]['GO_term']){#
+			protein_annotations <- GO_term #
+		}#
+#
+		geneID2GO[[protein$omaid]] = protein_annotations#
+	}#
+#
+	if(format=="geneID2GO"){#
+			return(geneID2GO)#
+			}#
+	if(format=="GO2geneID"){#
+			return(topGO::inverseList(geneID2GO))#
+			}#
+	else{#
+		stop("Invalid format. Must be either 'GO2geneID' or 'geneID2GO'")#
 	}#
 }
-proteins_list
-proteins_list = list()#
+annotations = formatTopGO(geneList,format="geneID2GO")
+getTopGO(annotations=annotations, myInterestingGenes = list("YEAST00058"), format = "geneID2GO")
+formatTopGO <- function(geneList,format){#
 #
-for(child in children){#
-	child_hog = resolveURL(child$levels_url)#
-	members = resolveURL(child_hog$members_url)$members#
-	for(member in members){#
-		proteins_list[[member]] = member$omaid#
+	geneID2GO = list()#
+#
+	for(protein in geneList){#
+		if(startsWith(protein['ontology'][[1]],"https://")){#
+			protein['ontology'][[1]] = resolveURL(protein['ontology'][[1]])#
+		}#
+#
+		protein_annotations = {}#
+#
+		for (GO_term in protein['ontology'][[1]]['GO_term']){#
+			protein_annotations <- GO_term #
+		}#
+#
+		geneID2GO[[protein$omaid]] = protein_annotations#
+	}#
+#
+	if(format=="geneID2GO"){#
+			return(geneID2GO)#
+			}#
+	if(format=="GO2geneID"){#
+			return(topGO::inverseList(geneID2GO))#
+			}#
+	else{#
+		stop("Invalid format. Must be either 'GO2geneID' or 'geneID2GO'")#
 	}#
 }
-proteins_list = list()#
+annotations = formatTopGO(geneList,format="geneID2GO")
+getTopGO(annotations=annotations, myInterestingGenes = list("YEAST00058"), format = "geneID2GO")
+formatTopGO <- function(geneList,format){#
 #
-for(child in children){#
-	child_hog = resolveURL(child$levels_url)#
-	members = resolveURL(child_hog$members_url)$members#
-	for(i in range(length(members))){#
-		proteins_list[[i]] = members[[i]]$omaid#
+	geneID2GO = list()#
+#
+	for(protein in geneList){#
+		if(startsWith(protein['ontology'][[1]],"https://")){#
+			protein['ontology'][[1]] = resolveURL(protein['ontology'][[1]])#
+		}#
+#
+		protein_annotations = {}#
+#
+		for (GO_term in protein['ontology'][[1]]['GO_term']){#
+			protein_annotations <- GO_term #
+		}#
+#
+		geneID2GO[[protein$omaid]] = protein_annotations#
 	}#
-}
-proteins_list
-devtools::build_vignettes("roma")
-object_list = list()#
 #
-for(protein in proteins_list){#
-	object_list[[protein]] = getData(type="protein",id=protein)#
-}
-object_list
-for(i in range(length(proteins_list))){#
-	object_list[[i]] = getData(type="protein",id=proteins_list[[i]])#
-}
-object_list = list()#
-#
-for(i in range(length(proteins_list))){#
-	object_list[[i]] = getData(type="protein",id=proteins_list[[i]])#
-}
-object_list
-length(object_list)
-length(proteins_list)
-proteins_list = list()#
-#
-for(child in children){#
-	child_hog = resolveURL(child$levels_url)#
-	members = resolveURL(child_hog$members_url)$members#
-	for(i in range(length(members))){#
-		proteins_list[[i]] = members[[i]]$omaid#
+	if(format=="geneID2GO"){#
+			return(geneID2GO)#
+			}#
+	if(format=="GO2geneID"){#
+			return(topGO::inverseList(geneID2GO))#
+			}#
+	else{#
+		stop("Invalid format. Must be either 'GO2geneID' or 'geneID2GO'")#
 	}#
-}
-length(proteins_list)
-object_list = list()#
 #
-for(i in range(length(proteins_list))){#
-	object_list[[i]] = getData(type="protein",id=proteins_list[[i]])#
 }
-length(object_list)
-annotations = formatTopGO(object_list,format="geneID2GO")
-objects_list
-object_list
-length(object_list)
-str(object_list)
-str(proteins_list)
-object_list = list()#
-#
-for(i in range(length(proteins_list))){#
-	object_list[[i]] = getData(type="protein",id=proteins_list[[i]])#
-}
-str(object_list)
-object_list[[1]] = getData(type="protein",id=proteins_list[[1]])
-str(object_list)
-annotations = formatTopGO(object_list,format="geneID2GO")
+annotations = formatTopGO(geneList,format="geneID2GO")
+getTopGO(annotations=annotations, myInterestingGenes = list("YEAST00058"), format = "geneID2GO")
 annotations
-topGO = getTopGO(annotations, myInterestingGenes = list(proteins_list[[1]]), format = "geneID2GO")
-library(roma)#
-library(topGO)#
-#
-hog <- getHOG(id="HUMAN22168")#
-#
-children = hog$children_hogs#
-#creating a list of omaid's for the protein members#
-proteins_list = list()#
-#
-for(child in children){#
-	child_hog = resolveURL(child$levels_url)#
-	members = resolveURL(child_hog$members_url)$members#
-	for(i in range(length(members))){#
-		proteins_list[[i]] = members[[i]]$omaid#
-	}#
-}#
-#
-#let's check the go annotations for each#
-#
-object_list = list()#
-#
-for(i in range(length(proteins_list))){#
-	object_list[[i]] = getData(type="protein",id=proteins_list[[i]])#
-}
-object_list
-devtools::build_vignettes("roma")
-library(rmarkdown)
 library(knitr)
-devtools::build_vignettes("roma")
-browseVignettes("roma")
-devtools::install("roma")
-browseVignettes("roma")
-browseVignettes("roma")
-browseVignettes("roma")
-devtools::build_vignettes("roma")
-devtools::build_vignettes("roma")
-devtools::build_vignettes("roma/sequence_mapping.Rmd")
-devtools::build_vignettes("roma./sequence_mapping.Rmd")
-setwd("")
-devtools::build_vignettes("roma/vignettes/sequence_mapping.Rmd")
-devtools::build_vignettes("roma/vignettes/")
-devtools::build_vignettes("roma/vignettes/")
-devtools::build_vignettes("roma")
-library(roma)#
-library(topGO)#
-#
-hog <- getHOG(id="HUMAN22168")#
-#
-children = hog$children_hogs
-proteins_list = list()#
-#
-for(child in children){#
-	child_hog = resolveURL(child$levels_url)#
-	members = resolveURL(child_hog$members_url)$members#
-	for(i in range(length(members))){#
-		proteins_list[[i]] = members[[i]]$omaid#
-	}#
-}
-proteins_list
-object_list = list()#
-#
-for(i in range(length(proteins_list))){#
-	object_list[[i]] = getData(type="protein",id=proteins_list[[i]])#
-}
-object_list
-object_list = list()#
-#
-for(i in range(length(proteins_list))){#
-	object_list[[i]] = getData(type="protein",id=proteins_list[[i]])#
-	i++#
-}
-object_list = list()#
-#
-for(i in range(length(proteins_list))){#
-	object_list[[i]] = getData(type="protein",id=proteins_list[[i]])#
-	i+=i#
-}
-object_list = list()#
-#
-for(i in range(length(proteins_list))){#
-	object_list[[i]] = getData(type="protein",id=proteins_list[[i]])#
-	i=i+1#
-}
-object_list
-proteins_list
-object_list = list()
-for(i in range(length(proteins_list))){#
-	object_list[[i]] = getData(type="protein",id=proteins_list[[i]])#
-	i=i+1#
-}
-length(object_list)
-str(object_list)
-object_list[[1]] = getData(type="protein",id=proteins_list[[1]])
-object_list[[1]]
-browseVignettes("roma")
-content_list
-lista[[i]]<-"klara"
-lista<-list()
-lista[[i]]<-"klara"
-lista[[ii]]<-"gab"
-lista[["ii"]]<-"gab"
-lista[[i]]<-"klara"
-lista
-"ii" in names(lista)
-"ii" %in% names(lista)
-setwd("./roma")
+library(rmarkdown)
+library(devtools)
+setwd("desktop")
+build_vignettes("roma")
+install('roma')
+build_vignettes("roma")
+build_vignettes("roma")
+build_vignettes("roma")
+install('roma')
+build_vignettes("roma")
+setwd("roma")
 document()
+roxygen2::roxygenise()
+roxygen2::roxygenise()
+build_vignettes("roma")
 document()
+update.packages("roxygen2")
+update.packages("roxygen2")
 document()
-document()
-biocLite("BiocCheck")
-source("https://bioconductor.org/biocLite.R")#
-biocLite("BiocCheck")
-library(BiocCheck)

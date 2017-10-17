@@ -1,10 +1,10 @@
 ---
-title: "Taxonomic trees with Roma"
+title: "Exploring Taxonomic trees with roma"
 author: "Klara Kaleb"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Exploring Orthology with Roma}
+  %\VignetteIndexEntry{Exploring Taxonomic trees with roma}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -18,9 +18,7 @@ library(roma)
 
 taxonomy = getTaxonomy(root="Alveolata")
 
-write.table(taxonomy$newick, "newick.txt")
-
-tree_object = getTree("newick.txt")
+tree_object = getTree(taxonomy$newick)
 
 ggtree::ggtree(tree_object)
 

@@ -11,10 +11,17 @@ vignette: >
 
 This little vignette shows you how to get started with the `roma` package. roma is a wrapper for the REST API for the Orthologous MAtrix project (OMA) which is a  database for the inference of orthologs among complete genomes. 
 
-For more details on the OMA project, see https://omabrowser.org/oma/home/ .
+For more details on the OMA project, see https://omabrowser.org/oma/home/.
 
 ## Some useful functions
-The package contains a range of functions that are used to query the database in an R friendly way. This vignette describes some of them, whereas the rest are described in more detail in other vignettes.
+The package contains a range of functions that are used to query the database in an R friendly way. This vignette describes some of them, whereas the rest are described in more detail in other vignettes:
+
+[Exploring Hierarchical orthologous groups with roma](exploring_hogs.html)
+
+[Exploring Taxonomic trees with roma](tree_visualisation.html)
+
+[Sequence Analysis with roma](sequence_mapping.html)
+
 
 
 ###getXref
@@ -25,14 +32,13 @@ library(roma)
 
 results <- getXref(pattern="MAL")
 
-results
+head(results)
 ```
 
 ###getGenomeAlignment
 This function serves to obtain the orthologs for 2 whole genomes. The result is a dataframe containing information on each member in the pair and their relationship. 
 
 ```{r, warning=FALSE, message=FALSE}
-library(roma)
 
 alignment <- getGenomeAlignment(genome_id1 = "YEAST", genome_id2 = "ASHGO")
 
@@ -59,30 +65,28 @@ This master-function function serves to obtain the information for a single entr
 
 
 
-The result is an S3 Object, attributes of which can be accessed via $. Below is an example of obtaining information for a specific OMA group.
+The result is an S3 Object, attributes of which can be accessed via $ or via the getAttribute() function. Below is an example of obtaining information for a specific OMA group.
 
 ```{r, warning=FALSE, message=FALSE}
-library(roma)
 
-group <- getData(type="Group",id="YEAST58")
+group <- getData(type="group",id="YEAST58")
 
 group$fingerprint
+
+getAttribute(group, 'fingerprint')
 
 
 ```
 
 ###resolveURL
-In most cases there is great quantity of information available for a given entry and this impacts the data retrival time. Due to this, the information available for such entries in split into a number of endpoints and these are included appropriatelly as redirects. This function allows the user to obtain further information behind those urls. 
+In most cases there is great quantity of information available for a given entry and this impacts the data retrival time. Due to this, the information available for such entries is split into a number of endpoints and these are included appropriatelly as redirects. This function allows the user to obtain further information behind those urls. 
 
-###formatData
-When an object is created from the corresponding response to a request, its data is returned in the simplest most form to speed up loading time. This sometimes results in very long named lists which can be a challenge to read - the purpose of this function is to format those lists in an appropriate dataframe. 
 
 One can see some of the above functions in action in the below example of trying to obtain the list of orthologs for a protein entry.
 
 ```{r, warning=FALSE, message=FALSE}
-library(roma)
 
-protein <- getData(type="Protein",id="YEAST58")
+protein <- getData(type="protein",id="YEAST58")
 
 attributes(protein)
 
@@ -90,11 +94,7 @@ protein$orthologs
 
 orthologs = resolveURL(protein$orthologs)
 
-head(orthologs)
-
-formatted_orthologs = formatData(orthologs)
-
 ```
 
-For further information on the OMA REST API please visit ([OMA REST API DOCUMENTATION](http://omadev.cs.ucl.ac.uk/api/docs)).
+For further information on the OMA REST API please visit [OMA REST API DOCUMENTATION](http://omadev.cs.ucl.ac.uk/api/docs).
 

@@ -13,27 +13,39 @@
 
 
 
-getHOG <- function(id, level=NULL, members=FALSE){
-	
-	if(!is.null(level)){
-		if(members==FALSE){
-		url = urlGenerator(type="hog",id=id,query_param1="level",query_param1_value=level)
-		}
-		else{
-		url = urlGenerator(type="hog",id=id,detail="members",query_param1 ="level",query_param1_value=level)
-	}
-	}
-	
-	else{
-		if(members==FALSE){
-		url = urlGenerator(type="hog",id=id)
-		}
-		else{
-		url = urlGenerator(type="hog",id=id,detail="members")
-	}
-	}
-
-	check_response(url)
-	
-	return(requestFactory(url))
+getHOG <- function(id, level = NULL, members = FALSE) {
+    
+    
+    if (class(members) != "logical") {
+        stop("Members parameter is of type boolean.")
+    }
+    
+    
+    if (missing(id)) {
+        stop("You must provide a valid HOG ID.")
+    }
+    
+    
+    if (!is.null(level)) {
+        if (members == FALSE) {
+            url = urlGenerator(type = "hog", id = id, query_param1 = "level", 
+                query_param1_value = level)
+        } else {
+            url = urlGenerator(type = "hog", id = id, detail = "members", 
+                query_param1 = "level", query_param1_value = level)
+        }
+    } else {
+        if (class(level) == "integer") {
+            stop("You must provide a valid identifier for a taxonomic level - 
+            	it can only be idneitifed via its full capitalised name.")
+        }
+        
+        if (members == FALSE) {
+            url = urlGenerator(type = "hog", id = id)
+        } else {
+            url = urlGenerator(type = "hog", id = id, detail = "members")
+        }
+    }
+    
+    return(requestFactory(url))
 }

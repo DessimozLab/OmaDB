@@ -21,6 +21,5 @@ The function to create a topGO object containing the GO annotations for the give
 }
 \examples{
 annotations = formatTopGO(geneList = list(getData(type="protein",id="YEAST58"),getData(type="protein",id="YEAST00059")),format="geneID2GO")
-library(topGO)
-getTopGO(annotations=annotations, myInterestingGenes = list("YEAST00058"), format = "geneID2GO")
+getTopGO(annotations, myInterestingGenes = list("YEAST00058"), format = "geneID2GO")
 }

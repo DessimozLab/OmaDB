@@ -10,7 +10,7 @@ getAnnotation(query)
 \item{query}{the sequence to be annotated}
 }
 \value{
-an object containing the JSON keys as attributes
+a data.frame containg the GO annotaition information linked to the query sequence
 }
 \description{
 The function to obtain GO annotation for a given sequence.

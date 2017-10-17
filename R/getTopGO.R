@@ -5,7 +5,7 @@
 #'
 #' @param geneList the list of roma protein objects to be included in the analysis - this is where the GO annotations are extracted from
 #' @param format format for the data to be returned in - either 'GO2geneID' or 'geneID2GO'
-#' @return either GO2geneID list or geneID2GO depending on the format parameter
+#' @return a list containing the GO2geneID or geneID2GO information
 #' @export
 #' @examples
 #' geneList = list(getData(type="protein",id="YEAST58"),getData(type="protein",id="YEAST00059"))
@@ -23,13 +23,9 @@ formatTopGO <- function(geneList,format){
 			protein['ontology'][[1]] = resolveURL(protein['ontology'][[1]])
 		}
 
-		protein_annotations = {}
+		protein_annotations = protein['ontology'][[1]]['GO_term']
 
-		for (GO_term in protein['ontology'][[1]]['GO_term']){
-			protein_annotations <- GO_term 
-		}
-
-		geneID2GO[[protein$omaid]] = protein_annotations
+		geneID2GO[[protein$omaid]] = unlist(as.list(protein_annotations))
 	}
 
 	if(format=="geneID2GO"){
@@ -44,6 +40,7 @@ formatTopGO <- function(geneList,format){
 
 }
 
+
 #' Get the topGO Object function
 #' 
 #' The function to create a topGO object containing the GO annotations for the given protein list. 
@@ -53,16 +50,29 @@ formatTopGO <- function(geneList,format){
 #' @param format format for the data to be returned in - either 'GO2geneID' or 'geneID2GO'
 #' @return topGO object
 #' @export
-#' @examples
+#' @import topGO
+#' @examples 
 #' annotations = formatTopGO(geneList = list(getData(type="protein",id="YEAST58"),getData(type="protein",id="YEAST00059")),format="geneID2GO")
-#' library(topGO)
-#' getTopGO(annotations=annotations, myInterestingGenes = list("YEAST00058"), format = "geneID2GO")
+#' getTopGO(annotations, myInterestingGenes = list("YEAST00058"), format = "geneID2GO")
 
 
 
 
 getTopGO <- function(annotations,format,myInterestingGenes){
 	
+	if(missing(annotations) || class(annotations) != "list"){
+		stop("You must provide a valid list of annotations.")
+	}
+
+	if(missing(format) || !(format %in% list("geneID2GO","GO2geneID"))){
+		stop("You must provide a valid annotations format.")
+	}
+
+	if(missing(myInterestingGenes)){
+		stop("You must provide a valid list of genes of interest.")
+	}
+
+
 	geneNames <- names(annotations)
 
 	geneList <- factor(as.integer(geneNames %in% myInterestingGenes))
@@ -71,11 +81,11 @@ getTopGO <- function(annotations,format,myInterestingGenes){
 
 	if(format=="geneID2GO"){
 		GOdata = new("topGOdata", ontology = "MF", allGenes = geneList,
-              annot = topGO::annFUN.gene2GO, gene2GO = annotations)
+              annot = annFUN.gene2GO, gene2GO = annotations)
 	}
 	if(format=="GO2geneID"){
 		GOdata = new("topGOdata", ontology = "MF", allGenes = geneList,
-              annot = topGO::annFUN.GO2gene, GO2gene = annotations)
+              annot = annFUN.GO2gene, GO2gene = annotations)
 	}
 
 	return(GOdata)

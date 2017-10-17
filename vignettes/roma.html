@@ -12,7 +12,7 @@
 
 <meta name="author" content="Klara Kaleb" />
 
-<meta name="date" content="2017-10-12" />
+<meta name="date" content="2017-10-16" />
 
 <title>Get started with Roma</title>
 
@@ -70,15 +70,18 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">Get started with Roma</h1>
 <h4 class="author"><em>Klara Kaleb</em></h4>
-<h4 class="date"><em>2017-10-12</em></h4>
+<h4 class="date"><em>2017-10-16</em></h4>
 
 
 
 <p>This little vignette shows you how to get started with the <code>roma</code> package. roma is a wrapper for the REST API for the Orthologous MAtrix project (OMA) which is a database for the inference of orthologs among complete genomes.</p>
-<p>For more details on the OMA project, see <a href="https://omabrowser.org/oma/home/" class="uri">https://omabrowser.org/oma/home/</a> .</p>
+<p>For more details on the OMA project, see <a href="https://omabrowser.org/oma/home/" class="uri">https://omabrowser.org/oma/home/</a>.</p>
 <div id="some-useful-functions" class="section level2">
 <h2>Some useful functions</h2>
-<p>The package contains a range of functions that are used to query the database in an R friendly way. This vignette describes some of them, whereas the rest are described in more detail in other vignettes.</p>
+<p>The package contains a range of functions that are used to query the database in an R friendly way. This vignette describes some of them, whereas the rest are described in more detail in other vignettes:</p>
+<p><a href="exploring_hogs.html">Exploring Hierarchical orthologous groups with roma</a></p>
+<p><a href="tree_visualisation.html">Exploring Taxonomic trees with roma</a></p>
+<p><a href="sequence_mapping.html">Sequence Analysis with roma</a></p>
 <div id="getxref" class="section level3">
 <h3>getXref</h3>
 <p>This function searches the OMA database for entries containing the pattern defined and returns the results in a dataframe. Hence, it is usually a good starting place. Sample code is below.</p>
@@ -86,24 +89,49 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 results &lt;-<span class="st"> </span><span class="kw">getXref</span>(<span class="dt">pattern=</span><span class="st">&quot;MAL&quot;</span>)
 
-results</code></pre></div>
-<pre><code>## NULL</code></pre>
+<span class="kw">head</span>(results)</code></pre></div>
+<pre><code>##               xref       source entry_nr      omaid genome.code
+## 1              MAL    Gene Name  7303554 LOXAF01991       LOXAF
+## 2  MAL (1 of many)    Gene Name  7007578 LEPOC05079       LEPOC
+## 3            MAL I      Synonym  9055390 AEDAE12616       AEDAE
+## 4 MAL-like protein Protein Name  7422454 MOUSE13449       MOUSE
+## 5             MAL1    Gene Name  6515270 PICST01578       PICST
+## 6            MAL11    Gene Name  6565545 YEAST02783       YEAST
+##   genome.taxon_id
+## 1            9785
+## 2            7918
+## 3            7159
+## 4           10090
+## 5          322104
+## 6          559292
+##                                                                        genome.species
+## 1                                                                  Loxodonta africana
+## 2                                                                Lepisosteus oculatus
+## 3                                                                       Aedes aegypti
+## 4                                                                        Mus musculus
+## 5 Scheffersomyces stipitis (strain ATCC 58785 / CBS 6054 / NBRC 10063 / NRRL Y-11545)
+## 6                               Saccharomyces cerevisiae (strain ATCC 204508 / S288c)
+##                          genome.genome_url
+## 1 https://omabrowser.org/api/genome/LOXAF/
+## 2 https://omabrowser.org/api/genome/LEPOC/
+## 3 https://omabrowser.org/api/genome/AEDAE/
+## 4 https://omabrowser.org/api/genome/MOUSE/
+## 5 https://omabrowser.org/api/genome/PICST/
+## 6 https://omabrowser.org/api/genome/YEAST/</code></pre>
 </div>
 <div id="getgenomealignment" class="section level3">
 <h3>getGenomeAlignment</h3>
 <p>This function serves to obtain the orthologs for 2 whole genomes. The result is a dataframe containing information on each member in the pair and their relationship.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(roma)
-
-alignment &lt;-<span class="st"> </span><span class="kw">getGenomeAlignment</span>(<span class="dt">genome_id1 =</span> <span class="st">&quot;YEAST&quot;</span>, <span class="dt">genome_id2 =</span> <span class="st">&quot;ASHGO&quot;</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">alignment &lt;-<span class="st"> </span><span class="kw">getGenomeAlignment</span>(<span class="dt">genome_id1 =</span> <span class="st">&quot;YEAST&quot;</span>, <span class="dt">genome_id2 =</span> <span class="st">&quot;ASHGO&quot;</span>)
 
 <span class="kw">head</span>(alignment)</code></pre></div>
-<pre><code>##   entry_1.entry_nr                                entry_1.entry_url
-## 1          6567568 https://omadev.cs.ucl.ac.uk/api/protein/6567568/
-## 2          6567157 https://omadev.cs.ucl.ac.uk/api/protein/6567157/
-## 3          6567158 https://omadev.cs.ucl.ac.uk/api/protein/6567158/
-## 4          6567565 https://omadev.cs.ucl.ac.uk/api/protein/6567565/
-## 5          6566009 https://omadev.cs.ucl.ac.uk/api/protein/6566009/
-## 6          6566007 https://omadev.cs.ucl.ac.uk/api/protein/6566007/
+<pre><code>##   entry_1.entry_nr                           entry_1.entry_url
+## 1          6567568 https://omabrowser.org/api/protein/6567568/
+## 2          6567157 https://omabrowser.org/api/protein/6567157/
+## 3          6567158 https://omabrowser.org/api/protein/6567158/
+## 4          6567565 https://omabrowser.org/api/protein/6567565/
+## 5          6566009 https://omabrowser.org/api/protein/6566009/
+## 6          6566007 https://omabrowser.org/api/protein/6566007/
 ##   entry_1.omaid entry_1.canonicalid             entry_1.sequence_md5
 ## 1    YEAST04806          RCE1_YEAST 605098a0697ad8fc7af2101e758033cb
 ## 2    YEAST04395          ZDS2_YEAST 8cc75f16fbfd321833abc48fd1173154
@@ -125,13 +153,13 @@ alignment &lt;-<span class="st"> </span><span class="kw">getGenomeAlignment</spa
 ## 4              809623            810777                   -1
 ## 5              299157            302849                   -1
 ## 6              295245            298814                    1
-##   entry_2.entry_nr                                entry_2.entry_url
-## 1          6548024 https://omadev.cs.ucl.ac.uk/api/protein/6548024/
-## 2          6548025 https://omadev.cs.ucl.ac.uk/api/protein/6548025/
-## 3          6548026 https://omadev.cs.ucl.ac.uk/api/protein/6548026/
-## 4          6548027 https://omadev.cs.ucl.ac.uk/api/protein/6548027/
-## 5          6548028 https://omadev.cs.ucl.ac.uk/api/protein/6548028/
-## 6          6548029 https://omadev.cs.ucl.ac.uk/api/protein/6548029/
+##   entry_2.entry_nr                           entry_2.entry_url
+## 1          6548024 https://omabrowser.org/api/protein/6548024/
+## 2          6548025 https://omabrowser.org/api/protein/6548025/
+## 3          6548026 https://omabrowser.org/api/protein/6548026/
+## 4          6548027 https://omabrowser.org/api/protein/6548027/
+## 5          6548028 https://omabrowser.org/api/protein/6548028/
+## 6          6548029 https://omabrowser.org/api/protein/6548029/
 ##   entry_2.omaid entry_2.canonicalid             entry_2.sequence_md5
 ## 1    ASHGO00001              Q75FB7 a9b1a6dc9afb2b02afe8fdf8029b5f22
 ## 2    ASHGO00002              Q75FB6 5d186037c4dd0a89b34d70d596fac86d
@@ -183,25 +211,19 @@ alignment &lt;-<span class="st"> </span><span class="kw">getGenomeAlignment</spa
 <li>id of one of its members</li>
 </ul></li>
 </ul>
-<p>The result is an S3 Object, attributes of which can be accessed via $. Below is an example of obtaining information for a specific OMA group.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(roma)
-
-group &lt;-<span class="st"> </span><span class="kw">getData</span>(<span class="dt">type=</span><span class="st">&quot;Group&quot;</span>,<span class="dt">id=</span><span class="st">&quot;YEAST58&quot;</span>)
+<p>The result is an S3 Object, attributes of which can be accessed via $ or via the getAttribute() function. Below is an example of obtaining information for a specific OMA group.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">group &lt;-<span class="st"> </span><span class="kw">getData</span>(<span class="dt">type=</span><span class="st">&quot;group&quot;</span>,<span class="dt">id=</span><span class="st">&quot;YEAST58&quot;</span>)
 
 group<span class="op">$</span>fingerprint</code></pre></div>
+<pre><code>## [1] &quot;PNDKFPS&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">getAttribute</span>(group, <span class="st">'fingerprint'</span>)</code></pre></div>
 <pre><code>## [1] &quot;PNDKFPS&quot;</code></pre>
 </div>
 <div id="resolveurl" class="section level3">
 <h3>resolveURL</h3>
-<p>In most cases there is great quantity of information available for a given entry and this impacts the data retrival time. Due to this, the information available for such entries in split into a number of endpoints and these are included appropriatelly as redirects. This function allows the user to obtain further information behind those urls.</p>
-</div>
-<div id="formatdata" class="section level3">
-<h3>formatData</h3>
-<p>When an object is created from the corresponding response to a request, its data is returned in the simplest most form to speed up loading time. This sometimes results in very long named lists which can be a challenge to read - the purpose of this function is to format those lists in an appropriate dataframe.</p>
+<p>In most cases there is great quantity of information available for a given entry and this impacts the data retrival time. Due to this, the information available for such entries is split into a number of endpoints and these are included appropriatelly as redirects. This function allows the user to obtain further information behind those urls.</p>
 <p>One can see some of the above functions in action in the below example of trying to obtain the list of orthologs for a protein entry.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(roma)
-
-protein &lt;-<span class="st"> </span><span class="kw">getData</span>(<span class="dt">type=</span><span class="st">&quot;Protein&quot;</span>,<span class="dt">id=</span><span class="st">&quot;YEAST58&quot;</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">protein &lt;-<span class="st"> </span><span class="kw">getData</span>(<span class="dt">type=</span><span class="st">&quot;protein&quot;</span>,<span class="dt">id=</span><span class="st">&quot;YEAST58&quot;</span>)
 
 <span class="kw">attributes</span>(protein)</code></pre></div>
 <pre><code>## $names
@@ -211,45 +233,11 @@ protein &lt;-<span class="st"> </span><span class="kw">getData</span>(<span clas
 ## [10] &quot;roothog_id&quot;      &quot;hog_levels&quot;      &quot;sequence_length&quot;
 ## [13] &quot;sequence&quot;        &quot;cdna&quot;            &quot;domains&quot;        
 ## [16] &quot;xref&quot;            &quot;orthologs&quot;       &quot;ontology&quot;       
-## [19] &quot;oma_group_url&quot;   &quot;oma_hog_members&quot;
-## 
-## $class
-## [1] &quot;OMAObject&quot;</code></pre>
+## [19] &quot;oma_group_url&quot;   &quot;oma_hog_members&quot;</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">protein<span class="op">$</span>orthologs</code></pre></div>
-<pre><code>## [1] &quot;https://omadev.cs.ucl.ac.uk/api/protein/6562820/orthologs/&quot;</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">orthologs =<span class="st"> </span><span class="kw">resolveURL</span>(protein<span class="op">$</span>orthologs)
-
-<span class="kw">head</span>(orthologs)</code></pre></div>
-<pre><code>##   entry_nr                                        entry_url      omaid
-## 1  6284774 https://omadev.cs.ucl.ac.uk/api/protein/6284774/ COCLU03588
-## 2  6341447 https://omadev.cs.ucl.ac.uk/api/protein/6341447/ COLGR10929
-## 3  6349325 https://omadev.cs.ucl.ac.uk/api/protein/6349325/ COLSU06788
-## 4  6410870 https://omadev.cs.ucl.ac.uk/api/protein/6410870/ FUSO411719
-## 5  6418086 https://omadev.cs.ucl.ac.uk/api/protein/6418086/ GIBZA02345
-## 6  6443712 https://omadev.cs.ucl.ac.uk/api/protein/6443712/ NECHA14651
-##   canonicalid                     sequence_md5 oma_group  oma_hog_id
-## 1             c5db7c8e6b0eee5c6bbc18fe2dbf9ba7    721679 HOG:0367321
-## 2             2cf82b1ffadc581d82d920af9b0130a2    721679 HOG:0367321
-## 3  A0A066XI05 d6abbfd6d6ed96217331e86733ae4aeb    721679 HOG:0367321
-## 4  A0A0D2XKA6 b92bedd8c4fe61cc3667d4f108ffb528    721679 HOG:0367321
-## 5             54814145e0f45beb33ac2e2cb99335a3    721678 HOG:0367321
-## 6             8c85e6f457288d146cb99fbc61404cb9    721679 HOG:0367321
-##         chromosome locus.start locus.end locus.strand rel_type distance
-## 1       scaffold_6       27852     30189           -1      1:1      105
-## 2         GG697333      764822    767178            1      1:1      108
-## 3  Scaffolds0609.1         399      2755            1      1:1      109
-## 4                4     4317479   4319279           -1      1:1      107
-## 5  Supercontig_3.1     6701031   6703176           -1      1:1      109
-## 6 sca_14_chr10_3_0      669785    671940           -1      1:1      105
-##     score
-## 1 1362.00
-## 2 1320.99
-## 3 1312.07
-## 4 1326.20
-## 5 1327.66
-## 6 1336.03</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">formatted_orthologs =<span class="st"> </span><span class="kw">formatData</span>(orthologs)</code></pre></div>
-<p>For further information on the OMA REST API please visit (<a href="http://omadev.cs.ucl.ac.uk/api/docs">OMA REST API DOCUMENTATION</a>).</p>
+<pre><code>## [1] &quot;https://omabrowser.org/api/protein/6562820/orthologs/&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">orthologs =<span class="st"> </span><span class="kw">resolveURL</span>(protein<span class="op">$</span>orthologs)</code></pre></div>
+<p>For further information on the OMA REST API please visit <a href="http://omadev.cs.ucl.ac.uk/api/docs">OMA REST API DOCUMENTATION</a>.</p>
 </div>
 </div>
 

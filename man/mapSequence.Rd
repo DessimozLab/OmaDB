@@ -14,7 +14,7 @@ mapSequence(query, search, full_length = FALSE)
 \item{full_length}{a boolean indicating whether or not for exact matches, the query sequence must be matching the full target sequence. By default, a partial exact match is also reported as exact match.}
 }
 \value{
-an object containing the JSON keys as attributes
+a data.frame containing the information of matches for the query sequence
 }
 \description{
 The function to identify a sequence.

@@ -17,7 +17,8 @@ getTaxonomy <- function(root=NULL,members) {
 		url = urlGenerator(type="taxonomy",id=root,query_param1="type",query_param1_value="newick")
 	}
 	else{
-		url = urlGenerator(type="taxonomy",id=root,query_param1="members",query_param1_value=members,query_param2="type",query_param2_value="newick")				
+		url = urlGenerator(type="taxonomy",id=root,query_param1="members",query_param1_value=members,
+			query_param2="type",query_param2_value="newick")				
 	}
 	return(requestFactory(url))
 }

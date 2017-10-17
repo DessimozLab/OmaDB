@@ -10,7 +10,7 @@ resolveURL(url_field)
 \item{url_field}{the url of interest}
 }
 \value{
-an object containing JSON keys as attributes
+a data.frame containing the information behind an URL
 }
 \description{
 The function to obtain further information from a given url.

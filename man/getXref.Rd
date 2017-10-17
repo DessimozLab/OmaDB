@@ -10,7 +10,7 @@ getXref(pattern)
 \item{pattern}{the pattern to query the OMA database with - needs to be at least 3 characters long}
 }
 \value{
-an object containing JSON keys as attributes
+a data.frame containing information on the cross references for a given pattern
 }
 \description{
 The function to list all the crossreferences that match a certain defined pattern.

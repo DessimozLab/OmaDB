@@ -18,12 +18,16 @@ getGenomeAlignment <- function(genome_id1,genome_id2,chr1=NULL,chr2=NULL){
 		stop("You must provide IDs for both genomes.")
 	}
 	if(!is.null(chr1) && !is.null(chr2)) {
-		#more complex url 
+		
 		url = paste0(API_URL,"/pairs/",genome_id1,"/",genome_id2,"/?chr1=",chr1,"&chr2=",chr2)
 	}
 	if(!is.null(chr1) && is.null(chr2)) {
-		#more complex url 
+		
 		url = paste0(API_URL,"/pairs/",genome_id1,"/",genome_id2,"/?chr1=",chr1)
+	}
+	if(is.null(chr1) && !is.null(chr2)) {
+		
+		url = paste0(API_URL,"/pairs/",genome_id1,"/",genome_id2,"/?chr2=",chr2)
 	}
 	else{
 		url = paste0(API_URL,"/pairs/",genome_id1,"/",genome_id2,"/")

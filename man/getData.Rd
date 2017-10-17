@@ -18,6 +18,6 @@ an object containing the JSON keys as attributes
 The function to obtain the information available for a single entry in the datase.
 }
 \examples{
-getData(type = "Protein", id="YEAST00001")
-getData(type = "Group", id="YEAST00001")
+getData(type = "protein", id="YEAST00001")
+getData(type = "group", id="YEAST00001")
 }

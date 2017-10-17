@@ -12,7 +12,7 @@ formatTopGO(geneList, format)
 \item{format}{format for the data to be returned in - either 'GO2geneID' or 'geneID2GO'}
 }
 \value{
-either GO2geneID list or geneID2GO depending on the format parameter
+a list containing the GO2geneID or geneID2GO information
 }
 \description{
 The function to create a list of GO annotations that is compatible with topGO from protein objects in roma
