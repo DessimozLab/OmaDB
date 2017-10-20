@@ -18,7 +18,7 @@ library(roma)
 
 taxonomy = getTaxonomy(root="Alveolata")
 
-tree_object = getTree(taxonomy$newick)
+tree_object = getTree(taxonomy)
 
 ggtree::ggtree(tree_object)
 

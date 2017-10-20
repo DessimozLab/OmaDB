@@ -16,6 +16,8 @@ head(alignment)
 
 group <- getData(type="group",id="YEAST58")
 
+object_attributes = getObjectAttributes(group)
+
 group$fingerprint
 
 getAttribute(group, 'fingerprint')
@@ -26,10 +28,27 @@ getAttribute(group, 'fingerprint')
 
 protein <- getData(type="protein",id="YEAST58")
 
-attributes(protein)
+getObjectAttributes(protein)
 
-protein$orthologs
+orthologs = getAttribute(protein,'orthologs')
 
-orthologs = resolveURL(protein$orthologs)
+orthologs = resolveURL(orthologs)
+
+head(orthologs)
+
+
+## ---- warning=FALSE, message=FALSE---------------------------------------
+
+gRanges = getGRanges(orthologs)
+str(gRanges)
+
+
+## ---- warning=FALSE, message=FALSE---------------------------------------
+
+sequences = getSequences(orthologs)
+str(sequences)
+
+ontologies = getOntologies(orthologs)
+str(ontologies)
 
 

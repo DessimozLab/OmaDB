@@ -2,7 +2,7 @@
 #' 
 #' The function to obtain the information available for a single entry in the datase.
 #'
-#' @param type the type for the entry to be returned - either protein, genome, group or hog
+#' @param type the type for the entry to be returned - either protein, genome or group
 #' @param id an identifier for the entry to be returned. For more information, see the "Get started with Roma" vignette.
 #' @return an object containing the JSON keys as attributes
 #' @export

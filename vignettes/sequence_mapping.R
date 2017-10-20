@@ -5,13 +5,19 @@ sequence = "MNDPSLLGYPNVGPQQQQQQQQQQHAGLLGKGTPNALQQQLHMNQLTGIPPPGLMNNSDVHTSSNNNS
 
 sequence_map <- mapSequence(sequence)
 
-length(sequence_map$targets) 
+getObjectAttributes(sequence_map)
 
-protein = resolveURL(sequence_map$targets$entry_url[[1]])
+targets = getAttribute(sequence_map,'targets')
 
-oma_group = protein$oma_group
+length(targets) 
 
-domains = resolveURL(protein$domains)
+protein = resolveURL(targets[['entry_url']])
+
+oma_group = getAttribute(protein,'oma_group')
+
+domains = getAttribute(protein,'domains')
+
+domains = resolveURL(domains)
 
 
 

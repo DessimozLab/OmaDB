@@ -37,7 +37,7 @@ getHOG <- function(id, level = NULL, members = FALSE) {
     } else {
         if (class(level) == "integer") {
             stop("You must provide a valid identifier for a taxonomic level - 
-            	it can only be idneitifed via its full capitalised name.")
+            	it can only be idenitifed via its full capitalised name.")
         }
         
         if (members == FALSE) {
@@ -49,3 +49,33 @@ getHOG <- function(id, level = NULL, members = FALSE) {
     
     return(requestFactory(url))
 }
+
+#' Get Members of Children HOGs Function
+#' 
+#' The function to obtain the information available for a Hierarchical orthologous group entry in the datase.
+#'
+#' @param hog a roma hog object
+#' @return an list of data frames containing information on members for each child hog
+#' @export
+#' @examples
+#' childrenMembers(getHOG(id = "YEAST590"))
+
+childrenMembers <- function(hog){
+
+    children_members = lapply(hog$children_hogs[['hog_id']], FUN = function(child_id) {
+        getHOG(id=child_id,members=TRUE)$members
+        
+        })
+    
+    names(children_members) = hog$children_hogs[['hog_id']]
+
+    return(children_members)
+
+}
+
+
+
+
+
+
+

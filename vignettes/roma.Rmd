@@ -23,7 +23,6 @@ The package contains a range of functions that are used to query the database in
 [Sequence Analysis with roma](sequence_mapping.html)
 
 
-
 ###getXref
 This function searches the OMA database for entries containing the pattern defined and returns the results in a dataframe. Hence, it is usually a good starting place. Sample code is below.
 
@@ -64,12 +63,17 @@ This master-function function serves to obtain the information for a single entr
 	* id of one of its members
 
 
+###getObjectAttributes
+The result of the getData function is an S3 Object with attributes corresponding to the information requested. This function allows the user to list all the object attributes and their corresponding data types. 
 
-The result is an S3 Object, attributes of which can be accessed via $ or via the getAttribute() function. Below is an example of obtaining information for a specific OMA group.
+###getAttribute
+The specific attributes of the created object can be accessed via $ or via the getAttribute() function. Below is an example of obtaining information for a specific OMA group.
 
 ```{r, warning=FALSE, message=FALSE}
 
 group <- getData(type="group",id="YEAST58")
+
+object_attributes = getObjectAttributes(group)
 
 group$fingerprint
 
@@ -88,13 +92,37 @@ One can see some of the above functions in action in the below example of trying
 
 protein <- getData(type="protein",id="YEAST58")
 
-attributes(protein)
+getObjectAttributes(protein)
 
-protein$orthologs
+orthologs = getAttribute(protein,'orthologs')
 
-orthologs = resolveURL(protein$orthologs)
+orthologs = resolveURL(orthologs)
+
+head(orthologs)
 
 ```
+
+The orthologs for a protein are returned as a data.frame. This structure is also found in other areas of the package (e.g. the data on the members of a particular OMA group or a HOG) and hence features a number of functions to simplify its processing. For example, the user can obtain a set of genomic ranges for the proteins in a dataframe as so:
+
+```{r, warning=FALSE, message=FALSE}
+
+gRanges = getGRanges(orthologs)
+str(gRanges)
+
+```
+
+The user can also obtain the list of sequences for a given dataframe of proteins and well as the list of their corresponding ontologies (that can be plugged into the topGO for further analysis).
+
+```{r, warning=FALSE, message=FALSE}
+
+sequences = getSequences(orthologs)
+str(sequences)
+
+ontologies = getOntologies(orthologs)
+str(ontologies)
+
+```
+
 
 For further information on the OMA REST API please visit [OMA REST API DOCUMENTATION](http://omadev.cs.ucl.ac.uk/api/docs).
 

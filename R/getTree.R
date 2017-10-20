@@ -12,6 +12,10 @@
 
 
 getTree <- function(newick){
+	if(class(newick)=="list"){
+		newick = newick$newick
+	}
+	
 	return(ape::read.tree(text=newick))
 }
 

@@ -2,7 +2,7 @@
 #' 
 #' The function to obtain the GRanges object from a dataframe containing a list of members. 
 #'
-#' @param df the dataframe containing the genomic range data of interest
+#' @param df the dataframe or a list of dataframes containing the genomic range data of interest
 #' @return an GRanges object
 #' @export
 #' @importFrom GenomicRanges makeGRangesFromDataFrame
@@ -12,6 +12,10 @@
 
 
 getGRanges <- function(df){
+
+	if(class(df)=="list"){
+		df = plyr::rbind.fill(df)
+	}
 
 	df$locus.strand[df$locus.strand == "1"] <- "+"
 	df$locus.strand[df$locus.strand == "-1"] <- "-"
@@ -26,7 +30,7 @@ getGRanges <- function(df){
 #' 
 #' The function to obtain the gene ontologies from a dataframe of members.
 #'
-#' @param df the dataframe containing the member proteins of interest
+#' @param df the dataframe or a list of dataframes containing the member proteins of interest
 #' @return a list containing the geneID2GO information 
 #' @export
 #' @examples
@@ -34,6 +38,10 @@ getGRanges <- function(df){
 
 
 getOntologies <- function(df){
+
+	if(class(df)=="list"){
+		df = plyr::rbind.fill(df)
+	}
 
 	object_list = lapply(df$omaid, FUN = function (x) getData(type = "protein", x))
 
@@ -47,13 +55,17 @@ getOntologies <- function(df){
 #' 
 #' The function to obtain the protein seqeunces from a dataframe of members.
 #'
-#' @param df the dataframe containing the member proteins of interest
+#' @param df the dataframe or a list of dataframes containing the member proteins of interest
 #' @return a list containing the AAString object for each member gene
 #' @export
 #' @examples
 #' sequences = getSequences(df = getData("group","YEAST58")$members)
 
 getSequences <- function(df){
+
+	if(class(df)=="list"){
+		df = plyr::rbind.fill(df)
+	}
 
 	object_list = lapply(df$omaid, FUN = function (x) getData(type = "protein", x))
 

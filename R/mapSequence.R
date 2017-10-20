@@ -31,8 +31,8 @@ mapSequence <- function(query,search,full_length=FALSE){
 			stop("search parameter invalid. Must be one of 'approximate', 'exact', 'mixed'")
 		}
 		else{
-		url = urlGenerator(type="sequence",query_param1="query",query_param1_value=query,query_param2="full_length",
-			query_param2_value=as.character(full_length),query_param3="search",query_param3_value=search)
+			url = urlGenerator(type="sequence",query_param1="query",query_param1_value=query,query_param2="full_length",
+				query_param2_value=as.character(full_length),query_param3="search",query_param3_value=search)
 
 		}
 	}

@@ -13,6 +13,9 @@ getAnnotation <- function(query){
 	if(missing(query)){
 		stop("You must provide a sequence to query.")
 	}
+	if(class(query)=="AAString"){
+		query = as.character(query)
+	}
 
 	url = urlGenerator(type="function",query_param1="query",query_param1_value=query)
 	

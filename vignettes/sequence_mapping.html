@@ -12,7 +12,7 @@
 
 <meta name="author" content="Klara Kaleb" />
 
-<meta name="date" content="2017-10-16" />
+<meta name="date" content="2017-10-20" />
 
 <title>Sequence Analysis with roma</title>
 
@@ -70,7 +70,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">Sequence Analysis with roma</h1>
 <h4 class="author"><em>Klara Kaleb</em></h4>
-<h4 class="date"><em>2017-10-16</em></h4>
+<h4 class="date"><em>2017-10-20</em></h4>
 
 
 
@@ -82,69 +82,51 @@ sequence =<span class="st"> &quot;MNDPSLLGYPNVGPQQQQQQQQQQHAGLLGKGTPNALQQQLHMNQL
 
 sequence_map &lt;-<span class="st"> </span><span class="kw">mapSequence</span>(sequence)
 
-<span class="kw">length</span>(sequence_map<span class="op">$</span>targets) </code></pre></div>
+<span class="kw">getObjectAttributes</span>(sequence_map)</code></pre></div>
+<pre><code>## [1] &quot;query : character&quot;
+## [1] &quot;identified_by : character&quot;
+## [1] &quot;targets : data.frame&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">targets =<span class="st"> </span><span class="kw">getAttribute</span>(sequence_map,<span class="st">'targets'</span>)
+
+<span class="kw">length</span>(targets) </code></pre></div>
 <pre><code>## [1] 23</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">protein =<span class="st"> </span><span class="kw">resolveURL</span>(sequence_map<span class="op">$</span>targets<span class="op">$</span>entry_url[[<span class="dv">1</span>]])
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">protein =<span class="st"> </span><span class="kw">resolveURL</span>(targets[[<span class="st">'entry_url'</span>]])
 
-oma_group =<span class="st"> </span>protein<span class="op">$</span>oma_group
+oma_group =<span class="st"> </span><span class="kw">getAttribute</span>(protein,<span class="st">'oma_group'</span>)
 
-domains =<span class="st"> </span><span class="kw">resolveURL</span>(protein<span class="op">$</span>domains)</code></pre></div>
+domains =<span class="st"> </span><span class="kw">getAttribute</span>(protein,<span class="st">'domains'</span>)
+
+domains =<span class="st"> </span><span class="kw">resolveURL</span>(domains)</code></pre></div>
 <p>One can also directly obtain GO annotations for a given query sequence as below:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sequence_annotation &lt;-<span class="st"> </span><span class="kw">getAnnotation</span>(sequence)
 
 sequence_annotation </code></pre></div>
-<pre><code>##    DB_Object_Type             With Qualifier      GO_ID DB_Object_Name
-## 1         protein Exact:YEAST00058           GO:0000076               
-## 2         protein Exact:YEAST00058           GO:0000175               
-## 3         protein Exact:YEAST00058           GO:0000288               
-## 4         protein Exact:YEAST00058           GO:0000289               
-## 5         protein Exact:YEAST00058           GO:0000932               
-## 6         protein Exact:YEAST00058           GO:0003723               
-## 7         protein Exact:YEAST00058           GO:0004518               
-## 8         protein Exact:YEAST00058           GO:0004527               
-## 9         protein Exact:YEAST00058           GO:0004535               
-## 10        protein Exact:YEAST00058           GO:0005515               
-## 11        protein Exact:YEAST00058           GO:0005634               
-## 12        protein Exact:YEAST00058           GO:0005737               
-## 13        protein Exact:YEAST00058           GO:0006260               
-## 14        protein Exact:YEAST00058           GO:0006351               
-## 15        protein Exact:YEAST00058           GO:0006355               
-## 16        protein Exact:YEAST00058           GO:0006357               
-## 17        protein Exact:YEAST00058           GO:0006368               
-## 18        protein Exact:YEAST00058           GO:0007089               
-## 19        protein Exact:YEAST00058           GO:0016787               
-## 20        protein Exact:YEAST00058           GO:0030015               
-## 21        protein Exact:YEAST00058           GO:0032968               
-## 22        protein Exact:YEAST00058           GO:0046872               
-## 23        protein Exact:YEAST00058           GO:0048478               
-## 24        protein Exact:YEAST00058           GO:0090305               
-## 25        protein Exact:YEAST00058           GO:0090503               
-##        Date Evidence Synonym Assigned_By          DB DB.Reference
-## 1  20171008      IEA         OMA_FastMap OMA_FastMap  OMA_Fun:002
-## 2  20171008      IEA         OMA_FastMap OMA_FastMap  OMA_Fun:002
-## 3  20171008      IEA         OMA_FastMap OMA_FastMap  OMA_Fun:002
-## 4  20171008      IEA         OMA_FastMap OMA_FastMap  OMA_Fun:002
-## 5  20171008      IEA         OMA_FastMap OMA_FastMap  OMA_Fun:002
-## 6  20171008      IEA         OMA_FastMap OMA_FastMap  OMA_Fun:002
-## 7  20171008      IEA         OMA_FastMap OMA_FastMap  OMA_Fun:002
-## 8  20171008      IEA         OMA_FastMap OMA_FastMap  OMA_Fun:002
-## 9  20171008      IEA         OMA_FastMap OMA_FastMap  OMA_Fun:002
-## 10 20171008      IEA         OMA_FastMap OMA_FastMap  OMA_Fun:002
-## 11 20171008      IEA         OMA_FastMap OMA_FastMap  OMA_Fun:002
-## 12 20171008      IEA         OMA_FastMap OMA_FastMap  OMA_Fun:002
-## 13 20171008      IEA         OMA_FastMap OMA_FastMap  OMA_Fun:002
-## 14 20171008      IEA         OMA_FastMap OMA_FastMap  OMA_Fun:002
-## 15 20171008      IEA         OMA_FastMap OMA_FastMap  OMA_Fun:002
-## 16 20171008      IEA         OMA_FastMap OMA_FastMap  OMA_Fun:002
-## 17 20171008      IEA         OMA_FastMap OMA_FastMap  OMA_Fun:002
-## 18 20171008      IEA         OMA_FastMap OMA_FastMap  OMA_Fun:002
-## 19 20171008      IEA         OMA_FastMap OMA_FastMap  OMA_Fun:002
-## 20 20171008      IEA         OMA_FastMap OMA_FastMap  OMA_Fun:002
-## 21 20171008      IEA         OMA_FastMap OMA_FastMap  OMA_Fun:002
-## 22 20171008      IEA         OMA_FastMap OMA_FastMap  OMA_Fun:002
-## 23 20171008      IEA         OMA_FastMap OMA_FastMap  OMA_Fun:002
-## 24 20171008      IEA         OMA_FastMap OMA_FastMap  OMA_Fun:002
-## 25 20171008      IEA         OMA_FastMap OMA_FastMap  OMA_Fun:002
+<pre><code>##    Evidence DB_Object_Type Synonym             With Aspect
+## 1       IEA        protein         Exact:YEAST00058      P
+## 2       IEA        protein         Exact:YEAST00058      F
+## 3       IEA        protein         Exact:YEAST00058      P
+## 4       IEA        protein         Exact:YEAST00058      P
+## 5       IEA        protein         Exact:YEAST00058      C
+## 6       IEA        protein         Exact:YEAST00058      F
+## 7       IEA        protein         Exact:YEAST00058      F
+## 8       IEA        protein         Exact:YEAST00058      F
+## 9       IEA        protein         Exact:YEAST00058      F
+## 10      IEA        protein         Exact:YEAST00058      F
+## 11      IEA        protein         Exact:YEAST00058      C
+## 12      IEA        protein         Exact:YEAST00058      C
+## 13      IEA        protein         Exact:YEAST00058      P
+## 14      IEA        protein         Exact:YEAST00058      P
+## 15      IEA        protein         Exact:YEAST00058      P
+## 16      IEA        protein         Exact:YEAST00058      P
+## 17      IEA        protein         Exact:YEAST00058      P
+## 18      IEA        protein         Exact:YEAST00058      P
+## 19      IEA        protein         Exact:YEAST00058      F
+## 20      IEA        protein         Exact:YEAST00058      C
+## 21      IEA        protein         Exact:YEAST00058      P
+## 22      IEA        protein         Exact:YEAST00058      F
+## 23      IEA        protein         Exact:YEAST00058      P
+## 24      IEA        protein         Exact:YEAST00058      P
+## 25      IEA        protein         Exact:YEAST00058      P
 ##                                                                            GO_name
 ## 1                                                       DNA replication checkpoint
 ## 2                                                   3'-5'-exoribonuclease activity
@@ -171,32 +153,58 @@ sequence_annotation </code></pre></div>
 ## 23                                                     replication fork protection
 ## 24                                     nucleic acid phosphodiester bond hydrolysis
 ## 25                              RNA phosphodiester bond hydrolysis, exonucleolytic
-##    Aspect
-## 1       P
-## 2       F
-## 3       P
-## 4       P
-## 5       C
-## 6       F
-## 7       F
-## 8       F
-## 9       F
-## 10      F
-## 11      C
-## 12      C
-## 13      P
-## 14      P
-## 15      P
-## 16      P
-## 17      P
-## 18      P
-## 19      F
-## 20      C
-## 21      P
-## 22      F
-## 23      P
-## 24      P
-## 25      P</code></pre>
+##    DB.Reference Assigned_By Qualifier     Date DB_Object_Name      GO_ID
+## 1   OMA_Fun:002 OMA_FastMap           20171008                GO:0000076
+## 2   OMA_Fun:002 OMA_FastMap           20171008                GO:0000175
+## 3   OMA_Fun:002 OMA_FastMap           20171008                GO:0000288
+## 4   OMA_Fun:002 OMA_FastMap           20171008                GO:0000289
+## 5   OMA_Fun:002 OMA_FastMap           20171008                GO:0000932
+## 6   OMA_Fun:002 OMA_FastMap           20171008                GO:0003723
+## 7   OMA_Fun:002 OMA_FastMap           20171008                GO:0004518
+## 8   OMA_Fun:002 OMA_FastMap           20171008                GO:0004527
+## 9   OMA_Fun:002 OMA_FastMap           20171008                GO:0004535
+## 10  OMA_Fun:002 OMA_FastMap           20171008                GO:0005515
+## 11  OMA_Fun:002 OMA_FastMap           20171008                GO:0005634
+## 12  OMA_Fun:002 OMA_FastMap           20171008                GO:0005737
+## 13  OMA_Fun:002 OMA_FastMap           20171008                GO:0006260
+## 14  OMA_Fun:002 OMA_FastMap           20171008                GO:0006351
+## 15  OMA_Fun:002 OMA_FastMap           20171008                GO:0006355
+## 16  OMA_Fun:002 OMA_FastMap           20171008                GO:0006357
+## 17  OMA_Fun:002 OMA_FastMap           20171008                GO:0006368
+## 18  OMA_Fun:002 OMA_FastMap           20171008                GO:0007089
+## 19  OMA_Fun:002 OMA_FastMap           20171008                GO:0016787
+## 20  OMA_Fun:002 OMA_FastMap           20171008                GO:0030015
+## 21  OMA_Fun:002 OMA_FastMap           20171008                GO:0032968
+## 22  OMA_Fun:002 OMA_FastMap           20171008                GO:0046872
+## 23  OMA_Fun:002 OMA_FastMap           20171008                GO:0048478
+## 24  OMA_Fun:002 OMA_FastMap           20171008                GO:0090305
+## 25  OMA_Fun:002 OMA_FastMap           20171008                GO:0090503
+##             DB
+## 1  OMA_FastMap
+## 2  OMA_FastMap
+## 3  OMA_FastMap
+## 4  OMA_FastMap
+## 5  OMA_FastMap
+## 6  OMA_FastMap
+## 7  OMA_FastMap
+## 8  OMA_FastMap
+## 9  OMA_FastMap
+## 10 OMA_FastMap
+## 11 OMA_FastMap
+## 12 OMA_FastMap
+## 13 OMA_FastMap
+## 14 OMA_FastMap
+## 15 OMA_FastMap
+## 16 OMA_FastMap
+## 17 OMA_FastMap
+## 18 OMA_FastMap
+## 19 OMA_FastMap
+## 20 OMA_FastMap
+## 21 OMA_FastMap
+## 22 OMA_FastMap
+## 23 OMA_FastMap
+## 24 OMA_FastMap
+## 25 OMA_FastMap</code></pre>
 
 
 

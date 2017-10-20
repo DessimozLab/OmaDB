@@ -7,7 +7,7 @@
 getGRanges(df)
 }
 \arguments{
-\item{df}{the dataframe containing the genomic range data of interest}
+\item{df}{the dataframe or a list of dataframes containing the genomic range data of interest}
 }
 \value{
 an GRanges object

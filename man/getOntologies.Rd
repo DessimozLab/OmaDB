@@ -7,7 +7,7 @@
 getOntologies(df)
 }
 \arguments{
-\item{df}{the dataframe containing the member proteins of interest}
+\item{df}{the dataframe or a list of dataframes containing the member proteins of interest}
 }
 \value{
 a list containing the geneID2GO information

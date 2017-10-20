@@ -11,7 +11,7 @@ getTopGO(annotations, format, myInterestingGenes)
 
 \item{format}{format for the data to be returned in - either 'GO2geneID' or 'geneID2GO'}
 
-\item{myInterestingGenes}{list identifiers for the genes of interest}
+\item{myInterestingGenes}{list of identifiers for the genes of interest or a dataframe containing them}
 }
 \value{
 topGO object
@@ -20,6 +20,8 @@ topGO object
 The function to create a topGO object containing the GO annotations for the given protein list.
 }
 \examples{
-annotations = formatTopGO(geneList = list(getData(type="protein",id="YEAST58"),getData(type="protein",id="YEAST00059")),format="geneID2GO")
+geneList = list(getData(type="protein",id="YEAST58"),getData(type="protein",id="YEAST00059"))
+annotations = formatTopGO(geneList,format="geneID2GO")
+library(topGO)
 getTopGO(annotations, myInterestingGenes = list("YEAST00058"), format = "geneID2GO")
 }

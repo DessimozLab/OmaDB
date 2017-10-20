@@ -90,40 +90,45 @@ simpleRequest <- function (url){
 
 objectFactory <- function(column_names, content_list) {
     
-    list_of_variables = list()
-    
-    for (name in column_names) {
-        
+
+    list_of_variables = lapply(column_names, FUN = function(name) {
+
         content = content_list[[name]]
-        
-        if (class(content) == "list" && length(content)!=0) {
-            if (is.null(names(content))) {
-                  content = formatData(content)
+
+            if (class(content) == "list" && length(content)!=0) {
+                if (is.null(names(content))) {
+                      formatData(content)
+                }
             }
-        }
-        
-        if (name == "chromosomes") {
-            content = GenomicRanges::makeGRangesFromDataFrame(content, 
-                start.field = "entry_ranges.1", end.field = "entry_ranges.2", 
-                seqnames.field = "id", ignore.strand = TRUE)
-        }
-        
-        if (name == "locus") {
-            content = GenomicRanges::GRanges(seqnames = content_list[["omaid"]], 
-                ranges = IRanges::IRanges(content$start, content$end), 
-                strand = content$strand)
-        }
-        
-        if (name == "sequence") {
-            content = Biostrings::AAString(content)
-        }
-        
-        if (name == "cdna" && !(grepl("X", content))) {
-            content = Biostrings::DNAString(content)
-        }
-        
-        list_of_variables[[name]] = content
-    }
+
+            else if (name == "chromosomes") {
+                GenomicRanges::makeGRangesFromDataFrame(content, 
+                    start.field = "entry_ranges.1", end.field = "entry_ranges.2", 
+                    seqnames.field = "id", ignore.strand = TRUE)
+            }
+            
+            else if (name == "locus") {
+                GenomicRanges::GRanges(seqnames = content_list[["omaid"]], 
+                    ranges = IRanges::IRanges(content$start, content$end), 
+                    strand = content$strand)
+            }
+            
+            else if (name == "sequence") {
+                Biostrings::AAString(content)
+            }
+            
+            else if (name == "cdna" && !(grepl("X", content))) {
+                Biostrings::DNAString(content)
+            }
+            else{
+                content
+            }
+    
+
+        })
+
+
+    names(list_of_variables) = column_names
     
     value <- list_of_variables
     
@@ -133,8 +138,6 @@ objectFactory <- function(column_names, content_list) {
 
 requestFactory <- function (url) {
 
-	
-
 	out<- tryCatch(
 	{	
 		response = httr::GET(url)
@@ -143,15 +146,20 @@ requestFactory <- function (url) {
 		column_names = names(content_list)
 
 		if(is.null(column_names)){
-			if(length(content_list)==1){
+			 if(length(content_list)==1){
 				column_names = names(content_list[[1]])
 
 				objectFactory(column_names, content_list = content_list[[1]])
 				}
 			
-			else{
-
-				formatData(content_list)
+		      else{
+                    if(length(content_list)!=0){
+                       formatData(content_list) 
+                    }
+                    else{
+                        return("")
+                    }
+				
 			}
 			
 		}
@@ -190,14 +198,19 @@ requestFactory <- function (url) {
 }
 
 formatData <- function(data) {
-    if (class(data) == "list" && length(data) != 0) {
-        
+
         if ("entry_1" %in% names(data[[1]])) {
             for (i in seq_along(data)) {
                 data[[i]][[1]][[7]] = rbind(data[[i]][[1]][[7]])
                 data[[i]][[2]][[7]] = rbind(data[[i]][[2]][[7]])
             }
             
+        }
+
+        if("alternative_levels" %in% names(data[[1]])){
+            for (i in seq_along(data)) {
+                data[[i]][['alternative_levels']] = NULL
+            }        
         }
         
         if ("entry_ranges" %in% names(data[[1]])) {
@@ -208,14 +221,11 @@ formatData <- function(data) {
             }
             
         }
-        
-        
+               
         dfs <- lapply(data, data.frame, stringsAsFactors = FALSE)
         data = plyr::rbind.fill(dfs)
         
         return(data)
-        
-    }
     
 }
 

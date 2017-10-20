@@ -12,7 +12,7 @@
 
 <meta name="author" content="Klara Kaleb" />
 
-<meta name="date" content="2017-10-16" />
+<meta name="date" content="2017-10-20" />
 
 <title>Get started with Roma</title>
 
@@ -70,7 +70,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">Get started with Roma</h1>
 <h4 class="author"><em>Klara Kaleb</em></h4>
-<h4 class="date"><em>2017-10-16</em></h4>
+<h4 class="date"><em>2017-10-20</em></h4>
 
 
 
@@ -211,10 +211,22 @@ results &lt;-<span class="st"> </span><span class="kw">getXref</span>(<span clas
 <li>id of one of its members</li>
 </ul></li>
 </ul>
-<p>The result is an S3 Object, attributes of which can be accessed via $ or via the getAttribute() function. Below is an example of obtaining information for a specific OMA group.</p>
+</div>
+<div id="getobjectattributes" class="section level3">
+<h3>getObjectAttributes</h3>
+<p>The result of the getData function is an S3 Object with attributes corresponding to the information requested. This function allows the user to list all the object attributes and their corresponding data types.</p>
+</div>
+<div id="getattribute" class="section level3">
+<h3>getAttribute</h3>
+<p>The specific attributes of the created object can be accessed via $ or via the getAttribute() function. Below is an example of obtaining information for a specific OMA group.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">group &lt;-<span class="st"> </span><span class="kw">getData</span>(<span class="dt">type=</span><span class="st">&quot;group&quot;</span>,<span class="dt">id=</span><span class="st">&quot;YEAST58&quot;</span>)
 
-group<span class="op">$</span>fingerprint</code></pre></div>
+object_attributes =<span class="st"> </span><span class="kw">getObjectAttributes</span>(group)</code></pre></div>
+<pre><code>## [1] &quot;group_nr : integer&quot;
+## [1] &quot;fingerprint : character&quot;
+## [1] &quot;related_groups : URL&quot;
+## [1] &quot;members : data.frame&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">group<span class="op">$</span>fingerprint</code></pre></div>
 <pre><code>## [1] &quot;PNDKFPS&quot;</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">getAttribute</span>(group, <span class="st">'fingerprint'</span>)</code></pre></div>
 <pre><code>## [1] &quot;PNDKFPS&quot;</code></pre>
@@ -225,18 +237,263 @@ group<span class="op">$</span>fingerprint</code></pre></div>
 <p>One can see some of the above functions in action in the below example of trying to obtain the list of orthologs for a protein entry.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">protein &lt;-<span class="st"> </span><span class="kw">getData</span>(<span class="dt">type=</span><span class="st">&quot;protein&quot;</span>,<span class="dt">id=</span><span class="st">&quot;YEAST58&quot;</span>)
 
-<span class="kw">attributes</span>(protein)</code></pre></div>
-<pre><code>## $names
-##  [1] &quot;entry_nr&quot;        &quot;entry_url&quot;       &quot;omaid&quot;          
-##  [4] &quot;canonicalid&quot;     &quot;sequence_md5&quot;    &quot;oma_group&quot;      
-##  [7] &quot;oma_hog_id&quot;      &quot;chromosome&quot;      &quot;locus&quot;          
-## [10] &quot;roothog_id&quot;      &quot;hog_levels&quot;      &quot;sequence_length&quot;
-## [13] &quot;sequence&quot;        &quot;cdna&quot;            &quot;domains&quot;        
-## [16] &quot;xref&quot;            &quot;orthologs&quot;       &quot;ontology&quot;       
-## [19] &quot;oma_group_url&quot;   &quot;oma_hog_members&quot;</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">protein<span class="op">$</span>orthologs</code></pre></div>
-<pre><code>## [1] &quot;https://omabrowser.org/api/protein/6562820/orthologs/&quot;</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">orthologs =<span class="st"> </span><span class="kw">resolveURL</span>(protein<span class="op">$</span>orthologs)</code></pre></div>
+<span class="kw">getObjectAttributes</span>(protein)</code></pre></div>
+<pre><code>## [1] &quot;entry_nr : integer&quot;
+## [1] &quot;entry_url : URL&quot;
+## [1] &quot;omaid : character&quot;
+## [1] &quot;canonicalid : character&quot;
+## [1] &quot;sequence_md5 : character&quot;
+## [1] &quot;oma_group : integer&quot;
+## [1] &quot;oma_hog_id : character&quot;
+## [1] &quot;chromosome : character&quot;
+## [1] &quot;locus : NULL&quot;
+## [1] &quot;roothog_id : integer&quot;
+## [1] &quot;hog_levels : data.frame&quot;
+## [1] &quot;sequence_length : integer&quot;
+## [1] &quot;sequence : AAString&quot;
+## [1] &quot;cdna : DNAString&quot;
+## [1] &quot;domains : URL&quot;
+## [1] &quot;xref : URL&quot;
+## [1] &quot;orthologs : URL&quot;
+## [1] &quot;ontology : URL&quot;
+## [1] &quot;oma_group_url : URL&quot;
+## [1] &quot;oma_hog_members : URL&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">orthologs =<span class="st"> </span><span class="kw">getAttribute</span>(protein,<span class="st">'orthologs'</span>)
+
+orthologs =<span class="st"> </span><span class="kw">resolveURL</span>(orthologs)
+
+<span class="kw">head</span>(orthologs)</code></pre></div>
+<pre><code>##   entry_nr                                   entry_url      omaid
+## 1  6284774 https://omabrowser.org/api/protein/6284774/ COCLU03588
+## 2  6341447 https://omabrowser.org/api/protein/6341447/ COLGR10929
+## 3  6349325 https://omabrowser.org/api/protein/6349325/ COLSU06788
+## 4  6410870 https://omabrowser.org/api/protein/6410870/ FUSO411719
+## 5  6418086 https://omabrowser.org/api/protein/6418086/ GIBZA02345
+## 6  6443712 https://omabrowser.org/api/protein/6443712/ NECHA14651
+##   canonicalid                     sequence_md5 oma_group  oma_hog_id
+## 1             c5db7c8e6b0eee5c6bbc18fe2dbf9ba7    721679 HOG:0367321
+## 2             2cf82b1ffadc581d82d920af9b0130a2    721679 HOG:0367321
+## 3  A0A066XI05 d6abbfd6d6ed96217331e86733ae4aeb    721679 HOG:0367321
+## 4  A0A0D2XKA6 b92bedd8c4fe61cc3667d4f108ffb528    721679 HOG:0367321
+## 5             54814145e0f45beb33ac2e2cb99335a3    721678 HOG:0367321
+## 6             8c85e6f457288d146cb99fbc61404cb9    721679 HOG:0367321
+##         chromosome locus.start locus.end locus.strand rel_type distance
+## 1       scaffold_6       27852     30189           -1      1:1      105
+## 2         GG697333      764822    767178            1      1:1      108
+## 3  Scaffolds0609.1         399      2755            1      1:1      109
+## 4                4     4317479   4319279           -1      1:1      107
+## 5  Supercontig_3.1     6701031   6703176           -1      1:1      109
+## 6 sca_14_chr10_3_0      669785    671940           -1      1:1      105
+##     score
+## 1 1362.00
+## 2 1320.99
+## 3 1312.07
+## 4 1326.20
+## 5 1327.66
+## 6 1336.03</code></pre>
+<p>The orthologs for a protein are returned as a data.frame. This structure is also found in other areas of the package (e.g. the data on the members of a particular OMA group or a HOG) and hence features a number of functions to simplify its processing. For example, the user can obtain a set of genomic ranges for the proteins in a dataframe as so:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">gRanges =<span class="st"> </span><span class="kw">getGRanges</span>(orthologs)
+<span class="kw">str</span>(gRanges)</code></pre></div>
+<pre><code>## Formal class 'GRanges' [package &quot;GenomicRanges&quot;] with 6 slots
+##   ..@ seqnames       :Formal class 'Rle' [package &quot;S4Vectors&quot;] with 4 slots
+##   .. .. ..@ values         : Factor w/ 18 levels &quot;ZYGRO02696&quot;,&quot;ASHGO01343&quot;,..: 6 7 8 11 12 15 18 3 14 9 ...
+##   .. .. ..@ lengths        : int [1:18] 1 1 1 1 1 1 1 1 1 1 ...
+##   .. .. ..@ elementMetadata: NULL
+##   .. .. ..@ metadata       : list()
+##   ..@ ranges         :Formal class 'IRanges' [package &quot;IRanges&quot;] with 6 slots
+##   .. .. ..@ start          : int [1:18] 27852 764822 399 4317479 6701031 669785 3756431 1390917 1013851 373608 ...
+##   .. .. ..@ width          : int [1:18] 2338 2357 2357 1801 2146 2156 2373 2358 2529 2496 ...
+##   .. .. ..@ NAMES          : NULL
+##   .. .. ..@ elementType    : chr &quot;integer&quot;
+##   .. .. ..@ elementMetadata: NULL
+##   .. .. ..@ metadata       : list()
+##   ..@ strand         :Formal class 'Rle' [package &quot;S4Vectors&quot;] with 4 slots
+##   .. .. ..@ values         : Factor w/ 3 levels &quot;+&quot;,&quot;-&quot;,&quot;*&quot;: 2 1 2 1 2 1 2
+##   .. .. ..@ lengths        : int [1:7] 1 2 3 1 4 3 4
+##   .. .. ..@ elementMetadata: NULL
+##   .. .. ..@ metadata       : list()
+##   ..@ elementMetadata:Formal class 'DataFrame' [package &quot;S4Vectors&quot;] with 6 slots
+##   .. .. ..@ rownames       : NULL
+##   .. .. ..@ nrows          : int 18
+##   .. .. ..@ listData       : Named list()
+##   .. .. ..@ elementType    : chr &quot;ANY&quot;
+##   .. .. ..@ elementMetadata: NULL
+##   .. .. ..@ metadata       : list()
+##   ..@ seqinfo        :Formal class 'Seqinfo' [package &quot;GenomeInfoDb&quot;] with 4 slots
+##   .. .. ..@ seqnames   : chr [1:18] &quot;ZYGRO02696&quot; &quot;ASHGO01343&quot; &quot;CANAW00573&quot; &quot;CANGA01835&quot; ...
+##   .. .. ..@ seqlengths : int [1:18] NA NA NA NA NA NA NA NA NA NA ...
+##   .. .. ..@ is_circular: logi [1:18] NA NA NA NA NA NA ...
+##   .. .. ..@ genome     : chr [1:18] NA NA NA NA ...
+##   ..@ metadata       : list()</code></pre>
+<p>The user can also obtain the list of sequences for a given dataframe of proteins and well as the list of their corresponding ontologies (that can be plugged into the topGO for further analysis).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sequences =<span class="st"> </span><span class="kw">getSequences</span>(orthologs)
+<span class="kw">str</span>(sequences)</code></pre></div>
+<pre><code>## List of 18
+##  $ COCLU03588:Formal class 'AAString' [package &quot;Biostrings&quot;] with 5 slots
+##   .. ..@ shared         :Formal class 'SharedRaw' [package &quot;XVector&quot;] with 2 slots
+##   .. .. .. ..@ xp                    :&lt;externalptr&gt; 
+##   .. .. .. ..@ .link_to_cached_object:&lt;environment: 0x7ff1ab5a5628&gt; 
+##   .. ..@ offset         : int 0
+##   .. ..@ length         : int 759
+##   .. ..@ elementMetadata: NULL
+##   .. ..@ metadata       : list()
+##  $ COLGR10929:Formal class 'AAString' [package &quot;Biostrings&quot;] with 5 slots
+##   .. ..@ shared         :Formal class 'SharedRaw' [package &quot;XVector&quot;] with 2 slots
+##   .. .. .. ..@ xp                    :&lt;externalptr&gt; 
+##   .. .. .. ..@ .link_to_cached_object:&lt;environment: 0x7ff1ab5a5628&gt; 
+##   .. ..@ offset         : int 0
+##   .. ..@ length         : int 768
+##   .. ..@ elementMetadata: NULL
+##   .. ..@ metadata       : list()
+##  $ COLSU06788:Formal class 'AAString' [package &quot;Biostrings&quot;] with 5 slots
+##   .. ..@ shared         :Formal class 'SharedRaw' [package &quot;XVector&quot;] with 2 slots
+##   .. .. .. ..@ xp                    :&lt;externalptr&gt; 
+##   .. .. .. ..@ .link_to_cached_object:&lt;environment: 0x7ff1ab5a5628&gt; 
+##   .. ..@ offset         : int 0
+##   .. ..@ length         : int 768
+##   .. ..@ elementMetadata: NULL
+##   .. ..@ metadata       : list()
+##  $ FUSO411719:Formal class 'AAString' [package &quot;Biostrings&quot;] with 5 slots
+##   .. ..@ shared         :Formal class 'SharedRaw' [package &quot;XVector&quot;] with 2 slots
+##   .. .. .. ..@ xp                    :&lt;externalptr&gt; 
+##   .. .. .. ..@ .link_to_cached_object:&lt;environment: 0x7ff1ab5a5628&gt; 
+##   .. ..@ offset         : int 0
+##   .. ..@ length         : int 585
+##   .. ..@ elementMetadata: NULL
+##   .. ..@ metadata       : list()
+##  $ GIBZA02345:Formal class 'AAString' [package &quot;Biostrings&quot;] with 5 slots
+##   .. ..@ shared         :Formal class 'SharedRaw' [package &quot;XVector&quot;] with 2 slots
+##   .. .. .. ..@ xp                    :&lt;externalptr&gt; 
+##   .. .. .. ..@ .link_to_cached_object:&lt;environment: 0x7ff1ab5a5628&gt; 
+##   .. ..@ offset         : int 0
+##   .. ..@ length         : int 698
+##   .. ..@ elementMetadata: NULL
+##   .. ..@ metadata       : list()
+##  $ NECHA14651:Formal class 'AAString' [package &quot;Biostrings&quot;] with 5 slots
+##   .. ..@ shared         :Formal class 'SharedRaw' [package &quot;XVector&quot;] with 2 slots
+##   .. .. .. ..@ xp                    :&lt;externalptr&gt; 
+##   .. .. .. ..@ .link_to_cached_object:&lt;environment: 0x7ff1ab5a5628&gt; 
+##   .. ..@ offset         : int 0
+##   .. ..@ length         : int 700
+##   .. ..@ elementMetadata: NULL
+##   .. ..@ metadata       : list()
+##  $ THIHE03640:Formal class 'AAString' [package &quot;Biostrings&quot;] with 5 slots
+##   .. ..@ shared         :Formal class 'SharedRaw' [package &quot;XVector&quot;] with 2 slots
+##   .. .. .. ..@ xp                    :&lt;externalptr&gt; 
+##   .. .. .. ..@ .link_to_cached_object:&lt;environment: 0x7ff1ab5a5628&gt; 
+##   .. ..@ offset         : int 0
+##   .. ..@ length         : int 761
+##   .. ..@ elementMetadata: NULL
+##   .. ..@ metadata       : list()
+##  $ CANAW00573:Formal class 'AAString' [package &quot;Biostrings&quot;] with 5 slots
+##   .. ..@ shared         :Formal class 'SharedRaw' [package &quot;XVector&quot;] with 2 slots
+##   .. .. .. ..@ xp                    :&lt;externalptr&gt; 
+##   .. .. .. ..@ .link_to_cached_object:&lt;environment: 0x7ff1ab5a5628&gt; 
+##   .. ..@ offset         : int 0
+##   .. ..@ length         : int 785
+##   .. ..@ elementMetadata: NULL
+##   .. ..@ metadata       : list()
+##  $ LODEL00382:Formal class 'AAString' [package &quot;Biostrings&quot;] with 5 slots
+##   .. ..@ shared         :Formal class 'SharedRaw' [package &quot;XVector&quot;] with 2 slots
+##   .. .. .. ..@ xp                    :&lt;externalptr&gt; 
+##   .. .. .. ..@ .link_to_cached_object:&lt;environment: 0x7ff1ab5a5628&gt; 
+##   .. ..@ offset         : int 0
+##   .. ..@ length         : int 842
+##   .. ..@ elementMetadata: NULL
+##   .. ..@ metadata       : list()
+##  $ DEBHA04175:Formal class 'AAString' [package &quot;Biostrings&quot;] with 5 slots
+##   .. ..@ shared         :Formal class 'SharedRaw' [package &quot;XVector&quot;] with 2 slots
+##   .. .. .. ..@ xp                    :&lt;externalptr&gt; 
+##   .. .. .. ..@ .link_to_cached_object:&lt;environment: 0x7ff1ab5a5628&gt; 
+##   .. ..@ offset         : int 0
+##   .. ..@ length         : int 831
+##   .. ..@ elementMetadata: NULL
+##   .. ..@ metadata       : list()
+##  $ SPAPN04932:Formal class 'AAString' [package &quot;Biostrings&quot;] with 5 slots
+##   .. ..@ shared         :Formal class 'SharedRaw' [package &quot;XVector&quot;] with 2 slots
+##   .. .. .. ..@ xp                    :&lt;externalptr&gt; 
+##   .. .. .. ..@ .link_to_cached_object:&lt;environment: 0x7ff1ab5a5628&gt; 
+##   .. ..@ offset         : int 0
+##   .. ..@ length         : int 817
+##   .. ..@ elementMetadata: NULL
+##   .. ..@ metadata       : list()
+##  $ CANTE00168:Formal class 'AAString' [package &quot;Biostrings&quot;] with 5 slots
+##   .. ..@ shared         :Formal class 'SharedRaw' [package &quot;XVector&quot;] with 2 slots
+##   .. .. .. ..@ xp                    :&lt;externalptr&gt; 
+##   .. .. .. ..@ .link_to_cached_object:&lt;environment: 0x7ff1ab5a5628&gt; 
+##   .. ..@ offset         : int 0
+##   .. ..@ length         : int 675
+##   .. ..@ elementMetadata: NULL
+##   .. ..@ metadata       : list()
+##  $ PICPG00513:Formal class 'AAString' [package &quot;Biostrings&quot;] with 5 slots
+##   .. ..@ shared         :Formal class 'SharedRaw' [package &quot;XVector&quot;] with 2 slots
+##   .. .. .. ..@ xp                    :&lt;externalptr&gt; 
+##   .. .. .. ..@ .link_to_cached_object:&lt;environment: 0x7ff1ab5a5628&gt; 
+##   .. ..@ offset         : int 0
+##   .. ..@ length         : int 768
+##   .. ..@ elementMetadata: NULL
+##   .. ..@ metadata       : list()
+##  $ ASHGO01343:Formal class 'AAString' [package &quot;Biostrings&quot;] with 5 slots
+##   .. ..@ shared         :Formal class 'SharedRaw' [package &quot;XVector&quot;] with 2 slots
+##   .. .. .. ..@ xp                    :&lt;externalptr&gt; 
+##   .. .. .. ..@ .link_to_cached_object:&lt;environment: 0x7ff1ab5a5628&gt; 
+##   .. ..@ offset         : int 0
+##   .. ..@ length         : int 736
+##   .. ..@ elementMetadata: NULL
+##   .. ..@ metadata       : list()
+##  $ KLULA00697:Formal class 'AAString' [package &quot;Biostrings&quot;] with 5 slots
+##   .. ..@ shared         :Formal class 'SharedRaw' [package &quot;XVector&quot;] with 2 slots
+##   .. .. .. ..@ xp                    :&lt;externalptr&gt; 
+##   .. .. .. ..@ .link_to_cached_object:&lt;environment: 0x7ff1ab5a5628&gt; 
+##   .. ..@ offset         : int 0
+##   .. ..@ length         : int 790
+##   .. ..@ elementMetadata: NULL
+##   .. ..@ metadata       : list()
+##  $ CANGA01835:Formal class 'AAString' [package &quot;Biostrings&quot;] with 5 slots
+##   .. ..@ shared         :Formal class 'SharedRaw' [package &quot;XVector&quot;] with 2 slots
+##   .. .. .. ..@ xp                    :&lt;externalptr&gt; 
+##   .. .. .. ..@ .link_to_cached_object:&lt;environment: 0x7ff1ab5a5628&gt; 
+##   .. ..@ offset         : int 0
+##   .. ..@ length         : int 873
+##   .. ..@ elementMetadata: NULL
+##   .. ..@ metadata       : list()
+##  $ ZYGRO02696:Formal class 'AAString' [package &quot;Biostrings&quot;] with 5 slots
+##   .. ..@ shared         :Formal class 'SharedRaw' [package &quot;XVector&quot;] with 2 slots
+##   .. .. .. ..@ xp                    :&lt;externalptr&gt; 
+##   .. .. .. ..@ .link_to_cached_object:&lt;environment: 0x7ff1ab5a5628&gt; 
+##   .. ..@ offset         : int 0
+##   .. ..@ length         : int 857
+##   .. ..@ elementMetadata: NULL
+##   .. ..@ metadata       : list()
+##  $ DROBM15099:Formal class 'AAString' [package &quot;Biostrings&quot;] with 5 slots
+##   .. ..@ shared         :Formal class 'SharedRaw' [package &quot;XVector&quot;] with 2 slots
+##   .. .. .. ..@ xp                    :&lt;externalptr&gt; 
+##   .. .. .. ..@ .link_to_cached_object:&lt;environment: 0x7ff1ab5a5628&gt; 
+##   .. ..@ offset         : int 0
+##   .. ..@ length         : int 903
+##   .. ..@ elementMetadata: NULL
+##   .. ..@ metadata       : list()</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ontologies =<span class="st"> </span><span class="kw">getOntologies</span>(orthologs)
+<span class="kw">str</span>(ontologies)</code></pre></div>
+<pre><code>## List of 18
+##  $ COCLU03588: chr [1:7] &quot;GO:0003723&quot; &quot;GO:0004535&quot; &quot;GO:0005634&quot; &quot;GO:0005737&quot; ...
+##  $ COLGR10929: chr [1:10] &quot;GO:0004519&quot; &quot;GO:0004527&quot; &quot;GO:0090305&quot; &quot;GO:0003723&quot; ...
+##  $ COLSU06788: chr [1:10] &quot;GO:0004519&quot; &quot;GO:0004527&quot; &quot;GO:0090305&quot; &quot;GO:0003723&quot; ...
+##  $ FUSO411719: chr [1:7] &quot;GO:0003723&quot; &quot;GO:0004535&quot; &quot;GO:0005634&quot; &quot;GO:0005737&quot; ...
+##  $ GIBZA02345: chr [1:11] &quot;GO:0000288&quot; &quot;GO:0003723&quot; &quot;GO:0004535&quot; &quot;GO:0005634&quot; ...
+##  $ NECHA14651: chr [1:7] &quot;GO:0003723&quot; &quot;GO:0004535&quot; &quot;GO:0005634&quot; &quot;GO:0005737&quot; ...
+##  $ THIHE03640: chr [1:7] &quot;GO:0003723&quot; &quot;GO:0004535&quot; &quot;GO:0005634&quot; &quot;GO:0005737&quot; ...
+##  $ CANAW00573: chr [1:26] &quot;GO:0000076&quot; &quot;GO:0000175&quot; &quot;GO:0000288&quot; &quot;GO:0000288&quot; ...
+##  $ LODEL00382: chr [1:22] &quot;GO:0000076&quot; &quot;GO:0000175&quot; &quot;GO:0000288&quot; &quot;GO:0000289&quot; ...
+##  $ DEBHA04175: chr [1:28] &quot;GO:0000076&quot; &quot;GO:0000175&quot; &quot;GO:0000288&quot; &quot;GO:0000289&quot; ...
+##  $ SPAPN04932: chr [1:22] &quot;GO:0000076&quot; &quot;GO:0000175&quot; &quot;GO:0000288&quot; &quot;GO:0000289&quot; ...
+##  $ CANTE00168: chr [1:11] &quot;GO:0000288&quot; &quot;GO:0003723&quot; &quot;GO:0004535&quot; &quot;GO:0005634&quot; ...
+##  $ PICPG00513: chr [1:26] &quot;GO:0000076&quot; &quot;GO:0000175&quot; &quot;GO:0000288&quot; &quot;GO:0000288&quot; ...
+##  $ ASHGO01343: chr [1:28] &quot;GO:0000076&quot; &quot;GO:0000175&quot; &quot;GO:0000288&quot; &quot;GO:0000289&quot; ...
+##  $ KLULA00697: chr [1:28] &quot;GO:0000076&quot; &quot;GO:0000175&quot; &quot;GO:0000288&quot; &quot;GO:0000289&quot; ...
+##  $ CANGA01835: chr [1:28] &quot;GO:0000076&quot; &quot;GO:0000175&quot; &quot;GO:0000288&quot; &quot;GO:0000289&quot; ...
+##  $ ZYGRO02696: chr [1:22] &quot;GO:0000076&quot; &quot;GO:0000175&quot; &quot;GO:0000288&quot; &quot;GO:0000289&quot; ...
+##  $ DROBM15099: chr &quot;&quot;</code></pre>
 <p>For further information on the OMA REST API please visit <a href="http://omadev.cs.ucl.ac.uk/api/docs">OMA REST API DOCUMENTATION</a>.</p>
 </div>
 </div>
