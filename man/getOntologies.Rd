@@ -16,5 +16,5 @@ a list containing the geneID2GO information
 The function to obtain the gene ontologies from a dataframe of members.
 }
 \examples{
-ontologies = getOntologies(df = getData("group","YEAST58")$members)
+ontologies = getOntologies(df = getData("group","YEAST58")['members'])
 }

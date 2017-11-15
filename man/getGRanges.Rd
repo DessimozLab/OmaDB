@@ -16,5 +16,5 @@ an GRanges object
 The function to obtain the GRanges object from a dataframe containing a list of members.
 }
 \examples{
-gRanges = getGRanges(df = getData("group","YEAST58")$members)
+gRanges = getGRanges(df = getData("group","YEAST58")['members'])
 }

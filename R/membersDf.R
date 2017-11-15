@@ -7,7 +7,7 @@
 #' @export
 #' @importFrom GenomicRanges makeGRangesFromDataFrame
 #' @examples
-#' gRanges = getGRanges(df = getData("group","YEAST58")$members)
+#' gRanges = getGRanges(df = getData("group","YEAST58")['members'])
 
 
 
@@ -34,7 +34,7 @@ getGRanges <- function(df){
 #' @return a list containing the geneID2GO information 
 #' @export
 #' @examples
-#' ontologies = getOntologies(df = getData("group","YEAST58")$members)
+#' ontologies = getOntologies(df = getData("group","YEAST58")['members'])
 
 
 getOntologies <- function(df){
@@ -59,7 +59,7 @@ getOntologies <- function(df){
 #' @return a list containing the AAString object for each member gene
 #' @export
 #' @examples
-#' sequences = getSequences(df = getData("group","YEAST58")$members)
+#' sequences = getSequences(df = getData("group","YEAST58")['members'])
 
 getSequences <- function(df){
 

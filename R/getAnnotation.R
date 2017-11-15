@@ -2,7 +2,7 @@
 #' 
 #' The function to obtain GO annotation for a given sequence.
 #'
-#' @param query the sequence to be annotated
+#' @param query the sequence to be annotated, it can be either a string or an AAString object from the Biostrings package
 #' @return a data.frame containg the GO annotaition information linked to the query sequence
 #' @export
 #' @examples

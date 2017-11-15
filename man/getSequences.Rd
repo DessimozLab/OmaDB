@@ -16,5 +16,5 @@ a list containing the AAString object for each member gene
 The function to obtain the protein seqeunces from a dataframe of members.
 }
 \examples{
-sequences = getSequences(df = getData("group","YEAST58")$members)
+sequences = getSequences(df = getData("group","YEAST58")['members'])
 }

@@ -7,7 +7,7 @@
 getAnnotation(query)
 }
 \arguments{
-\item{query}{the sequence to be annotated}
+\item{query}{the sequence to be annotated, it can be either a string or an AAString object from the Biostrings package}
 }
 \value{
 a data.frame containg the GO annotaition information linked to the query sequence

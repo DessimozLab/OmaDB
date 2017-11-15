@@ -9,7 +9,7 @@ getHOG(id, level = NULL, members = FALSE)
 \arguments{
 \item{id}{an identifier for the entry to be returned - either its id or one of its protein members}
 
-\item{level}{a specific level for the HOG to be restricted to - set to the root level by default}
+\item{level}{a specific level for the HOG to be restricted to - set to the root level by default. A taxonomic level can be identified by its full capitalised name e.g. "Fungi" or "Saccharomycetaceae".}
 
 \item{members}{boolean that when set to TRUE returns the list of protein members at a given hog and/or level}
 }

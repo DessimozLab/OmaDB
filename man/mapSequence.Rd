@@ -7,7 +7,7 @@
 mapSequence(query, search, full_length = FALSE)
 }
 \arguments{
-\item{query}{the sequence to be searched}
+\item{query}{the sequence to be searched, it can be either a string or an AAString object from the Biostrings package}
 
 \item{search}{argument to choose search strategy. Can be set to 'exact', 'approximate' or 'mixed'. Defaults to 'mixed', meaning first tries to find exact match. If no target can be found, uses approximate search strategy to identify query sequence in database.}
 
