@@ -4,7 +4,7 @@
 #'
 #' @param id an identifier for the entry to be returned - either its id or one of its protein members
 #' @param level a specific level for the HOG to be restricted to - set to the root level by default. A taxonomic level can be identified by its full capitalised name e.g. "Fungi" or "Saccharomycetaceae". 
-#' @param members boolean that when set to TRUE returns the list of protein members at a given hog and/or level
+#' @param members boolean that when set to TRUE returns a dataframe containg the protein members at a given hog and/or level
 #' @return an object containing the JSON keys as attributes
 #' @export
 #' @examples

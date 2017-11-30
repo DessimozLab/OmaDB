@@ -97,7 +97,7 @@ objectFactory <- function(column_names, content_list) {
 
             if (class(content) == "list" && length(content)!=0) {
                 if (is.null(names(content))) {
-                      formatData(content)
+                      formatData(content)  
                 }
             }
 
@@ -123,7 +123,6 @@ objectFactory <- function(column_names, content_list) {
             else{
                 content
             }
-    
 
         })
 
@@ -138,7 +137,7 @@ objectFactory <- function(column_names, content_list) {
 
 requestFactory <- function (url) {
 
-	out<- tryCatch(
+	out <- tryCatch(
 	{	
 		response = httr::GET(url)
 
@@ -146,42 +145,39 @@ requestFactory <- function (url) {
 		column_names = names(content_list)
 
 		if(is.null(column_names)){
-			 if(length(content_list)==1){
-				column_names = names(content_list[[1]])
-
-				objectFactory(column_names, content_list = content_list[[1]])
-				}
+			if(length(content_list)==1){
 			
-		      else{
-                    if(length(content_list)!=0){
-                       formatData(content_list) 
+				return(objectFactory(names(content_list[[1]]), content_list[[1]]))
+			     
+                 }	
+		    else if (length(content_list)!=1 && length(content_list)!=0){
+                 return(formatData(content_list))
                     }
-                    else{
-                        return("")
-                    }
-				
-			}
-			
+           
+            else if (length(content_list)==0){
+                return(" ")
+            }
+                    
 		}
 
-		else {
+		if(!is.null(column_names)) {
 
 			objectFactory(column_names,content_list)
 		}
 	},
 		
-		error= function(cond) {
-            message(paste("THE OMA REST API request failed: the endpoint does not exist:", url))
+		error = function(cond) {
+            message(paste("THE OMA REST API request failed:", url))
             message("Here's the original error message:")
             
-			response_message = httr::http_status(response)$message
-			
+            response_message = httr::http_status(response)$message
+            
             message(response_message)
             
             return(NA)
         },
 
-    	warning=function(cond) {
+        warning = function(cond) {
             message(paste("URL caused a warning:", url))
             message("Here's the original warning message:")
             
@@ -190,8 +186,8 @@ requestFactory <- function (url) {
             message(response_message)
  
             return(NULL)
-        }	
-
+        }
+    	
 		)
 	
 	return(out)
@@ -207,13 +203,13 @@ formatData <- function(data) {
             
         }
 
-        if("alternative_levels" %in% names(data[[1]])){
+        else if("alternative_levels" %in% names(data[[1]])){
             for (i in seq_along(data)) {
                 data[[i]][['alternative_levels']] = NULL
             }        
         }
         
-        if ("entry_ranges" %in% names(data[[1]])) {
+        else if ("entry_ranges" %in% names(data[[1]])) {
             
             for (i in seq_along(data)) {
                 data[[i]][[2]][[1]] = rbind(data[[i]][[2]][[1]])
@@ -221,7 +217,15 @@ formatData <- function(data) {
             }
             
         }
-               
+
+        else if("sequence" %in% names(data[[1]])){
+            for (i in seq_along(data)) {
+                data[[i]] = objectFactory(names(data[[i]]),data[[i]])
+                
+            }
+            return(data)
+        }
+     
         dfs <- lapply(data, data.frame, stringsAsFactors = FALSE)
         data = plyr::rbind.fill(dfs)
         

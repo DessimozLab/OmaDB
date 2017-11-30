@@ -1,6 +1,6 @@
 Package: roma
 Title: R wrapper for the OMA REST API
-Version: 0.99.8
+Version: 0.99.9
 Author: Klara Kaleb 
 Maintainer: Klara Kaleb <klarakaleb@outlook.com>
 Description: A package for the orthology prediction data download from OMA database.
