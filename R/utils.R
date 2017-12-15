@@ -12,6 +12,7 @@ depth <- function(list) ifelse(is.list(list), 1L + max(sapply(list, depth)), 0L)
 #' @importFrom GenomicRanges GRanges
 #' @importFrom GenomicRanges makeGRangesFromDataFrame
 #' @importFrom IRanges IRanges
+#' @importFrom ggtree ggtree
 
 urlGenerator <- function(type = NULL, id = NULL, detail = NULL, query_param1 = NULL, 
     query_param1_value = NULL, query_param2 = NULL, query_param2_value = NULL, 

@@ -1,8 +1,8 @@
 #' Get the Tree Object
 #' 
-#' The function to obtain the tree object from newick stored in a text file.
+#' The function to obtain the tree object from newick.
 #'
-#' @param newick the newick of interest
+#' @param newick the newick of interest.
 #' @return an tree object
 #' @export
 #' @importFrom ape read.tree
