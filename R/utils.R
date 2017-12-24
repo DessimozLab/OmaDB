@@ -94,15 +94,16 @@ objectFactory <- function(column_names, content_list) {
 
     list_of_variables = lapply(column_names, FUN = function(name) {
 
-        content = content_list[[name]]
+            content = content_list[[name]]
 
-            if (class(content) == "list" && length(content)!=0) {
+            if (class(content) == "list" && length(content)!=0 && name!="locus"  && name!="chromosomes") {
                 if (is.null(names(content))) {
-                      formatData(content)  
+                    formatData(content)  
                 }
             }
 
             else if (name == "chromosomes") {
+                content = formatData(content)
                 GenomicRanges::makeGRangesFromDataFrame(content, 
                     start.field = "entry_ranges.1", end.field = "entry_ranges.2", 
                     seqnames.field = "id", ignore.strand = TRUE)
@@ -121,6 +122,7 @@ objectFactory <- function(column_names, content_list) {
             else if (name == "cdna" && !(grepl("X", content))) {
                 Biostrings::DNAString(content)
             }
+            
             else{
                 content
             }
@@ -147,8 +149,10 @@ requestFactory <- function (url) {
 
 		if(is.null(column_names)){
 			if(length(content_list)==1){
-			
-				return(objectFactory(names(content_list[[1]]), content_list[[1]]))
+			     column_names = names(content_list[[1]])
+                 content_list = content_list[[1]]
+
+				return(objectFactory(column_names, content_list))
 			     
                  }	
 		    else if (length(content_list)!=1 && length(content_list)!=0){
@@ -213,7 +217,7 @@ formatData <- function(data) {
         else if ("entry_ranges" %in% names(data[[1]])) {
             
             for (i in seq_along(data)) {
-                data[[i]][[2]][[1]] = rbind(data[[i]][[2]][[1]])
+                data[[i]][[1]][[1]] = rbind(data[[i]][[1]][[1]])
                 
             }
             
