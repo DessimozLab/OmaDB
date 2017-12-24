@@ -58,13 +58,6 @@ myInterestingGenes = childrenMembers[['HOG:0261495.1a.1a']]
 
 annotations = getOntologies(childrenMembers)
 
-# We can now directly use the above data to construct a topGO object for further analysis (such as GO enrichment)
-
-library(topGO)
-
-topGO = getTopGO(annotations, myInterestingGenes, format = "geneID2GO")
-
-
 ```
 
 (1) Altenhoff, A., Gil, M., Gonnet, G., & Dessimoz, C. (2013). Inferring Hierarchical Orthologous Groups from Orthologous Gene Pairs PLoS ONE, 8 DOI: 10.1371/journal.pone.0053786
