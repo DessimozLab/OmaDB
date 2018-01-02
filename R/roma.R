@@ -20,7 +20,6 @@
 #'
 #' \itemize{
 #'   \item formatTopGO()
-#'   \item getTopGO()
 #'   \item getGRanges()
 #'   \item getTree()
 #' } 
