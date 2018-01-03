@@ -217,8 +217,9 @@ formatData <- function(data) {
         else if ("entry_ranges" %in% names(data[[1]])) {
             
             for (i in seq_along(data)) {
-                data[[i]][[1]][[1]] = rbind(data[[i]][[1]][[1]])
-                
+                data[[i]][['entry_ranges.1']] = data[[i]]['entry_ranges'][[1]][[1]][[1]]
+                data[[i]][['entry_ranges.2']] = data[[i]]['entry_ranges'][[1]][[1]][[2]]
+                data[[i]][['entry_ranges']] = NULL
             }
             
         }
