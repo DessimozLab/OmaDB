@@ -2,6 +2,7 @@
 
 export(childrenMembers)
 export(formatTopGO)
+export(getTopGO)
 export(getAnnotation)
 export(getAttribute)
 export(getData)
@@ -26,3 +27,4 @@ importFrom(IRanges,IRanges)
 importFrom(ape,read.tree)
 importFrom(methods,new)
 importFrom(utils,URLencode)
+import(topGO)
