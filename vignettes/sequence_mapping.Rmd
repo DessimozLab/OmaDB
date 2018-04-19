@@ -11,14 +11,16 @@ vignette: >
 
 One useful function of the roma package is its functionality to exactly and partially match sequences. We will explore this further in this vignette. 
 
-Let's say we have a sequence of interest that we want to map. We first pass it to the mapSequence function which returns a list of targets. From this list we can then construct roma protein objects for which we can obtain further infromation - such as its oma group or its domains. 
+Let's say we have a sequence of interest that we want to map, in this case:
+
+ "MNDPSLLGYPNVGPQQQQQQQQQQHAGLLGKGTPNALQQQLHMNQLTGIPPPGLMNNSDVHTSSNNNSRQLLDQLANGNANMLNMNMDNNNNNNNNNNNNNNNGGGSGVMMNASTAAVNSIGMVPTVGTPVNINVNASNPLLHPHLDDPSLLNNPIWKLQLHLAAVSAQSLGQPNIYARQNAMKKYLATQQAQQAQQQAQQQAQQQVPGPFGPGPQAAPPALQPTDFQQSHIAEASKSLVDCTKQALMEMADTLTDSKTAKKQQPTGDSTPSGTATNSAVSTPLTPKIELFANGKDEANQALLQHKKLSQYSIDEDDDIENRMVMPKDSKYDDQLWHALDLSNLQIFNISANIFKYDFLTRLYLNGNSLTELPAEIKNLSNLRVLDLSHNRLTSLPAELGSCFQLKYFYFFDNMVTTLPWEFGNLCNLQFLGVEGNPLEKQFLKILTEKSVTGLIFYLRDNRPEIPLPHER"
+
+We can pass it to the mapSequence() function which returns a list of targets. From this list we can then construct roma protein objects for which we can obtain further infromation - such as its oma group or its domains. The example response object is below.
 
 ```{r, warning=FALSE, message=FALSE}
 library(roma)
 
-sequence = "MNDPSLLGYPNVGPQQQQQQQQQQHAGLLGKGTPNALQQQLHMNQLTGIPPPGLMNNSDVHTSSNNNSRQLLDQLANGNANMLNMNMDNNNNNNNNNNNNNNNGGGSGVMMNASTAAVNSIGMVPTVGTPVNINVNASNPLLHPHLDDPSLLNNPIWKLQLHLAAVSAQSLGQPNIYARQNAMKKYLATQQAQQAQQQAQQQAQQQVPGPFGPGPQAAPPALQPTDFQQSHIAEASKSLVDCTKQALMEMADTLTDSKTAKKQQPTGDSTPSGTATNSAVSTPLTPKIELFANGKDEANQALLQHKKLSQYSIDEDDDIENRMVMPKDSKYDDQLWHALDLSNLQIFNISANIFKYDFLTRLYLNGNSLTELPAEIKNLSNLRVLDLSHNRLTSLPAELGSCFQLKYFYFFDNMVTTLPWEFGNLCNLQFLGVEGNPLEKQFLKILTEKSVTGLIFYLRDNRPEIPLPHER"
-
-sequence_map <- mapSequence(sequence)
+load('../data/sequence_map.rda')
 
 getObjectAttributes(sequence_map)
 
@@ -26,22 +28,15 @@ targets = getAttribute(sequence_map,'targets')
 
 length(targets) 
 
-protein = resolveURL(targets[[1]][['entry_url']])
-
-oma_group = getAttribute(protein,'oma_group')
-
-domains = getAttribute(protein,'domains')
-
-domains = resolveURL(domains)
-
+protein = targets[[1]][['entry_url']]
 
 ```
 
-One can also directly obtain GO annotations for a given query sequence as below:
+One can also directly obtain GO annotations for a given query sequence, which results in an object as below:
 
 ```{r, warning=FALSE, message=FALSE}
 
-sequence_annotation <- getAnnotation(sequence)
+load('../data/sequence_annotation.rda')
 
 sequence_annotation 
 

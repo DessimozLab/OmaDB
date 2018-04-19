@@ -12,7 +12,7 @@ depth <- function(list) ifelse(is.list(list), 1L + max(sapply(list, depth)), 0L)
 #' @importFrom GenomicRanges GRanges
 #' @importFrom GenomicRanges makeGRangesFromDataFrame
 #' @importFrom IRanges IRanges
-#' @importFrom ggtree ggtree
+#' @importFrom pingr is_online
 
 urlGenerator <- function(type = NULL, id = NULL, detail = NULL, query_param1 = NULL, 
     query_param1_value = NULL, query_param2 = NULL, query_param2_value = NULL, 
@@ -53,15 +53,22 @@ simpleRequest <- function (url){
 
 	out <- tryCatch(
 	{		
-		response = httr::GET(url)
+		#change this. flikr. 
+        if(pingr::is_online()){
+            response = httr::GET(url)
+            content_list = httr::content(response, as = "parsed")
+            column_names = names(content_list)
 
-		content_list = httr::content(response, as = "parsed")
-		column_names = names(content_list)
+            objectFactory(column_names,content_list) 
+        }
 
-		objectFactory(column_names,content_list)
+        else{
+            return("Error in connectivity.")
+        }
+		
 	}, 
 	error = function(cond) {
-            message(paste("THE OMA REST API request failed:", url))
+            message("THE OMA REST API request failed:", url)
             message("Here's the original error message:")
             
 			response_message = httr::http_status(response)$message
@@ -72,7 +79,7 @@ simpleRequest <- function (url){
         },
 
     warning = function(cond) {
-            message(paste("URL caused a warning:", url))
+            message("URL caused a warning:", url)
             message("Here's the original warning message:")
             
             response_message = httr::http_status(response)$message
@@ -138,37 +145,47 @@ objectFactory <- function(column_names, content_list) {
     
 }
 
+#TO DO - fix error handling. empty obj? 
+
 requestFactory <- function (url) {
 
 	out <- tryCatch(
 	{	
-		response = httr::GET(url)
+		
+        if(pingr::is_online()){
+            response = httr::GET(url)
+            content_list = httr::content(response, as = "parsed")
+            column_names = names(content_list)
 
-		content_list = httr::content(response, as = "parsed")
-		column_names = names(content_list)
+            if(is.null(column_names)){
+                if(length(content_list)==1){
+                    column_names = names(content_list[[1]])
+                    content_list = content_list[[1]]
 
-		if(is.null(column_names)){
-			if(length(content_list)==1){
-			     column_names = names(content_list[[1]])
-                 content_list = content_list[[1]]
+                    return(objectFactory(column_names, content_list))
+                 
+                 }  
 
-				return(objectFactory(column_names, content_list))
-			     
-                 }	
-		    else if (length(content_list)!=1 && length(content_list)!=0){
-                 return(formatData(content_list))
+                else if (length(content_list)!=1 && length(content_list)!=0){
+                    return(formatData(content_list))
                     }
            
             else if (length(content_list)==0){
                 return(" ")
             }
                     
-		}
+        }
 
-		if(!is.null(column_names)) {
+        if(!is.null(column_names)) {
 
-			objectFactory(column_names,content_list)
-		}
+            objectFactory(column_names,content_list)
+        }
+
+        }
+        else{
+            return("Error in connectivity.")
+        }
+		
 	},
 		
 		error = function(cond) {

@@ -11,7 +11,7 @@ getHOG(id, level = NULL, members = FALSE)
 
 \item{level}{a specific level for the HOG to be restricted to - set to the root level by default. A taxonomic level can be identified by its full capitalised name e.g. "Fungi" or "Saccharomycetaceae".}
 
-\item{members}{boolean that when set to TRUE returns the list of protein members at a given hog and/or level}
+\item{members}{boolean that when set to TRUE returns a dataframe containg the protein members at a given hog and/or level}
 }
 \value{
 an object containing the JSON keys as attributes

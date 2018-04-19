@@ -4,8 +4,8 @@ Version: 0.99.11
 Author: Klara Kaleb 
 Maintainer: Klara Kaleb <klarakaleb@outlook.com>, Adrian Altenhoff <adrian.altenhoff@inf.ethz.ch>
 Description: A package for the orthology prediction data download from OMA database.
-Depends: R (>= 3.5), httr (>= 1.2.1), plyr(>= 1.8.4)
-Imports: utils, ape, Biostrings, GenomicRanges, IRanges, methods, topGO
+Depends: R (>= 3.4), httr (>= 1.2.1), plyr(>= 1.8.4)
+Imports: utils, ape, Biostrings, GenomicRanges, IRanges, methods, topGO, pingr
 License: GPL-2
 LazyData: true
 Suggests: knitr,

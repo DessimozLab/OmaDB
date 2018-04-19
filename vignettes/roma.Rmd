@@ -24,14 +24,14 @@ The package contains a range of functions that are used to query the database in
 
 
 ###getXref
-This function searches the OMA database for entries containing the pattern defined and returns the results in a dataframe. Hence, it is usually a good starting place. Sample code is below.
+This function searches the OMA database for entries containing the pattern defined and returns the results in a dataframe. Hence, it is usually a good starting place. Sample response is below.
 
 ```{r, warning=FALSE, message=FALSE}
 library(roma)
 
-results <- getXref(pattern="MAL")
+xref = load('../data/xref.rda')
 
-head(results)
+head(xref)
 ```
 
 ###getGenomeAlignment
@@ -39,9 +39,9 @@ This function serves to obtain the orthologs for 2 whole genomes. The result is 
 
 ```{r, warning=FALSE, message=FALSE}
 
-alignment <- getGenomeAlignment(genome_id1 = "YEAST", genome_id2 = "ASHGO")
+load('../data/pairs.rda')
 
-head(alignment)
+head(pairs)
 
 ```
 
@@ -67,11 +67,11 @@ This master-function function serves to obtain the information for a single entr
 The result of the getData function is an S3 Object with attributes corresponding to the information requested. This function allows the user to list all the object attributes and their corresponding data types. 
 
 ###getAttribute
-The specific attributes of the created object can be accessed via $ or via the getAttribute() function. Below is an example of obtaining information for a specific OMA group.
+The specific attributes of the created object can be accessed via $ or via the getAttribute() function. Below is an example of object containing information about an OMA group. 
 
 ```{r, warning=FALSE, message=FALSE}
 
-group <- getData(type="group",id="YEAST58")
+load('../data/group.rda')
 
 object_attributes = getObjectAttributes(group)
 
@@ -85,20 +85,17 @@ getAttribute(group, 'fingerprint')
 ###resolveURL
 In most cases there is great quantity of information available for a given entry and this impacts the data retrival time. Due to this, the information available for such entries is split into a number of endpoints and these are included appropriatelly as redirects. This function allows the user to obtain further information behind those urls. 
 
-
-One can see some of the above functions in action in the below example of trying to obtain the list of orthologs for a protein entry.
+An example of use for the above function would be to obtain the list of orthologs for a given protein.
 
 ```{r, warning=FALSE, message=FALSE}
 
-protein <- getData(type="protein",id="YEAST58")
+load('../data/protein.rda')
 
-getObjectAttributes(protein)
+getAttribute(protein,'orthologs')
 
-orthologs = getAttribute(protein,'orthologs')
+load('../data/orthologs.rda')
 
-orthologs = resolveURL(orthologs)
-
-head(orthologs)
+orthologs 
 
 ```
 
@@ -107,21 +104,12 @@ The orthologs for a protein are returned as a data.frame. This structure is also
 ```{r, warning=FALSE, message=FALSE}
 
 gRanges = getGRanges(orthologs)
+
 str(gRanges)
 
 ```
 
-The user can also obtain the list of sequences for a given dataframe of proteins and well as the list of their corresponding ontologies (that can be plugged into the topGO for further analysis).
-
-```{r, warning=FALSE, message=FALSE}
-
-sequences = getSequences(orthologs)
-str(sequences)
-
-ontologies = getOntologies(orthologs)
-str(ontologies)
-
-```
+The user can also obtain the list of sequences for a given dataframe of proteins and well as the list of their corresponding ontologies (that can be plugged into the topGO for further analysis). This can be done using the functions getSequences() and getOntologies() respectively.
 
 
 For further information on the OMA REST API please visit [OMA REST API DOCUMENTATION](http://omadev.cs.ucl.ac.uk/api/docs).
