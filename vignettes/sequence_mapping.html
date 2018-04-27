@@ -14,7 +14,7 @@
 
 <meta name="date" content="2018-04-27" />
 
-<title>Sequence Analysis with roma</title>
+<title>Sequence Analysis with OmaDB</title>
 
 
 
@@ -68,7 +68,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 
 
-<h1 class="title toc-ignore">Sequence Analysis with roma</h1>
+<h1 class="title toc-ignore">Sequence Analysis with OmaDB</h1>
 <h4 class="author"><em>Klara Kaleb</em></h4>
 <h4 class="date"><em>2018-04-27</em></h4>
 
@@ -78,7 +78,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>Let’s say we have a sequence of interest that we want to map, in this case:</p>
 <p>“MNDPSLLGYPNVGPQQQQQQQQQQHAGLLGKGTPNALQQQLHMNQLTGIPPPGLMNNSDVHTSSNNNSRQLLDQLANGNANMLNMNMDNNNNNNNNNNNNNNNGGGSGVMMNASTAAVNSIGMVPTVGTPVNINVNASNPLLHPHLDDPSLLNNPIWKLQLHLAAVSAQSLGQPNIYARQNAMKKYLATQQAQQAQQQAQQQAQQQVPGPFGPGPQAAPPALQPTDFQQSHIAEASKSLVDCTKQALMEMADTLTDSKTAKKQQPTGDSTPSGTATNSAVSTPLTPKIELFANGKDEANQALLQHKKLSQYSIDEDDDIENRMVMPKDSKYDDQLWHALDLSNLQIFNISANIFKYDFLTRLYLNGNSLTELPAEIKNLSNLRVLDLSHNRLTSLPAELGSCFQLKYFYFFDNMVTTLPWEFGNLCNLQFLGVEGNPLEKQFLKILTEKSVTGLIFYLRDNRPEIPLPHER”</p>
 <p>We can pass it to the mapSequence() function which returns a list of targets. From this list we can then construct roma protein objects for which we can obtain further infromation - such as its oma group or its domains. The example response object is below.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(roma)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(OmaDB)
 
 <span class="kw">load</span>(<span class="st">'../data/sequence_map.rda'</span>)
 

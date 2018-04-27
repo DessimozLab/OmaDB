@@ -1,5 +1,5 @@
 ## ---- warning=FALSE, message=FALSE---------------------------------------
-library(roma)
+library(OmaDB)
 
 xref = load('../data/xref.rda')
 

@@ -14,7 +14,7 @@
 
 <meta name="date" content="2018-04-27" />
 
-<title>Get started with Roma</title>
+<title>Get started with OmaDB</title>
 
 
 
@@ -68,7 +68,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 
 
-<h1 class="title toc-ignore">Get started with Roma</h1>
+<h1 class="title toc-ignore">Get started with OmaDB</h1>
 <h4 class="author"><em>Klara Kaleb</em></h4>
 <h4 class="date"><em>2018-04-27</em></h4>
 
@@ -85,7 +85,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div id="getxref" class="section level3">
 <h3>getXref</h3>
 <p>This function searches the OMA database for entries containing the pattern defined and returns the results in a dataframe. Hence, it is usually a good starting place. Sample response is below.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(roma)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(OmaDB)
 
 xref =<span class="st"> </span><span class="kw">load</span>(<span class="st">'../data/xref.rda'</span>)
 
@@ -310,7 +310,7 @@ orthologs </code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">gRanges =<span class="st"> </span><span class="kw">getGRanges</span>(orthologs)
 
 <span class="kw">str</span>(gRanges)</code></pre></div>
-<pre><code>## Formal class 'GRanges' [package &quot;GenomicRanges&quot;] with 6 slots
+<pre><code>## Formal class 'GRanges' [package &quot;GenomicRanges&quot;] with 7 slots
 ##   ..@ seqnames       :Formal class 'Rle' [package &quot;S4Vectors&quot;] with 4 slots
 ##   .. .. ..@ values         : Factor w/ 20 levels &quot;ZYGRO02696&quot;,&quot;ASHGO01343&quot;,..: 7 8 9 12 13 17 20 3 4 16 ...
 ##   .. .. ..@ lengths        : int [1:20] 1 1 1 1 1 1 1 1 1 1 ...
@@ -320,7 +320,7 @@ orthologs </code></pre></div>
 ##   .. .. ..@ start          : int [1:20] 27852 764822 399 4317479 6701031 669785 3756431 1809654 1390917 1013851 ...
 ##   .. .. ..@ width          : int [1:20] 2338 2357 2357 1801 2146 2156 2373 2364 2358 2529 ...
 ##   .. .. ..@ NAMES          : NULL
-##   .. .. ..@ elementType    : chr &quot;integer&quot;
+##   .. .. ..@ elementType    : chr &quot;ANY&quot;
 ##   .. .. ..@ elementMetadata: NULL
 ##   .. .. ..@ metadata       : list()
 ##   ..@ strand         :Formal class 'Rle' [package &quot;S4Vectors&quot;] with 4 slots
@@ -328,6 +328,11 @@ orthologs </code></pre></div>
 ##   .. .. ..@ lengths        : int [1:7] 1 2 3 2 5 3 4
 ##   .. .. ..@ elementMetadata: NULL
 ##   .. .. ..@ metadata       : list()
+##   ..@ seqinfo        :Formal class 'Seqinfo' [package &quot;GenomeInfoDb&quot;] with 4 slots
+##   .. .. ..@ seqnames   : chr [1:20] &quot;ZYGRO02696&quot; &quot;ASHGO01343&quot; &quot;CANAL00775&quot; &quot;CANAW00573&quot; ...
+##   .. .. ..@ seqlengths : int [1:20] NA NA NA NA NA NA NA NA NA NA ...
+##   .. .. ..@ is_circular: logi [1:20] NA NA NA NA NA NA ...
+##   .. .. ..@ genome     : chr [1:20] NA NA NA NA ...
 ##   ..@ elementMetadata:Formal class 'DataFrame' [package &quot;S4Vectors&quot;] with 6 slots
 ##   .. .. ..@ rownames       : NULL
 ##   .. .. ..@ nrows          : int 20
@@ -335,11 +340,7 @@ orthologs </code></pre></div>
 ##   .. .. ..@ elementType    : chr &quot;ANY&quot;
 ##   .. .. ..@ elementMetadata: NULL
 ##   .. .. ..@ metadata       : list()
-##   ..@ seqinfo        :Formal class 'Seqinfo' [package &quot;GenomeInfoDb&quot;] with 4 slots
-##   .. .. ..@ seqnames   : chr [1:20] &quot;ZYGRO02696&quot; &quot;ASHGO01343&quot; &quot;CANAL00775&quot; &quot;CANAW00573&quot; ...
-##   .. .. ..@ seqlengths : int [1:20] NA NA NA NA NA NA NA NA NA NA ...
-##   .. .. ..@ is_circular: logi [1:20] NA NA NA NA NA NA ...
-##   .. .. ..@ genome     : chr [1:20] NA NA NA NA ...
+##   ..@ elementType    : chr &quot;ANY&quot;
 ##   ..@ metadata       : list()</code></pre>
 <p>The user can also obtain the list of sequences for a given dataframe of proteins and well as the list of their corresponding ontologies (that can be plugged into the topGO for further analysis). This can be done using the functions getSequences() and getOntologies() respectively.</p>
 <p>For further information on the OMA REST API please visit <a href="http://omadev.cs.ucl.ac.uk/api/docs">OMA REST API DOCUMENTATION</a>.</p>

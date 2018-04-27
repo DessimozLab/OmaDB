@@ -4,7 +4,7 @@
 #'
 #' @param members optional parameter, list of member ncbi taxon or UniProt IDs that should be included in the induced taxonomy. 
 #' @param root optional parameter, the root of the node of interest
-#' @param newick optional parameter, boolean
+#' @param newick optional parameter, boolean default set to TRUE
 #' @return an object containing the JSON keys as attributes
 #' @export
 #' @examples
@@ -13,7 +13,7 @@
 #' getTaxonomy(root="Alveolata")
 
 
-getTaxonomy <- function(root=NULL,members,newick) {
+getTaxonomy <- function(root=NULL,members,newick=TRUE) {
 	if(missing(members)){
 		if(newick==FALSE){
 			url = urlGenerator(type="taxonomy",id=root)

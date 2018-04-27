@@ -14,7 +14,7 @@
 
 <meta name="date" content="2018-04-27" />
 
-<title>Exploring Taxonomic trees with roma</title>
+<title>Exploring Taxonomic trees with OmaDB</title>
 
 
 
@@ -68,14 +68,14 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 
 
-<h1 class="title toc-ignore">Exploring Taxonomic trees with roma</h1>
+<h1 class="title toc-ignore">Exploring Taxonomic trees with OmaDB</h1>
 <h4 class="author"><em>Klara Kaleb</em></h4>
 <h4 class="date"><em>2018-04-27</em></h4>
 
 
 
 <p>Using Roma, a user can easily obtain a taxonomic tree of interest using the getTaxonomy structure. The tree can be restricted to a certain root or by a list of members and the data is returned in the newick format. The newick can then be exported and used to create a tree object using ape which can then be visualised using ggtree. This can be done using the getTaxonomy() function, the output example of which is below.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(roma)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(OmaDB)
 
 <span class="kw">load</span>(<span class="st">'../data/taxonomy.rda'</span>)
 

@@ -1,10 +1,10 @@
 ---
-title: "Sequence Analysis with roma"
+title: "Sequence Analysis with OmaDB"
 author: "Klara Kaleb"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Sequence Mapping with roma}
+  %\VignetteIndexEntry{Sequence Mapping with OmaDB}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -18,7 +18,7 @@ Let's say we have a sequence of interest that we want to map, in this case:
 We can pass it to the mapSequence() function which returns a list of targets. From this list we can then construct roma protein objects for which we can obtain further infromation - such as its oma group or its domains. The example response object is below.
 
 ```{r, warning=FALSE, message=FALSE}
-library(roma)
+library(OmaDB)
 
 load('../data/sequence_map.rda')
 

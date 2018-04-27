@@ -1,10 +1,10 @@
 ---
-title: "Exploring Taxonomic trees with roma"
+title: "Exploring Taxonomic trees with OmaDB"
 author: "Klara Kaleb"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Exploring Taxonomic trees with roma}
+  %\VignetteIndexEntry{Exploring Taxonomic trees with OmaDB}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -13,7 +13,7 @@ Using Roma, a user can easily obtain a taxonomic tree of interest using the getT
 
 
 ```{r, warning=FALSE, message=FALSE}
-library(roma)
+library(OmaDB)
 
 load('../data/taxonomy.rda')
 

@@ -1,10 +1,10 @@
 ---
-title: "Get started with Roma"
+title: "Get started with OmaDB"
 author: "Klara Kaleb"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Get started with Roma}
+  %\VignetteIndexEntry{Get started with OmaDB}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -27,7 +27,7 @@ The package contains a range of functions that are used to query the database in
 This function searches the OMA database for entries containing the pattern defined and returns the results in a dataframe. Hence, it is usually a good starting place. Sample response is below.
 
 ```{r, warning=FALSE, message=FALSE}
-library(roma)
+library(OmaDB)
 
 xref = load('../data/xref.rda')
 

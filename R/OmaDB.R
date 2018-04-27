@@ -27,10 +27,10 @@
 #'
 #'
 #' \itemize{
-#'   \item Get started with Roma
-#'   \item Exploring Hierarchical orthologous groups with roma
-#'   \item Exploring Taxonomic trees with roma
-#'   \item Sequence Analysis with roma
+#'   \item Get started with OmaDB
+#'   \item Exploring Hierarchical orthologous groups with OmaDB
+#'   \item Exploring Taxonomic trees with OmaDB
+#'   \item Sequence Analysis with OmaDB
 #' }  
 #'
 
