@@ -1,9 +1,9 @@
-#' roma: A package for the orthology prediction data download from OMA database.
+#' OmaDB: A package for the orthology prediction data download from OMA database.
 #'
-#' roma is a wrapper for the REST API for the Orthologous MAtrix project (OMA) which is a  database for the inference of orthologs among complete genomes. For more details on the OMA project, see \url{https://omabrowser.org/oma/home/}.
+#' OmaDB is a wrapper for the REST API for the Orthologous MAtrix project (OMA) which is a  database for the inference of orthologs among complete genomes. For more details on the OMA project, see \url{https://omabrowser.org/oma/home/}.
 #' 
 #' 
-#' @section  roma functions:
+#' @section  OmaDB functions:
 #' The package contains a range of functions that are used to query the database. Some of the main functions are listed below:
 #'
 #' \itemize{
