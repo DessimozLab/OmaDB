@@ -12,7 +12,7 @@
 
 <meta name="author" content="Klara Kaleb" />
 
-<meta name="date" content="2017-10-20" />
+<meta name="date" content="2018-04-27" />
 
 <title>Get started with Roma</title>
 
@@ -70,7 +70,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">Get started with Roma</h1>
 <h4 class="author"><em>Klara Kaleb</em></h4>
-<h4 class="date"><em>2017-10-20</em></h4>
+<h4 class="date"><em>2018-04-27</em></h4>
 
 
 
@@ -84,103 +84,83 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p><a href="sequence_mapping.html">Sequence Analysis with roma</a></p>
 <div id="getxref" class="section level3">
 <h3>getXref</h3>
-<p>This function searches the OMA database for entries containing the pattern defined and returns the results in a dataframe. Hence, it is usually a good starting place. Sample code is below.</p>
+<p>This function searches the OMA database for entries containing the pattern defined and returns the results in a dataframe. Hence, it is usually a good starting place. Sample response is below.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(roma)
 
-results &lt;-<span class="st"> </span><span class="kw">getXref</span>(<span class="dt">pattern=</span><span class="st">&quot;MAL&quot;</span>)
+xref =<span class="st"> </span><span class="kw">load</span>(<span class="st">'../data/xref.rda'</span>)
 
-<span class="kw">head</span>(results)</code></pre></div>
-<pre><code>##               xref       source entry_nr      omaid genome.code
-## 1              MAL    Gene Name  7303554 LOXAF01991       LOXAF
-## 2  MAL (1 of many)    Gene Name  7007578 LEPOC05079       LEPOC
-## 3            MAL I      Synonym  9055390 AEDAE12616       AEDAE
-## 4 MAL-like protein Protein Name  7422454 MOUSE13449       MOUSE
-## 5             MAL1    Gene Name  6515270 PICST01578       PICST
-## 6            MAL11    Gene Name  6565545 YEAST02783       YEAST
-##   genome.taxon_id
-## 1            9785
-## 2            7918
-## 3            7159
-## 4           10090
-## 5          322104
-## 6          559292
-##                                                                        genome.species
-## 1                                                                  Loxodonta africana
-## 2                                                                Lepisosteus oculatus
-## 3                                                                       Aedes aegypti
-## 4                                                                        Mus musculus
-## 5 Scheffersomyces stipitis (strain ATCC 58785 / CBS 6054 / NBRC 10063 / NRRL Y-11545)
-## 6                               Saccharomyces cerevisiae (strain ATCC 204508 / S288c)
-##                          genome.genome_url
-## 1 https://omabrowser.org/api/genome/LOXAF/
-## 2 https://omabrowser.org/api/genome/LEPOC/
-## 3 https://omabrowser.org/api/genome/AEDAE/
-## 4 https://omabrowser.org/api/genome/MOUSE/
-## 5 https://omabrowser.org/api/genome/PICST/
-## 6 https://omabrowser.org/api/genome/YEAST/</code></pre>
+<span class="kw">head</span>(xref)</code></pre></div>
+<pre><code>## [1] &quot;xref&quot;</code></pre>
 </div>
 <div id="getgenomealignment" class="section level3">
 <h3>getGenomeAlignment</h3>
 <p>This function serves to obtain the orthologs for 2 whole genomes. The result is a dataframe containing information on each member in the pair and their relationship.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">alignment &lt;-<span class="st"> </span><span class="kw">getGenomeAlignment</span>(<span class="dt">genome_id1 =</span> <span class="st">&quot;YEAST&quot;</span>, <span class="dt">genome_id2 =</span> <span class="st">&quot;ASHGO&quot;</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">load</span>(<span class="st">'../data/pairs.rda'</span>)
 
-<span class="kw">head</span>(alignment)</code></pre></div>
+<span class="kw">head</span>(pairs)</code></pre></div>
 <pre><code>##   entry_1.entry_nr                           entry_1.entry_url
-## 1          6567568 https://omabrowser.org/api/protein/6567568/
-## 2          6567157 https://omabrowser.org/api/protein/6567157/
-## 3          6567158 https://omabrowser.org/api/protein/6567158/
-## 4          6567565 https://omabrowser.org/api/protein/6567565/
-## 5          6566009 https://omabrowser.org/api/protein/6566009/
-## 6          6566007 https://omabrowser.org/api/protein/6566007/
+## 1          6618226 https://omabrowser.org/api/protein/6618226/
+## 2          6618227 https://omabrowser.org/api/protein/6618227/
+## 3          6618228 https://omabrowser.org/api/protein/6618228/
+## 4          6618229 https://omabrowser.org/api/protein/6618229/
+## 5          6618230 https://omabrowser.org/api/protein/6618230/
+## 6          6618231 https://omabrowser.org/api/protein/6618231/
 ##   entry_1.omaid entry_1.canonicalid             entry_1.sequence_md5
-## 1    YEAST04806          RCE1_YEAST 605098a0697ad8fc7af2101e758033cb
-## 2    YEAST04395          ZDS2_YEAST 8cc75f16fbfd321833abc48fd1173154
-## 3    YEAST04396          YMK8_YEAST 783fea3b573632292d89a5a5218b6e90
-## 4    YEAST04803          SCS7_YEAST 9307c7a6e80ed39d8b6529329fee1819
-## 5    YEAST03247          SMC3_YEAST 4e8f1295434b44ae8f749cad976b966e
-## 6    YEAST03245          NET1_YEAST f2ba71aea520ea66f015ba357eb6e8c6
-##   entry_1.oma_group entry_1.oma_hog_id entry_1.chromosome
-## 1            590938     HOG:0372772.4c               XIII
-## 2            219496     HOG:0189085.1b               XIII
-## 3            212453        HOG:0188799               XIII
-## 4            750461  HOG:0376737.2c.3b               XIII
-## 5            484612     HOG:0385156.3a                  X
-## 6            512189     HOG:0188664.2b                  X
-##   entry_1.locus.start entry_1.locus.end entry_1.locus.strand
-## 1              814364            815311                   -1
-## 2               51640             54468                    1
-## 3               54793             55110                    1
-## 4              809623            810777                   -1
-## 5              299157            302849                   -1
-## 6              295245            298814                    1
-##   entry_2.entry_nr                           entry_2.entry_url
-## 1          6548024 https://omabrowser.org/api/protein/6548024/
-## 2          6548025 https://omabrowser.org/api/protein/6548025/
-## 3          6548026 https://omabrowser.org/api/protein/6548026/
-## 4          6548027 https://omabrowser.org/api/protein/6548027/
-## 5          6548028 https://omabrowser.org/api/protein/6548028/
-## 6          6548029 https://omabrowser.org/api/protein/6548029/
-##   entry_2.omaid entry_2.canonicalid             entry_2.sequence_md5
 ## 1    ASHGO00001              Q75FB7 a9b1a6dc9afb2b02afe8fdf8029b5f22
 ## 2    ASHGO00002              Q75FB6 5d186037c4dd0a89b34d70d596fac86d
 ## 3    ASHGO00003              Q75FB5 3a83b276f0c9034f7cf66277e7d6c983
 ## 4    ASHGO00004              Q75FB4 a8611c3f24ac6599e6a36a2710f6d24a
 ## 5    ASHGO00005              Q75FB3 07277f0ca66fcb49d175667272f1547f
 ## 6    ASHGO00006              Q75FB2 2b666569856af5f068e532ade89c1140
-##   entry_2.oma_group entry_2.oma_hog_id entry_2.chromosome
-## 1            590938     HOG:0372772.4c                  I
-## 2            219496        HOG:0189085                  I
-## 3            212453        HOG:0188799                  I
-## 4            750461  HOG:0376737.2c.3b                  I
-## 5            484612     HOG:0385156.3a                  I
-## 6            512189     HOG:0188664.3b                  I
-##   entry_2.locus.start entry_2.locus.end entry_2.locus.strand rel_type
-## 1                8108              9067                    1      1:1
-## 2                9537             12593                    1      1:1
-## 3               12906             13244                    1      1:1
-## 4               13713             14846                    1      1:1
-## 5               16155             19850                    1      1:1
-## 6               20056             23721                   -1      1:1
+##   entry_1.oma_group entry_1.oma_hog_id entry_1.chromosome
+## 1                 0     HOG:0393392.4c                  I
+## 2            203915        HOG:0200818                  I
+## 3            214367        HOG:0200433                  I
+## 4            768456  HOG:0387657.2d.3a                  I
+## 5            530479     HOG:0397172.3b                  I
+## 6            563083     HOG:0201049.3a                  I
+##   entry_1.locus.start entry_1.locus.end entry_1.locus.strand
+## 1                8108              9067                    1
+## 2                9537             12593                    1
+## 3               12906             13244                    1
+## 4               13713             14846                    1
+## 5               16155             19850                    1
+## 6               20056             23721                   -1
+##   entry_1.is_main_isoform entry_2.entry_nr
+## 1                    TRUE          6637770
+## 2                    TRUE          6637359
+## 3                    TRUE          6637360
+## 4                    TRUE          6637767
+## 5                    TRUE          6636211
+## 6                    TRUE          6636209
+##                             entry_2.entry_url entry_2.omaid
+## 1 https://omabrowser.org/api/protein/6637770/    YEAST04806
+## 2 https://omabrowser.org/api/protein/6637359/    YEAST04395
+## 3 https://omabrowser.org/api/protein/6637360/    YEAST04396
+## 4 https://omabrowser.org/api/protein/6637767/    YEAST04803
+## 5 https://omabrowser.org/api/protein/6636211/    YEAST03247
+## 6 https://omabrowser.org/api/protein/6636209/    YEAST03245
+##   entry_2.canonicalid             entry_2.sequence_md5 entry_2.oma_group
+## 1          RCE1_YEAST 605098a0697ad8fc7af2101e758033cb            494558
+## 2          ZDS2_YEAST 8cc75f16fbfd321833abc48fd1173154            203915
+## 3          YMK8_YEAST 783fea3b573632292d89a5a5218b6e90            214367
+## 4          SCS7_YEAST 9307c7a6e80ed39d8b6529329fee1819            768456
+## 5          SMC3_YEAST 4e8f1295434b44ae8f749cad976b966e            530479
+## 6          NET1_YEAST f2ba71aea520ea66f015ba357eb6e8c6            563083
+##   entry_2.oma_hog_id entry_2.chromosome entry_2.locus.start
+## 1     HOG:0393392.4c               XIII              814364
+## 2     HOG:0200818.1a               XIII               51640
+## 3        HOG:0200433               XIII               54793
+## 4  HOG:0387657.2d.3a               XIII              809623
+## 5     HOG:0397172.3b                  X              299157
+## 6     HOG:0201049.2a                  X              295245
+##   entry_2.locus.end entry_2.locus.strand entry_2.is_main_isoform rel_type
+## 1            815311                   -1                    TRUE      1:1
+## 2             54468                    1                    TRUE      1:1
+## 3             55110                    1                    TRUE      1:1
+## 4            810777                   -1                    TRUE      1:1
+## 5            302849                   -1                    TRUE      1:1
+## 6            298814                    1                    TRUE      1:1
 ##   distance   score
 ## 1 122.0000  636.04
 ## 2  95.0000 1424.24
@@ -218,8 +198,8 @@ results &lt;-<span class="st"> </span><span class="kw">getXref</span>(<span clas
 </div>
 <div id="getattribute" class="section level3">
 <h3>getAttribute</h3>
-<p>The specific attributes of the created object can be accessed via $ or via the getAttribute() function. Below is an example of obtaining information for a specific OMA group.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">group &lt;-<span class="st"> </span><span class="kw">getData</span>(<span class="dt">type=</span><span class="st">&quot;group&quot;</span>,<span class="dt">id=</span><span class="st">&quot;YEAST58&quot;</span>)
+<p>The specific attributes of the created object can be accessed via $ or via the getAttribute() function. Below is an example of object containing information about an OMA group.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">load</span>(<span class="st">'../data/group.rda'</span>)
 
 object_attributes =<span class="st"> </span><span class="kw">getObjectAttributes</span>(group)</code></pre></div>
 <pre><code>## [1] &quot;group_nr : integer&quot;
@@ -227,273 +207,141 @@ object_attributes =<span class="st"> </span><span class="kw">getObjectAttributes
 ## [1] &quot;related_groups : URL&quot;
 ## [1] &quot;members : data.frame&quot;</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">group<span class="op">$</span>fingerprint</code></pre></div>
-<pre><code>## [1] &quot;PNDKFPS&quot;</code></pre>
+<pre><code>## [1] &quot;FPNDKFP&quot;</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">getAttribute</span>(group, <span class="st">'fingerprint'</span>)</code></pre></div>
-<pre><code>## [1] &quot;PNDKFPS&quot;</code></pre>
+<pre><code>## [1] &quot;FPNDKFP&quot;</code></pre>
 </div>
 <div id="resolveurl" class="section level3">
 <h3>resolveURL</h3>
 <p>In most cases there is great quantity of information available for a given entry and this impacts the data retrival time. Due to this, the information available for such entries is split into a number of endpoints and these are included appropriatelly as redirects. This function allows the user to obtain further information behind those urls.</p>
-<p>One can see some of the above functions in action in the below example of trying to obtain the list of orthologs for a protein entry.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">protein &lt;-<span class="st"> </span><span class="kw">getData</span>(<span class="dt">type=</span><span class="st">&quot;protein&quot;</span>,<span class="dt">id=</span><span class="st">&quot;YEAST58&quot;</span>)
+<p>An example of use for the above function would be to obtain the list of orthologs for a given protein.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">load</span>(<span class="st">'../data/protein.rda'</span>)
 
-<span class="kw">getObjectAttributes</span>(protein)</code></pre></div>
-<pre><code>## [1] &quot;entry_nr : integer&quot;
-## [1] &quot;entry_url : URL&quot;
-## [1] &quot;omaid : character&quot;
-## [1] &quot;canonicalid : character&quot;
-## [1] &quot;sequence_md5 : character&quot;
-## [1] &quot;oma_group : integer&quot;
-## [1] &quot;oma_hog_id : character&quot;
-## [1] &quot;chromosome : character&quot;
-## [1] &quot;locus : NULL&quot;
-## [1] &quot;roothog_id : integer&quot;
-## [1] &quot;hog_levels : data.frame&quot;
-## [1] &quot;sequence_length : integer&quot;
-## [1] &quot;sequence : AAString&quot;
-## [1] &quot;cdna : DNAString&quot;
-## [1] &quot;domains : URL&quot;
-## [1] &quot;xref : URL&quot;
-## [1] &quot;orthologs : URL&quot;
-## [1] &quot;ontology : URL&quot;
-## [1] &quot;oma_group_url : URL&quot;
-## [1] &quot;oma_hog_members : URL&quot;</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">orthologs =<span class="st"> </span><span class="kw">getAttribute</span>(protein,<span class="st">'orthologs'</span>)
+<span class="kw">getAttribute</span>(protein,<span class="st">'orthologs'</span>)</code></pre></div>
+<pre><code>## [1] &quot;https://omabrowser.org/api/protein/6633022/orthologs/&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">load</span>(<span class="st">'../data/orthologs.rda'</span>)
 
-orthologs =<span class="st"> </span><span class="kw">resolveURL</span>(orthologs)
-
-<span class="kw">head</span>(orthologs)</code></pre></div>
-<pre><code>##   entry_nr                                   entry_url      omaid
-## 1  6284774 https://omabrowser.org/api/protein/6284774/ COCLU03588
-## 2  6341447 https://omabrowser.org/api/protein/6341447/ COLGR10929
-## 3  6349325 https://omabrowser.org/api/protein/6349325/ COLSU06788
-## 4  6410870 https://omabrowser.org/api/protein/6410870/ FUSO411719
-## 5  6418086 https://omabrowser.org/api/protein/6418086/ GIBZA02345
-## 6  6443712 https://omabrowser.org/api/protein/6443712/ NECHA14651
-##   canonicalid                     sequence_md5 oma_group  oma_hog_id
-## 1             c5db7c8e6b0eee5c6bbc18fe2dbf9ba7    721679 HOG:0367321
-## 2             2cf82b1ffadc581d82d920af9b0130a2    721679 HOG:0367321
-## 3  A0A066XI05 d6abbfd6d6ed96217331e86733ae4aeb    721679 HOG:0367321
-## 4  A0A0D2XKA6 b92bedd8c4fe61cc3667d4f108ffb528    721679 HOG:0367321
-## 5             54814145e0f45beb33ac2e2cb99335a3    721678 HOG:0367321
-## 6             8c85e6f457288d146cb99fbc61404cb9    721679 HOG:0367321
-##         chromosome locus.start locus.end locus.strand rel_type distance
-## 1       scaffold_6       27852     30189           -1      1:1      105
-## 2         GG697333      764822    767178            1      1:1      108
-## 3  Scaffolds0609.1         399      2755            1      1:1      109
-## 4                4     4317479   4319279           -1      1:1      107
-## 5  Supercontig_3.1     6701031   6703176           -1      1:1      109
-## 6 sca_14_chr10_3_0      669785    671940           -1      1:1      105
-##     score
-## 1 1362.00
-## 2 1320.99
-## 3 1312.07
-## 4 1326.20
-## 5 1327.66
-## 6 1336.03</code></pre>
+orthologs </code></pre></div>
+<pre><code>##    entry_nr                                   entry_url      omaid
+## 1   6342668 https://omabrowser.org/api/protein/6342668/ COCLU03588
+## 2   6399341 https://omabrowser.org/api/protein/6399341/ COLGR10929
+## 3   6407219 https://omabrowser.org/api/protein/6407219/ COLSU06788
+## 4   6468764 https://omabrowser.org/api/protein/6468764/ FUSO411719
+## 5   6475980 https://omabrowser.org/api/protein/6475980/ GIBZA02345
+## 6   6501606 https://omabrowser.org/api/protein/6501606/ NECHA14651
+## 7   6530466 https://omabrowser.org/api/protein/6530466/ THIHE03640
+## 8   6554631 https://omabrowser.org/api/protein/6554631/ CANAL00775
+## 9   6560817 https://omabrowser.org/api/protein/6560817/ CANAW00573
+## 10  6566321 https://omabrowser.org/api/protein/6566321/ LODEL00382
+## 11  6575886 https://omabrowser.org/api/protein/6575886/ DEBHA04175
+## 12  6579264 https://omabrowser.org/api/protein/6579264/ PICGU01290
+## 13  6594625 https://omabrowser.org/api/protein/6594625/ SPAPN04932
+## 14  6595834 https://omabrowser.org/api/protein/6595834/ CANTE00168
+## 15  6608129 https://omabrowser.org/api/protein/6608129/ KOMPG00513
+## 16  6619568 https://omabrowser.org/api/protein/6619568/ ASHGO01343
+## 17  6623679 https://omabrowser.org/api/protein/6623679/ KLULA00697
+## 18  6630047 https://omabrowser.org/api/protein/6630047/ CANGA01835
+## 19  6642012 https://omabrowser.org/api/protein/6642012/ ZYGRO02696
+## 20  8837885 https://omabrowser.org/api/protein/8837885/ DROBM15099
+##    canonicalid                     sequence_md5 oma_group     oma_hog_id
+## 1              c5db7c8e6b0eee5c6bbc18fe2dbf9ba7    737617 HOG:0379998.2a
+## 2              2cf82b1ffadc581d82d920af9b0130a2    737617 HOG:0379998.2a
+## 3   A0A066XI05 d6abbfd6d6ed96217331e86733ae4aeb    737617 HOG:0379998.2a
+## 4   A0A0D2XKA6 b92bedd8c4fe61cc3667d4f108ffb528    737617 HOG:0379998.2a
+## 5              54814145e0f45beb33ac2e2cb99335a3    737618 HOG:0379998.2a
+## 6              8c85e6f457288d146cb99fbc61404cb9    737617 HOG:0379998.2a
+## 7              416de3ec8baf6df5b95a10b2145e7242    737617 HOG:0379998.2a
+## 8   CCR4_CANAL b80e7f71d278fae2335d393c82912fee    737617 HOG:0379998.2b
+## 9       C4YDK4 d1158bec0e2fface48020c27d9e6ca2b    737618 HOG:0379998.2b
+## 10      A5DSP6 58726579b898e8bc18c954e8cc7039f5    737636 HOG:0379998.2b
+## 11  CCR4_DEBHA 06ae2387578bfe3873ad4c34a339bb26    737636 HOG:0379998.2b
+## 12      A5DDD9 d796187a45010e0868d774e568bf8d75    737617 HOG:0379998.2b
+## 13      G3ATH1 fe2c181e7927a749ce89d63f0cfa99a9    737636 HOG:0379998.2b
+## 14             4ff2469626a34edf6dfc0cc18d6ae06b    737618 HOG:0379998.2b
+## 15      C4R821 eb4910adfeab0ff42a374bee5d9c2176    737618 HOG:0379998.2b
+## 16  CCR4_ASHGO dc714e8db742c3fa6e16c074c3ea9b75    737617 HOG:0379998.2b
+## 17  CCR4_KLULA bd38c48cb3b76bed0c72f5cd2a7ec92e    737636 HOG:0379998.2b
+## 18  CCR4_CANGA 3329cf643b6767b0b022622779d5daf1    737636 HOG:0379998.2b
+## 19  A0A1Q2ZZG0 f2629a0761ab52e0a1beb6b4a5d9c868    737636 HOG:0379998.2b
+## 20             11d6a871f132d98e296ba5a628cac8b4         0               
+##                                   chromosome locus.start locus.end
+## 1                                 scaffold_6       27852     30189
+## 2                                   GG697333      764822    767178
+## 3                            Scaffolds0609.1         399      2755
+## 4                                          4     4317479   4319279
+## 5                            Supercontig_3.1     6701031   6703176
+## 6                           sca_14_chr10_3_0      669785    671940
+## 7                               chromosome_2     3756431   3758803
+## 8                     supercontig_supercont4     1809654   1812017
+## 9                                          1     1390917   1393274
+## 10 supercont1.1 of Lodderomyces elongisporus     1013851   1016379
+## 11                                         F      373608    376103
+## 12                      supercontig_CH408156      187607    189769
+## 13                                scaffold_6      636379    638832
+## 14                            scaffold_00004      297506    299533
+## 15                                         4      962805    965323
+## 16                                       III      882342    884552
+## 17                                         F     1468612   1470984
+## 18                                         H      598643    601264
+## 19                                         D      453024    455597
+## 20                          scf7180000299460       79621     84056
+##    locus.strand is_main_isoform rel_type distance   score
+## 1            -1            TRUE      1:1 105.0000 1362.00
+## 2             1            TRUE      1:1 108.0000 1320.99
+## 3             1            TRUE      1:1 109.0000 1312.07
+## 4            -1            TRUE      1:1 107.0000 1326.20
+## 5            -1            TRUE      1:1 109.0000 1327.66
+## 6            -1            TRUE      1:1 105.0000 1336.03
+## 7             1            TRUE      1:1 113.0000 1251.50
+## 8             1            TRUE      1:1  72.0000 2268.69
+## 9            -1            TRUE      1:1  72.0000 2266.12
+## 10           -1            TRUE      1:1  74.0000 2267.07
+## 11           -1            TRUE      1:1  73.0000 2246.76
+## 12           -1            TRUE      1:1  76.0000 2124.66
+## 13           -1            TRUE      1:1  73.0000 2240.65
+## 14            1            TRUE      1:1  79.0000 2116.79
+## 15            1            TRUE      1:1  68.0000 2364.83
+## 16            1            TRUE      1:1  36.1210 4302.76
+## 17           -1            TRUE      1:1  36.1210 4423.53
+## 18           -1            TRUE      1:1  35.3357 5201.71
+## 19           -1            TRUE      1:1  42.1286 4655.84
+## 20           -1            TRUE      1:1   0.3903 7730.37</code></pre>
 <p>The orthologs for a protein are returned as a data.frame. This structure is also found in other areas of the package (e.g. the data on the members of a particular OMA group or a HOG) and hence features a number of functions to simplify its processing. For example, the user can obtain a set of genomic ranges for the proteins in a dataframe as so:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">gRanges =<span class="st"> </span><span class="kw">getGRanges</span>(orthologs)
+
 <span class="kw">str</span>(gRanges)</code></pre></div>
 <pre><code>## Formal class 'GRanges' [package &quot;GenomicRanges&quot;] with 6 slots
 ##   ..@ seqnames       :Formal class 'Rle' [package &quot;S4Vectors&quot;] with 4 slots
-##   .. .. ..@ values         : Factor w/ 18 levels &quot;ZYGRO02696&quot;,&quot;ASHGO01343&quot;,..: 6 7 8 11 12 15 18 3 14 9 ...
-##   .. .. ..@ lengths        : int [1:18] 1 1 1 1 1 1 1 1 1 1 ...
+##   .. .. ..@ values         : Factor w/ 20 levels &quot;ZYGRO02696&quot;,&quot;ASHGO01343&quot;,..: 7 8 9 12 13 17 20 3 4 16 ...
+##   .. .. ..@ lengths        : int [1:20] 1 1 1 1 1 1 1 1 1 1 ...
 ##   .. .. ..@ elementMetadata: NULL
 ##   .. .. ..@ metadata       : list()
 ##   ..@ ranges         :Formal class 'IRanges' [package &quot;IRanges&quot;] with 6 slots
-##   .. .. ..@ start          : int [1:18] 27852 764822 399 4317479 6701031 669785 3756431 1390917 1013851 373608 ...
-##   .. .. ..@ width          : int [1:18] 2338 2357 2357 1801 2146 2156 2373 2358 2529 2496 ...
+##   .. .. ..@ start          : int [1:20] 27852 764822 399 4317479 6701031 669785 3756431 1809654 1390917 1013851 ...
+##   .. .. ..@ width          : int [1:20] 2338 2357 2357 1801 2146 2156 2373 2364 2358 2529 ...
 ##   .. .. ..@ NAMES          : NULL
 ##   .. .. ..@ elementType    : chr &quot;integer&quot;
 ##   .. .. ..@ elementMetadata: NULL
 ##   .. .. ..@ metadata       : list()
 ##   ..@ strand         :Formal class 'Rle' [package &quot;S4Vectors&quot;] with 4 slots
 ##   .. .. ..@ values         : Factor w/ 3 levels &quot;+&quot;,&quot;-&quot;,&quot;*&quot;: 2 1 2 1 2 1 2
-##   .. .. ..@ lengths        : int [1:7] 1 2 3 1 4 3 4
+##   .. .. ..@ lengths        : int [1:7] 1 2 3 2 5 3 4
 ##   .. .. ..@ elementMetadata: NULL
 ##   .. .. ..@ metadata       : list()
 ##   ..@ elementMetadata:Formal class 'DataFrame' [package &quot;S4Vectors&quot;] with 6 slots
 ##   .. .. ..@ rownames       : NULL
-##   .. .. ..@ nrows          : int 18
+##   .. .. ..@ nrows          : int 20
 ##   .. .. ..@ listData       : Named list()
 ##   .. .. ..@ elementType    : chr &quot;ANY&quot;
 ##   .. .. ..@ elementMetadata: NULL
 ##   .. .. ..@ metadata       : list()
 ##   ..@ seqinfo        :Formal class 'Seqinfo' [package &quot;GenomeInfoDb&quot;] with 4 slots
-##   .. .. ..@ seqnames   : chr [1:18] &quot;ZYGRO02696&quot; &quot;ASHGO01343&quot; &quot;CANAW00573&quot; &quot;CANGA01835&quot; ...
-##   .. .. ..@ seqlengths : int [1:18] NA NA NA NA NA NA NA NA NA NA ...
-##   .. .. ..@ is_circular: logi [1:18] NA NA NA NA NA NA ...
-##   .. .. ..@ genome     : chr [1:18] NA NA NA NA ...
+##   .. .. ..@ seqnames   : chr [1:20] &quot;ZYGRO02696&quot; &quot;ASHGO01343&quot; &quot;CANAL00775&quot; &quot;CANAW00573&quot; ...
+##   .. .. ..@ seqlengths : int [1:20] NA NA NA NA NA NA NA NA NA NA ...
+##   .. .. ..@ is_circular: logi [1:20] NA NA NA NA NA NA ...
+##   .. .. ..@ genome     : chr [1:20] NA NA NA NA ...
 ##   ..@ metadata       : list()</code></pre>
-<p>The user can also obtain the list of sequences for a given dataframe of proteins and well as the list of their corresponding ontologies (that can be plugged into the topGO for further analysis).</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sequences =<span class="st"> </span><span class="kw">getSequences</span>(orthologs)
-<span class="kw">str</span>(sequences)</code></pre></div>
-<pre><code>## List of 18
-##  $ COCLU03588:Formal class 'AAString' [package &quot;Biostrings&quot;] with 5 slots
-##   .. ..@ shared         :Formal class 'SharedRaw' [package &quot;XVector&quot;] with 2 slots
-##   .. .. .. ..@ xp                    :&lt;externalptr&gt; 
-##   .. .. .. ..@ .link_to_cached_object:&lt;environment: 0x7ff1ab5a5628&gt; 
-##   .. ..@ offset         : int 0
-##   .. ..@ length         : int 759
-##   .. ..@ elementMetadata: NULL
-##   .. ..@ metadata       : list()
-##  $ COLGR10929:Formal class 'AAString' [package &quot;Biostrings&quot;] with 5 slots
-##   .. ..@ shared         :Formal class 'SharedRaw' [package &quot;XVector&quot;] with 2 slots
-##   .. .. .. ..@ xp                    :&lt;externalptr&gt; 
-##   .. .. .. ..@ .link_to_cached_object:&lt;environment: 0x7ff1ab5a5628&gt; 
-##   .. ..@ offset         : int 0
-##   .. ..@ length         : int 768
-##   .. ..@ elementMetadata: NULL
-##   .. ..@ metadata       : list()
-##  $ COLSU06788:Formal class 'AAString' [package &quot;Biostrings&quot;] with 5 slots
-##   .. ..@ shared         :Formal class 'SharedRaw' [package &quot;XVector&quot;] with 2 slots
-##   .. .. .. ..@ xp                    :&lt;externalptr&gt; 
-##   .. .. .. ..@ .link_to_cached_object:&lt;environment: 0x7ff1ab5a5628&gt; 
-##   .. ..@ offset         : int 0
-##   .. ..@ length         : int 768
-##   .. ..@ elementMetadata: NULL
-##   .. ..@ metadata       : list()
-##  $ FUSO411719:Formal class 'AAString' [package &quot;Biostrings&quot;] with 5 slots
-##   .. ..@ shared         :Formal class 'SharedRaw' [package &quot;XVector&quot;] with 2 slots
-##   .. .. .. ..@ xp                    :&lt;externalptr&gt; 
-##   .. .. .. ..@ .link_to_cached_object:&lt;environment: 0x7ff1ab5a5628&gt; 
-##   .. ..@ offset         : int 0
-##   .. ..@ length         : int 585
-##   .. ..@ elementMetadata: NULL
-##   .. ..@ metadata       : list()
-##  $ GIBZA02345:Formal class 'AAString' [package &quot;Biostrings&quot;] with 5 slots
-##   .. ..@ shared         :Formal class 'SharedRaw' [package &quot;XVector&quot;] with 2 slots
-##   .. .. .. ..@ xp                    :&lt;externalptr&gt; 
-##   .. .. .. ..@ .link_to_cached_object:&lt;environment: 0x7ff1ab5a5628&gt; 
-##   .. ..@ offset         : int 0
-##   .. ..@ length         : int 698
-##   .. ..@ elementMetadata: NULL
-##   .. ..@ metadata       : list()
-##  $ NECHA14651:Formal class 'AAString' [package &quot;Biostrings&quot;] with 5 slots
-##   .. ..@ shared         :Formal class 'SharedRaw' [package &quot;XVector&quot;] with 2 slots
-##   .. .. .. ..@ xp                    :&lt;externalptr&gt; 
-##   .. .. .. ..@ .link_to_cached_object:&lt;environment: 0x7ff1ab5a5628&gt; 
-##   .. ..@ offset         : int 0
-##   .. ..@ length         : int 700
-##   .. ..@ elementMetadata: NULL
-##   .. ..@ metadata       : list()
-##  $ THIHE03640:Formal class 'AAString' [package &quot;Biostrings&quot;] with 5 slots
-##   .. ..@ shared         :Formal class 'SharedRaw' [package &quot;XVector&quot;] with 2 slots
-##   .. .. .. ..@ xp                    :&lt;externalptr&gt; 
-##   .. .. .. ..@ .link_to_cached_object:&lt;environment: 0x7ff1ab5a5628&gt; 
-##   .. ..@ offset         : int 0
-##   .. ..@ length         : int 761
-##   .. ..@ elementMetadata: NULL
-##   .. ..@ metadata       : list()
-##  $ CANAW00573:Formal class 'AAString' [package &quot;Biostrings&quot;] with 5 slots
-##   .. ..@ shared         :Formal class 'SharedRaw' [package &quot;XVector&quot;] with 2 slots
-##   .. .. .. ..@ xp                    :&lt;externalptr&gt; 
-##   .. .. .. ..@ .link_to_cached_object:&lt;environment: 0x7ff1ab5a5628&gt; 
-##   .. ..@ offset         : int 0
-##   .. ..@ length         : int 785
-##   .. ..@ elementMetadata: NULL
-##   .. ..@ metadata       : list()
-##  $ LODEL00382:Formal class 'AAString' [package &quot;Biostrings&quot;] with 5 slots
-##   .. ..@ shared         :Formal class 'SharedRaw' [package &quot;XVector&quot;] with 2 slots
-##   .. .. .. ..@ xp                    :&lt;externalptr&gt; 
-##   .. .. .. ..@ .link_to_cached_object:&lt;environment: 0x7ff1ab5a5628&gt; 
-##   .. ..@ offset         : int 0
-##   .. ..@ length         : int 842
-##   .. ..@ elementMetadata: NULL
-##   .. ..@ metadata       : list()
-##  $ DEBHA04175:Formal class 'AAString' [package &quot;Biostrings&quot;] with 5 slots
-##   .. ..@ shared         :Formal class 'SharedRaw' [package &quot;XVector&quot;] with 2 slots
-##   .. .. .. ..@ xp                    :&lt;externalptr&gt; 
-##   .. .. .. ..@ .link_to_cached_object:&lt;environment: 0x7ff1ab5a5628&gt; 
-##   .. ..@ offset         : int 0
-##   .. ..@ length         : int 831
-##   .. ..@ elementMetadata: NULL
-##   .. ..@ metadata       : list()
-##  $ SPAPN04932:Formal class 'AAString' [package &quot;Biostrings&quot;] with 5 slots
-##   .. ..@ shared         :Formal class 'SharedRaw' [package &quot;XVector&quot;] with 2 slots
-##   .. .. .. ..@ xp                    :&lt;externalptr&gt; 
-##   .. .. .. ..@ .link_to_cached_object:&lt;environment: 0x7ff1ab5a5628&gt; 
-##   .. ..@ offset         : int 0
-##   .. ..@ length         : int 817
-##   .. ..@ elementMetadata: NULL
-##   .. ..@ metadata       : list()
-##  $ CANTE00168:Formal class 'AAString' [package &quot;Biostrings&quot;] with 5 slots
-##   .. ..@ shared         :Formal class 'SharedRaw' [package &quot;XVector&quot;] with 2 slots
-##   .. .. .. ..@ xp                    :&lt;externalptr&gt; 
-##   .. .. .. ..@ .link_to_cached_object:&lt;environment: 0x7ff1ab5a5628&gt; 
-##   .. ..@ offset         : int 0
-##   .. ..@ length         : int 675
-##   .. ..@ elementMetadata: NULL
-##   .. ..@ metadata       : list()
-##  $ PICPG00513:Formal class 'AAString' [package &quot;Biostrings&quot;] with 5 slots
-##   .. ..@ shared         :Formal class 'SharedRaw' [package &quot;XVector&quot;] with 2 slots
-##   .. .. .. ..@ xp                    :&lt;externalptr&gt; 
-##   .. .. .. ..@ .link_to_cached_object:&lt;environment: 0x7ff1ab5a5628&gt; 
-##   .. ..@ offset         : int 0
-##   .. ..@ length         : int 768
-##   .. ..@ elementMetadata: NULL
-##   .. ..@ metadata       : list()
-##  $ ASHGO01343:Formal class 'AAString' [package &quot;Biostrings&quot;] with 5 slots
-##   .. ..@ shared         :Formal class 'SharedRaw' [package &quot;XVector&quot;] with 2 slots
-##   .. .. .. ..@ xp                    :&lt;externalptr&gt; 
-##   .. .. .. ..@ .link_to_cached_object:&lt;environment: 0x7ff1ab5a5628&gt; 
-##   .. ..@ offset         : int 0
-##   .. ..@ length         : int 736
-##   .. ..@ elementMetadata: NULL
-##   .. ..@ metadata       : list()
-##  $ KLULA00697:Formal class 'AAString' [package &quot;Biostrings&quot;] with 5 slots
-##   .. ..@ shared         :Formal class 'SharedRaw' [package &quot;XVector&quot;] with 2 slots
-##   .. .. .. ..@ xp                    :&lt;externalptr&gt; 
-##   .. .. .. ..@ .link_to_cached_object:&lt;environment: 0x7ff1ab5a5628&gt; 
-##   .. ..@ offset         : int 0
-##   .. ..@ length         : int 790
-##   .. ..@ elementMetadata: NULL
-##   .. ..@ metadata       : list()
-##  $ CANGA01835:Formal class 'AAString' [package &quot;Biostrings&quot;] with 5 slots
-##   .. ..@ shared         :Formal class 'SharedRaw' [package &quot;XVector&quot;] with 2 slots
-##   .. .. .. ..@ xp                    :&lt;externalptr&gt; 
-##   .. .. .. ..@ .link_to_cached_object:&lt;environment: 0x7ff1ab5a5628&gt; 
-##   .. ..@ offset         : int 0
-##   .. ..@ length         : int 873
-##   .. ..@ elementMetadata: NULL
-##   .. ..@ metadata       : list()
-##  $ ZYGRO02696:Formal class 'AAString' [package &quot;Biostrings&quot;] with 5 slots
-##   .. ..@ shared         :Formal class 'SharedRaw' [package &quot;XVector&quot;] with 2 slots
-##   .. .. .. ..@ xp                    :&lt;externalptr&gt; 
-##   .. .. .. ..@ .link_to_cached_object:&lt;environment: 0x7ff1ab5a5628&gt; 
-##   .. ..@ offset         : int 0
-##   .. ..@ length         : int 857
-##   .. ..@ elementMetadata: NULL
-##   .. ..@ metadata       : list()
-##  $ DROBM15099:Formal class 'AAString' [package &quot;Biostrings&quot;] with 5 slots
-##   .. ..@ shared         :Formal class 'SharedRaw' [package &quot;XVector&quot;] with 2 slots
-##   .. .. .. ..@ xp                    :&lt;externalptr&gt; 
-##   .. .. .. ..@ .link_to_cached_object:&lt;environment: 0x7ff1ab5a5628&gt; 
-##   .. ..@ offset         : int 0
-##   .. ..@ length         : int 903
-##   .. ..@ elementMetadata: NULL
-##   .. ..@ metadata       : list()</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ontologies =<span class="st"> </span><span class="kw">getOntologies</span>(orthologs)
-<span class="kw">str</span>(ontologies)</code></pre></div>
-<pre><code>## List of 18
-##  $ COCLU03588: chr [1:7] &quot;GO:0003723&quot; &quot;GO:0004535&quot; &quot;GO:0005634&quot; &quot;GO:0005737&quot; ...
-##  $ COLGR10929: chr [1:10] &quot;GO:0004519&quot; &quot;GO:0004527&quot; &quot;GO:0090305&quot; &quot;GO:0003723&quot; ...
-##  $ COLSU06788: chr [1:10] &quot;GO:0004519&quot; &quot;GO:0004527&quot; &quot;GO:0090305&quot; &quot;GO:0003723&quot; ...
-##  $ FUSO411719: chr [1:7] &quot;GO:0003723&quot; &quot;GO:0004535&quot; &quot;GO:0005634&quot; &quot;GO:0005737&quot; ...
-##  $ GIBZA02345: chr [1:11] &quot;GO:0000288&quot; &quot;GO:0003723&quot; &quot;GO:0004535&quot; &quot;GO:0005634&quot; ...
-##  $ NECHA14651: chr [1:7] &quot;GO:0003723&quot; &quot;GO:0004535&quot; &quot;GO:0005634&quot; &quot;GO:0005737&quot; ...
-##  $ THIHE03640: chr [1:7] &quot;GO:0003723&quot; &quot;GO:0004535&quot; &quot;GO:0005634&quot; &quot;GO:0005737&quot; ...
-##  $ CANAW00573: chr [1:26] &quot;GO:0000076&quot; &quot;GO:0000175&quot; &quot;GO:0000288&quot; &quot;GO:0000288&quot; ...
-##  $ LODEL00382: chr [1:22] &quot;GO:0000076&quot; &quot;GO:0000175&quot; &quot;GO:0000288&quot; &quot;GO:0000289&quot; ...
-##  $ DEBHA04175: chr [1:28] &quot;GO:0000076&quot; &quot;GO:0000175&quot; &quot;GO:0000288&quot; &quot;GO:0000289&quot; ...
-##  $ SPAPN04932: chr [1:22] &quot;GO:0000076&quot; &quot;GO:0000175&quot; &quot;GO:0000288&quot; &quot;GO:0000289&quot; ...
-##  $ CANTE00168: chr [1:11] &quot;GO:0000288&quot; &quot;GO:0003723&quot; &quot;GO:0004535&quot; &quot;GO:0005634&quot; ...
-##  $ PICPG00513: chr [1:26] &quot;GO:0000076&quot; &quot;GO:0000175&quot; &quot;GO:0000288&quot; &quot;GO:0000288&quot; ...
-##  $ ASHGO01343: chr [1:28] &quot;GO:0000076&quot; &quot;GO:0000175&quot; &quot;GO:0000288&quot; &quot;GO:0000289&quot; ...
-##  $ KLULA00697: chr [1:28] &quot;GO:0000076&quot; &quot;GO:0000175&quot; &quot;GO:0000288&quot; &quot;GO:0000289&quot; ...
-##  $ CANGA01835: chr [1:28] &quot;GO:0000076&quot; &quot;GO:0000175&quot; &quot;GO:0000288&quot; &quot;GO:0000289&quot; ...
-##  $ ZYGRO02696: chr [1:22] &quot;GO:0000076&quot; &quot;GO:0000175&quot; &quot;GO:0000288&quot; &quot;GO:0000289&quot; ...
-##  $ DROBM15099: chr &quot;&quot;</code></pre>
+<p>The user can also obtain the list of sequences for a given dataframe of proteins and well as the list of their corresponding ontologies (that can be plugged into the topGO for further analysis). This can be done using the functions getSequences() and getOntologies() respectively.</p>
 <p>For further information on the OMA REST API please visit <a href="http://omadev.cs.ucl.ac.uk/api/docs">OMA REST API DOCUMENTATION</a>.</p>
 </div>
 </div>

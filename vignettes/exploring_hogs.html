@@ -12,7 +12,7 @@
 
 <meta name="author" content="Klara Kaleb" />
 
-<meta name="date" content="2017-10-20" />
+<meta name="date" content="2018-04-27" />
 
 <title>Exploring Hierarchical orthologous groups with roma</title>
 
@@ -70,7 +70,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">Exploring Hierarchical orthologous groups with roma</h1>
 <h4 class="author"><em>Klara Kaleb</em></h4>
-<h4 class="date"><em>2017-10-20</em></h4>
+<h4 class="date"><em>2018-04-27</em></h4>
 
 
 
@@ -79,12 +79,99 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <h2>The HOGs</h2>
 <p>Hierarchical orthologous groups (also known as HOGs) are sets of genes that are defined with respect to particular taxonomic ranges of interest[1]. They group genes that have descended from a single common ancestral genes in that taxonomic range.</p>
 <p>HOGs hold a lot of useful information and have many applications in various contexts, including inference of gene function, study of gene evolution dynamics and comparative genomics. Each HOG has a taxonomic range - within it, a given HOG can branch into constructs known as subHOGs which arise in an event of gene duplication.</p>
-<p>HOGs can be retrived either by their hog id or by one of their members. Let’s say we are interested in a gene that goes by the name of HUMAN22168 - below is the way to access its HOG.</p>
+<p>HOGs can be retrived either by their hog id or by one of their members. Let’s say we are interested in a gene that goes by the name of HUMAN22168, which can be simply accessed using the getHOG() function. The exploration of the example response object is below.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(roma)
 
-hog &lt;-<span class="st"> </span><span class="kw">getHOG</span>(<span class="dt">id=</span><span class="st">&quot;HUMAN22168&quot;</span>)
+<span class="kw">load</span>(<span class="st">'../data/hog.rda'</span>)
 
-<span class="kw">getObjectAttributes</span>(hog)</code></pre></div>
+<span class="kw">print</span>(hog)</code></pre></div>
+<pre><code>## $hog_id
+## [1] &quot;HOG:0273533.1b&quot;
+## 
+## $level
+## [1] &quot;Sarcopterygii&quot;
+## 
+## $levels_url
+## [1] &quot;https://omabrowser.org/api/hog/HOG:0273533.1b/?level=Sarcopterygii&quot;
+## 
+## $members_url
+## [1] &quot;https://omabrowser.org/api/hog/HOG:0273533.1b/members/?level=Sarcopterygii&quot;
+## 
+## $alternative_levels
+##                        X..i..
+## 1         Chlorocebus sabaeus
+## 2                   Carnivora
+## 3     Gorilla gorilla gorilla
+## 4                      Sauria
+## 5                   Tetrapoda
+## 6          Microcebus murinus
+## 7                  Hominoidea
+## 8                 Haplorrhini
+## 9                  Chiroptera
+## 10      Mustela putorius furo
+## 11        Pelodiscus sinensis
+## 12                 Catarrhini
+## 13               Pongo abelii
+## 14             Laurasiatheria
+## 15      Oryctolagus cuniculus
+## 16                   Eutheria
+## 17              Strepsirrhini
+## 18            Pan troglodytes
+## 19                 Lagomorpha
+## 20                   Mammalia
+## 21                     Theria
+## 22         Xenopus tropicalis
+## 23              Sorex araneus
+## 24       Dasypus novemcinctus
+## 25             Macaca mulatta
+## 26                  Hominidae
+## 27                 Metatheria
+## 28                  Homininae
+## 29            Cavia porcellus
+## 30              Boreoeutheria
+## 31                Insectivora
+## 32             Equus caballus
+## 33         Otolemur garnettii
+## 34     Canis lupus familiaris
+## 35                     Glires
+## 36 Ictidomys tridecemlineatus
+## 37                Simiiformes
+## 38           Tarsius syrichta
+## 39              Archelosauria
+## 40            Cercopithecinae
+## 41           Euarchontoglires
+## 42         Callithrix jacchus
+## 43          Pteropus vampyrus
+## 44               Papio anubis
+## 45                   Primates
+## 46                 Caniformia
+## 47        Nomascus leucogenys
+## 48               Homo sapiens
+## 49                    Amniota
+## 50       Sarcophilus harrisii
+## 51     Ailuropoda melanoleuca
+## 52                  Xenarthra
+## 53           Myotis lucifugus
+## 54                   Rodentia
+## 55      Monodelphis domestica
+## 
+## $roothog_id
+## [1] 273533
+## 
+## $parent_hogs
+##        hog_id                                  levels_url
+## 1 HOG:0273533 https://omabrowser.org/api/hog/HOG:0273533/
+##                                           members_url
+## 1 https://omabrowser.org/api/hog/HOG:0273533/members/
+## 
+## $children_hogs
+##              hog_id                                        levels_url
+## 1 HOG:0273533.1b.1b https://omabrowser.org/api/hog/HOG:0273533.1b.1b/
+## 2 HOG:0273533.1b.1a https://omabrowser.org/api/hog/HOG:0273533.1b.1a/
+##                                                 members_url
+## 1 https://omabrowser.org/api/hog/HOG:0273533.1b.1b/members/
+## 2 https://omabrowser.org/api/hog/HOG:0273533.1b.1a/members/</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">getObjectAttributes</span>(hog)</code></pre></div>
 <pre><code>## [1] &quot;hog_id : character&quot;
 ## [1] &quot;level : character&quot;
 ## [1] &quot;levels_url : URL&quot;
@@ -105,30 +192,14 @@ children_hogs =<span class="st"> </span><span class="kw">getAttribute</span>(hog
 
 children_hogs</code></pre></div>
 <pre><code>##              hog_id                                        levels_url
-## 1 HOG:0261495.1a.1a https://omabrowser.org/api/hog/HOG:0261495.1a.1a/
-## 2 HOG:0261495.1a.1b https://omabrowser.org/api/hog/HOG:0261495.1a.1b/
+## 1 HOG:0273533.1b.1b https://omabrowser.org/api/hog/HOG:0273533.1b.1b/
+## 2 HOG:0273533.1b.1a https://omabrowser.org/api/hog/HOG:0273533.1b.1a/
 ##                                                 members_url
-## 1 https://omabrowser.org/api/hog/HOG:0261495.1a.1a/members/
-## 2 https://omabrowser.org/api/hog/HOG:0261495.1a.1b/members/</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">child_hog_ids  =<span class="st"> </span>children_hogs[[<span class="st">'hog_id'</span>]]
-
-child_hog_<span class="dv">1</span> =<span class="st"> </span><span class="kw">getHOG</span>(<span class="dt">id=</span>child_hog_ids[[<span class="dv">1</span>]])
-
-<span class="kw">getAttribute</span>(child_hog_<span class="dv">1</span>,<span class="st">&quot;level&quot;</span>)</code></pre></div>
-<pre><code>## [1] &quot;Neognathae&quot;</code></pre>
-<p>The above constructs an object holding information for the information available for a HOG in the current OMA database. We can recognise that HOG:0261495.1a is a subhog of its parent hog HOG:0261495 and that it further splits into 2 children subhogs, HOG:0261495.1a.1a and HOG:0261495.1a.1b respectively. We can also see that this split occured at the Neognathae level.</p>
-<p>We have just detected a gene duplication - it would be interesting to see if there is any gene differentiation as a consenquence. We can check this by looking at the member protein annotations for each subhog_id and perform a GO enrichment analysis on this by utilising the Bioconductor package topGO.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">childrenMembers =<span class="st"> </span><span class="kw">childrenMembers</span>(hog)
-
-myInterestingGenes =<span class="st"> </span>childrenMembers[[<span class="st">'HOG:0261495.1a.1a'</span>]]
-
-annotations =<span class="st"> </span><span class="kw">getOntologies</span>(childrenMembers)
-
-<span class="co"># We can now directly use the above data to construct a topGO object for further analysis (such as GO enrichment)</span>
-
-<span class="kw">library</span>(topGO)
-
-topGO =<span class="st"> </span><span class="kw">getTopGO</span>(annotations, myInterestingGenes, <span class="dt">format =</span> <span class="st">&quot;geneID2GO&quot;</span>)</code></pre></div>
+## 1 https://omabrowser.org/api/hog/HOG:0273533.1b.1b/members/
+## 2 https://omabrowser.org/api/hog/HOG:0273533.1b.1a/members/</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">child_hog_ids  =<span class="st"> </span>children_hogs[[<span class="st">'hog_id'</span>]]</code></pre></div>
+<p>From above, we can recognise that HOG:0261495.1a is a subhog of its parent hog HOG:0261495 and that it further splits into 2 children subhogs, HOG:0261495.1a.1a and HOG:0261495.1a.1b respectively. We further investigate at what taxonomic level this split has occured by looking at the root levels of the children subhogs.</p>
+<p>We have just detected a gene duplication - it would be interesting to see if there is any gene differentiation as a consenquence. We can check this by looking at the member protein annotations for each subhog_id using the function childrenMembers() and perform a GO enrichment analysis on this by utilising the Bioconductor package topGO.</p>
 <ol style="list-style-type: decimal">
 <li>Altenhoff, A., Gil, M., Gonnet, G., &amp; Dessimoz, C. (2013). Inferring Hierarchical Orthologous Groups from Orthologous Gene Pairs PLoS ONE, 8 DOI: 10.1371/journal.pone.0053786</li>
 </ol>

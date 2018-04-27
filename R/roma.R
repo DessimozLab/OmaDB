@@ -21,7 +21,6 @@
 #' \itemize{
 #'   \item formatTopGO()
 #'   \item getGRanges()
-#'   \item getTree()
 #' } 
 #'
 #' The above functions are described in more detail in the package vignette's listed below:
@@ -29,7 +28,7 @@
 #'
 #' \itemize{
 #'   \item Get started with Roma
-#'   \item Exploring Hierarchical orthologous groups with roma}
+#'   \item Exploring Hierarchical orthologous groups with roma
 #'   \item Exploring Taxonomic trees with roma
 #'   \item Sequence Analysis with roma
 #' }  

@@ -1,0 +1,33 @@
+#' An example protein object. 
+#'
+#' An object containing information for the YEAST00058 protein.
+#'
+#' @format A S3 object with 23 variables:
+#' \describe{
+#'   \item{entry_nr}{entry number of the protein}
+#'   \item{entry_url}{url pointer to the protein}
+#'   \item{omaid}{oma identifier of the protein}
+#'   \item{canonicalid}{canonicalid of the protein}
+#'   \item{sequence_md5}{sequence_md5 of the protein}
+#'   \item{oma_group}{oma_group of the protein}
+#'   \item{oma_hog_id}{hog id of the protein}
+#'   \item{chromosome}{chromosomal location of the protein}
+#'   \item{locus}{GRanges object with the locus information for the protein}
+#'   \item{is_main_isoform}{true/false}
+#'   \item{roothog_id}{root taxonomic level of the relevant hog}
+#'   \item{roothog_id}{taxonomic levels of the hog in which the protein is present}
+#'   \item{sequence_length}{length of the protein sequence}
+#'   \item{sequence}{AAString of the protein sequence}
+#'   \item{cdna}{DNAString of the protein sequence}
+#'   \item{domains}{url pointer to the list of protein domains}
+#'   \item{xref}{url pointer to the list of protein cross references}
+#'   \item{orthologs}{url pointer to the list of protein orthologs}
+#'   \item{homeologs}{url pointer to the list of protein homeologs}
+#'   \item{ontology}{url pointer to the list of protein GO ontologies}
+#'   \item{oma_group_url}{url pointer to the protein oma group}
+#'   \item{oma_hog_members}{url pointer to the protein hog members}
+#'   \item{alternative_isoforms_urls}{list of url pointers to the protein isoforms}
+#'   ...
+#' }
+#' @source \url{https://omabrowser.org/api/protein/6633022/}
+"protein"

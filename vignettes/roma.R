@@ -1,20 +1,20 @@
 ## ---- warning=FALSE, message=FALSE---------------------------------------
 library(roma)
 
-results <- getXref(pattern="MAL")
+xref = load('../data/xref.rda')
 
-head(results)
-
-## ---- warning=FALSE, message=FALSE---------------------------------------
-
-alignment <- getGenomeAlignment(genome_id1 = "YEAST", genome_id2 = "ASHGO")
-
-head(alignment)
-
+head(xref)
 
 ## ---- warning=FALSE, message=FALSE---------------------------------------
 
-group <- getData(type="group",id="YEAST58")
+load('../data/pairs.rda')
+
+head(pairs)
+
+
+## ---- warning=FALSE, message=FALSE---------------------------------------
+
+load('../data/group.rda')
 
 object_attributes = getObjectAttributes(group)
 
@@ -26,29 +26,19 @@ getAttribute(group, 'fingerprint')
 
 ## ---- warning=FALSE, message=FALSE---------------------------------------
 
-protein <- getData(type="protein",id="YEAST58")
+load('../data/protein.rda')
 
-getObjectAttributes(protein)
+getAttribute(protein,'orthologs')
 
-orthologs = getAttribute(protein,'orthologs')
+load('../data/orthologs.rda')
 
-orthologs = resolveURL(orthologs)
-
-head(orthologs)
+orthologs 
 
 
 ## ---- warning=FALSE, message=FALSE---------------------------------------
 
 gRanges = getGRanges(orthologs)
+
 str(gRanges)
-
-
-## ---- warning=FALSE, message=FALSE---------------------------------------
-
-sequences = getSequences(orthologs)
-str(sequences)
-
-ontologies = getOntologies(orthologs)
-str(ontologies)
 
 

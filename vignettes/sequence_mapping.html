@@ -12,7 +12,7 @@
 
 <meta name="author" content="Klara Kaleb" />
 
-<meta name="date" content="2017-10-20" />
+<meta name="date" content="2018-04-27" />
 
 <title>Sequence Analysis with roma</title>
 
@@ -70,141 +70,59 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">Sequence Analysis with roma</h1>
 <h4 class="author"><em>Klara Kaleb</em></h4>
-<h4 class="date"><em>2017-10-20</em></h4>
+<h4 class="date"><em>2018-04-27</em></h4>
 
 
 
 <p>One useful function of the roma package is its functionality to exactly and partially match sequences. We will explore this further in this vignette.</p>
-<p>Let’s say we have a sequence of interest that we want to map. We first pass it to the mapSequence function which returns a list of targets. From this list we can then construct roma protein objects for which we can obtain further infromation - such as its oma group or its domains.</p>
+<p>Let’s say we have a sequence of interest that we want to map, in this case:</p>
+<p>“MNDPSLLGYPNVGPQQQQQQQQQQHAGLLGKGTPNALQQQLHMNQLTGIPPPGLMNNSDVHTSSNNNSRQLLDQLANGNANMLNMNMDNNNNNNNNNNNNNNNGGGSGVMMNASTAAVNSIGMVPTVGTPVNINVNASNPLLHPHLDDPSLLNNPIWKLQLHLAAVSAQSLGQPNIYARQNAMKKYLATQQAQQAQQQAQQQAQQQVPGPFGPGPQAAPPALQPTDFQQSHIAEASKSLVDCTKQALMEMADTLTDSKTAKKQQPTGDSTPSGTATNSAVSTPLTPKIELFANGKDEANQALLQHKKLSQYSIDEDDDIENRMVMPKDSKYDDQLWHALDLSNLQIFNISANIFKYDFLTRLYLNGNSLTELPAEIKNLSNLRVLDLSHNRLTSLPAELGSCFQLKYFYFFDNMVTTLPWEFGNLCNLQFLGVEGNPLEKQFLKILTEKSVTGLIFYLRDNRPEIPLPHER”</p>
+<p>We can pass it to the mapSequence() function which returns a list of targets. From this list we can then construct roma protein objects for which we can obtain further infromation - such as its oma group or its domains. The example response object is below.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(roma)
 
-sequence =<span class="st"> &quot;MNDPSLLGYPNVGPQQQQQQQQQQHAGLLGKGTPNALQQQLHMNQLTGIPPPGLMNNSDVHTSSNNNSRQLLDQLANGNANMLNMNMDNNNNNNNNNNNNNNNGGGSGVMMNASTAAVNSIGMVPTVGTPVNINVNASNPLLHPHLDDPSLLNNPIWKLQLHLAAVSAQSLGQPNIYARQNAMKKYLATQQAQQAQQQAQQQAQQQVPGPFGPGPQAAPPALQPTDFQQSHIAEASKSLVDCTKQALMEMADTLTDSKTAKKQQPTGDSTPSGTATNSAVSTPLTPKIELFANGKDEANQALLQHKKLSQYSIDEDDDIENRMVMPKDSKYDDQLWHALDLSNLQIFNISANIFKYDFLTRLYLNGNSLTELPAEIKNLSNLRVLDLSHNRLTSLPAELGSCFQLKYFYFFDNMVTTLPWEFGNLCNLQFLGVEGNPLEKQFLKILTEKSVTGLIFYLRDNRPEIPLPHERRFIEINTDGEPQREYDSLQQSTEHLATDLAKRTFTVLSYNTLCQHYATPKMYRYTPSWALSWDYRRNKLKEQILSYDSDLLCLQEVESKTFEEYWVPLLDKHGYTGIFHAKARAKTMHSKDSKKVDGCCIFFKRDQFKLITKDAMDFSGAWMKHKKFQRTEDYLNRAMNKDNVALFLKLQHIPSGDTIWAVTTHLHWDPKFNDVKTFQVGVLLDHLETLLKEETSHNFRQDIKKFPVLICGDFNSYINSAVYELINTGRVQIHQEGNGRDFGYMSEKNFSHNLALKSSYNCIGELPFTNFTPSFTDVIDYIWFSTHALRVRGLLGEVDPEYVSKFIGFPNDKFPSDHIPLLARFEFMKTNTGSKKV&quot;</span>
-
-sequence_map &lt;-<span class="st"> </span><span class="kw">mapSequence</span>(sequence)
+<span class="kw">load</span>(<span class="st">'../data/sequence_map.rda'</span>)
 
 <span class="kw">getObjectAttributes</span>(sequence_map)</code></pre></div>
 <pre><code>## [1] &quot;query : character&quot;
 ## [1] &quot;identified_by : character&quot;
-## [1] &quot;targets : data.frame&quot;</code></pre>
+## [1] &quot;targets : list&quot;</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">targets =<span class="st"> </span><span class="kw">getAttribute</span>(sequence_map,<span class="st">'targets'</span>)
 
 <span class="kw">length</span>(targets) </code></pre></div>
-<pre><code>## [1] 23</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">protein =<span class="st"> </span><span class="kw">resolveURL</span>(targets[[<span class="st">'entry_url'</span>]])
-
-oma_group =<span class="st"> </span><span class="kw">getAttribute</span>(protein,<span class="st">'oma_group'</span>)
-
-domains =<span class="st"> </span><span class="kw">getAttribute</span>(protein,<span class="st">'domains'</span>)
-
-domains =<span class="st"> </span><span class="kw">resolveURL</span>(domains)</code></pre></div>
-<p>One can also directly obtain GO annotations for a given query sequence as below:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sequence_annotation &lt;-<span class="st"> </span><span class="kw">getAnnotation</span>(sequence)
+<pre><code>## [1] 1</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">protein =<span class="st"> </span>targets[[<span class="dv">1</span>]][[<span class="st">'entry_url'</span>]]</code></pre></div>
+<p>One can also directly obtain GO annotations for a given query sequence, which results in an object as below:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">load</span>(<span class="st">'../data/sequence_annotation.rda'</span>)
 
 sequence_annotation </code></pre></div>
-<pre><code>##    Evidence DB_Object_Type Synonym             With Aspect
-## 1       IEA        protein         Exact:YEAST00058      P
-## 2       IEA        protein         Exact:YEAST00058      F
-## 3       IEA        protein         Exact:YEAST00058      P
-## 4       IEA        protein         Exact:YEAST00058      P
-## 5       IEA        protein         Exact:YEAST00058      C
-## 6       IEA        protein         Exact:YEAST00058      F
-## 7       IEA        protein         Exact:YEAST00058      F
-## 8       IEA        protein         Exact:YEAST00058      F
-## 9       IEA        protein         Exact:YEAST00058      F
-## 10      IEA        protein         Exact:YEAST00058      F
-## 11      IEA        protein         Exact:YEAST00058      C
-## 12      IEA        protein         Exact:YEAST00058      C
-## 13      IEA        protein         Exact:YEAST00058      P
-## 14      IEA        protein         Exact:YEAST00058      P
-## 15      IEA        protein         Exact:YEAST00058      P
-## 16      IEA        protein         Exact:YEAST00058      P
-## 17      IEA        protein         Exact:YEAST00058      P
-## 18      IEA        protein         Exact:YEAST00058      P
-## 19      IEA        protein         Exact:YEAST00058      F
-## 20      IEA        protein         Exact:YEAST00058      C
-## 21      IEA        protein         Exact:YEAST00058      P
-## 22      IEA        protein         Exact:YEAST00058      F
-## 23      IEA        protein         Exact:YEAST00058      P
-## 24      IEA        protein         Exact:YEAST00058      P
-## 25      IEA        protein         Exact:YEAST00058      P
-##                                                                            GO_name
-## 1                                                       DNA replication checkpoint
-## 2                                                   3'-5'-exoribonuclease activity
-## 3        nuclear-transcribed mRNA catabolic process, deadenylation-dependent decay
-## 4                                 nuclear-transcribed mRNA poly(A) tail shortening
-## 5                                                                           P-body
-## 6                                                                      RNA binding
-## 7                                                                nuclease activity
-## 8                                                             exonuclease activity
-## 9                                           poly(A)-specific ribonuclease activity
-## 10                                                                 protein binding
-## 11                                                                         nucleus
-## 12                                                                       cytoplasm
-## 13                                                                 DNA replication
-## 14                                                    transcription, DNA-templated
-## 15                                      regulation of transcription, DNA-templated
-## 16                     regulation of transcription from RNA polymerase II promoter
-## 17                        transcription elongation from RNA polymerase II promoter
-## 18                            traversing start control point of mitotic cell cycle
-## 19                                                              hydrolase activity
-## 20                                                           CCR4-NOT core complex
-## 21 positive regulation of transcription elongation from RNA polymerase II promoter
-## 22                                                               metal ion binding
-## 23                                                     replication fork protection
-## 24                                     nucleic acid phosphodiester bond hydrolysis
-## 25                              RNA phosphodiester bond hydrolysis, exonucleolytic
-##    DB.Reference Assigned_By Qualifier     Date DB_Object_Name      GO_ID
-## 1   OMA_Fun:002 OMA_FastMap           20171008                GO:0000076
-## 2   OMA_Fun:002 OMA_FastMap           20171008                GO:0000175
-## 3   OMA_Fun:002 OMA_FastMap           20171008                GO:0000288
-## 4   OMA_Fun:002 OMA_FastMap           20171008                GO:0000289
-## 5   OMA_Fun:002 OMA_FastMap           20171008                GO:0000932
-## 6   OMA_Fun:002 OMA_FastMap           20171008                GO:0003723
-## 7   OMA_Fun:002 OMA_FastMap           20171008                GO:0004518
-## 8   OMA_Fun:002 OMA_FastMap           20171008                GO:0004527
-## 9   OMA_Fun:002 OMA_FastMap           20171008                GO:0004535
-## 10  OMA_Fun:002 OMA_FastMap           20171008                GO:0005515
-## 11  OMA_Fun:002 OMA_FastMap           20171008                GO:0005634
-## 12  OMA_Fun:002 OMA_FastMap           20171008                GO:0005737
-## 13  OMA_Fun:002 OMA_FastMap           20171008                GO:0006260
-## 14  OMA_Fun:002 OMA_FastMap           20171008                GO:0006351
-## 15  OMA_Fun:002 OMA_FastMap           20171008                GO:0006355
-## 16  OMA_Fun:002 OMA_FastMap           20171008                GO:0006357
-## 17  OMA_Fun:002 OMA_FastMap           20171008                GO:0006368
-## 18  OMA_Fun:002 OMA_FastMap           20171008                GO:0007089
-## 19  OMA_Fun:002 OMA_FastMap           20171008                GO:0016787
-## 20  OMA_Fun:002 OMA_FastMap           20171008                GO:0030015
-## 21  OMA_Fun:002 OMA_FastMap           20171008                GO:0032968
-## 22  OMA_Fun:002 OMA_FastMap           20171008                GO:0046872
-## 23  OMA_Fun:002 OMA_FastMap           20171008                GO:0048478
-## 24  OMA_Fun:002 OMA_FastMap           20171008                GO:0090305
-## 25  OMA_Fun:002 OMA_FastMap           20171008                GO:0090503
-##             DB
-## 1  OMA_FastMap
-## 2  OMA_FastMap
-## 3  OMA_FastMap
-## 4  OMA_FastMap
-## 5  OMA_FastMap
-## 6  OMA_FastMap
-## 7  OMA_FastMap
-## 8  OMA_FastMap
-## 9  OMA_FastMap
-## 10 OMA_FastMap
-## 11 OMA_FastMap
-## 12 OMA_FastMap
-## 13 OMA_FastMap
-## 14 OMA_FastMap
-## 15 OMA_FastMap
-## 16 OMA_FastMap
-## 17 OMA_FastMap
-## 18 OMA_FastMap
-## 19 OMA_FastMap
-## 20 OMA_FastMap
-## 21 OMA_FastMap
-## 22 OMA_FastMap
-## 23 OMA_FastMap
-## 24 OMA_FastMap
-## 25 OMA_FastMap</code></pre>
+<pre><code>##   Qualifier      GO_ID                                With Evidence
+## 1           GO:0003677 Approx:DICDI02796:239.3634208239752      IEA
+## 2           GO:0005509 Approx:DICDI02796:239.3634208239752      IEA
+## 3           GO:0005634 Approx:DICDI02796:239.3634208239752      IEA
+## 4           GO:0006351 Approx:DICDI02796:239.3634208239752      IEA
+## 5           GO:0006355 Approx:DICDI02796:239.3634208239752      IEA
+## 6           GO:0007275 Approx:DICDI02796:239.3634208239752      IEA
+##       Date DB_Object_Type DB_Object_Name Aspect Assigned_By
+## 1 20180102        protein                     F OMA_FastMap
+## 2 20180102        protein                     F OMA_FastMap
+## 3 20180102        protein                     C OMA_FastMap
+## 4 20180102        protein                     P OMA_FastMap
+## 5 20180102        protein                     P OMA_FastMap
+## 6 20180102        protein                     P OMA_FastMap
+##                                      GO_name          DB DB.Reference
+## 1                                DNA binding OMA_FastMap  OMA_Fun:002
+## 2                        calcium ion binding OMA_FastMap  OMA_Fun:002
+## 3                                    nucleus OMA_FastMap  OMA_Fun:002
+## 4               transcription, DNA-templated OMA_FastMap  OMA_Fun:002
+## 5 regulation of transcription, DNA-templated OMA_FastMap  OMA_Fun:002
+## 6         multicellular organism development OMA_FastMap  OMA_Fun:002
+##   Synonym
+## 1        
+## 2        
+## 3        
+## 4        
+## 5        
+## 6</code></pre>
 
 
 
