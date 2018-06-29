@@ -12,7 +12,6 @@
 #' getTaxonomy(members="YEAST,ASHGO")
 #' getTaxonomy(root="Alveolata")
 
-
 getTaxonomy <- function(root=NULL,members,newick=TRUE) {
 	if(missing(members)){
 		if(newick==FALSE){
