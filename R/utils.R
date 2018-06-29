@@ -7,12 +7,12 @@ depth <- function(list) ifelse(is.list(list), 1L + max(sapply(list, depth)), 0L)
 #' @importFrom utils URLencode
 #' @import httr
 #' @import plyr
+#' @import ape
 #' @importFrom  Biostrings AAString
 #' @importFrom Biostrings DNAString 
 #' @importFrom GenomicRanges GRanges
 #' @importFrom GenomicRanges makeGRangesFromDataFrame
 #' @importFrom IRanges IRanges
-#' @importFrom pingr is_online
 
 urlGenerator <- function(type = NULL, id = NULL, detail = NULL, query_param1 = NULL, 
     query_param1_value = NULL, query_param2 = NULL, query_param2_value = NULL, 
@@ -48,51 +48,71 @@ urlGenerator <- function(type = NULL, id = NULL, detail = NULL, query_param1 = N
     
 }
 
+
 simpleRequest <- function (url){
+    response = load_url(url)
+    if (!is.null(response)){
+        content_list = httr::content(response, as = "parsed")
+        column_names = names(content_list)
+        return( objectFactory(column_names,content_list) )
+    }
+    return(NULL)
+}
+
+load_url <- function(url){
 
 
-	out <- tryCatch(
-	{		
-		#change this. flikr. 
-        if(pingr::is_online()){
-            response = httr::GET(url)
-            content_list = httr::content(response, as = "parsed")
-            column_names = names(content_list)
-
-            objectFactory(column_names,content_list) 
+    count = 0
+    while(count<3){
+        response <- tryCatch(
+            httr::GET(url), 
+            error = function(cond){
+                Sys.sleep(0.5)
+                return(NULL)
+            },
+            warning = function(cond){
+                message(cond)
+                return(NULL)
+            }
+        )
+        if (is.null(response)){
+            count = count + 1
+            next
         }
-
-        else{
-            return("Error in connectivity.")
+        if (response$status_code < 500){
+            break
         }
-		
-	}, 
-	error = function(cond) {
-            message("THE OMA REST API request failed:", url)
-            message("Here's the original error message:")
-            
-			response_message = httr::http_status(response)$message
-			
-            message(response_message)
-            
-            return(NA)
-        },
+        message(sprintf("Request failed with server error %d. retry in %d secs", response$status_code, 2**count))
+        Sys.sleep(2**count)
+        count = count + 1
+    }
 
+    if (is.null(response)){
+        message(sprintf("Cannot resolve '%s'. Please connect to the internet", url))
+        return(NULL)
+    }
+    
+    tryCatch(
+    {
+        httr::stop_for_status(response)
+        # request worked out 
+        return(response)
+    }, 
+    error = function(cond) {
+        message("THE OMA REST API request failed:", url)
+        message("Here's the original error message:")
+        message(cond)
+        
+        return(NULL)
+    },
     warning = function(cond) {
-            message("URL caused a warning:", url)
-            message("Here's the original warning message:")
-            
-            response_message = httr::http_status(response)$message
-
-            message(response_message)
- 
-            return(NULL)
-        }
-   
-   	)
-
-	return(out)
-	
+        message("URL caused a warning:", url)
+        message("Here's the original warning message:")
+        message(cond)
+    
+        return(NULL)
+    }
+    )
 }
 
 
@@ -145,74 +165,35 @@ objectFactory <- function(column_names, content_list) {
     
 }
 
-#TO DO - fix error handling. empty obj? 
 
 requestFactory <- function (url) {
 
-	out <- tryCatch(
-	{	
-		
-        if(pingr::is_online()){
-            response = httr::GET(url)
-            content_list = httr::content(response, as = "parsed")
-            column_names = names(content_list)
+    response = load_url(url)
+    if (!is.null(response)){
+        content_list = httr::content(response, as = "parsed")
+        column_names = names(content_list)
+        if(is.null(column_names)){
+            if(length(content_list)==1){
+                column_names = names(content_list[[1]])
+                content_list = content_list[[1]]
 
-            if(is.null(column_names)){
-                if(length(content_list)==1){
-                    column_names = names(content_list[[1]])
-                    content_list = content_list[[1]]
+                return(objectFactory(column_names, content_list))
+             
+            }  
 
-                    return(objectFactory(column_names, content_list))
-                 
-                 }  
-
-                else if (length(content_list)!=1 && length(content_list)!=0){
-                    return(formatData(content_list))
-                    }
-           
+            else if (length(content_list)!=1 && length(content_list)!=0){
+                return(formatData(content_list))
+                }
+       
             else if (length(content_list)==0){
                 return(" ")
             }
-                    
+                
+        } else {
+            return( objectFactory(column_names,content_list))
         }
-
-        if(!is.null(column_names)) {
-
-            objectFactory(column_names,content_list)
-        }
-
-        }
-        else{
-            return("Error in connectivity.")
-        }
-		
-	},
-		
-		error = function(cond) {
-            message(paste("THE OMA REST API request failed:", url))
-            message("Here's the original error message:")
-            
-            response_message = httr::http_status(response)$message
-            
-            message(response_message)
-            
-            return(NA)
-        },
-
-        warning = function(cond) {
-            message(paste("URL caused a warning:", url))
-            message("Here's the original warning message:")
-            
-            response_message = httr::http_status(response)$message
-
-            message(response_message)
- 
-            return(NULL)
-        }
-    	
-		)
-	
-	return(out)
+    }
+    return(NULL)
 }
 
 formatData <- function(data) {

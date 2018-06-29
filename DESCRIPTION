@@ -1,11 +1,11 @@
 Package: OmaDB
 Title: R wrapper for the OMA REST API
-Version: 1.0.0
+Version: 1.0.1
 Author: Klara Kaleb 
 Maintainer: Klara Kaleb <klarakaleb@outlook.com>, Adrian Altenhoff <adrian.altenhoff@inf.ethz.ch>
 Description: A package for the orthology prediction data download from OMA database.
 Depends: R (>= 3.5), httr (>= 1.2.1), plyr(>= 1.8.4)
-Imports: utils, ape, Biostrings, GenomicRanges, IRanges, methods, topGO, pingr
+Imports: utils, ape, Biostrings, GenomicRanges, IRanges, methods, topGO
 License: GPL-2
 LazyData: true
 Suggests: knitr,
