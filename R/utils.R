@@ -49,8 +49,14 @@ urlGenerator <- function(type = NULL, id = NULL, detail = NULL, query_param1 = N
 }
 
 
-simpleRequest <- function (url){
-    response = load_url(url)
+simpleRequest <- function (url,body = NULL){
+    if(is.null(body)){
+        response = load_url(url)
+    }
+    else{
+        response = load_url(url,body)
+    }
+
     if (!is.null(response)){
         content_list = httr::content(response, as = "parsed")
         column_names = names(content_list)
@@ -59,13 +65,19 @@ simpleRequest <- function (url){
     return(NULL)
 }
 
-load_url <- function(url){
-
+load_url <- function(url, body = NULL){
 
     count = 0
     while(count<3){
         response <- tryCatch(
-            httr::GET(url), 
+            if(!is.null(body)){
+                 httr::POST(url, body = body, encode = "raw", accept('application/json'),content_type('application/json'))
+
+            }
+            else {
+                 httr::GET(url)
+            }
+            , 
             error = function(cond){
                 Sys.sleep(0.5)
                 return(NULL)
@@ -123,6 +135,10 @@ objectFactory <- function(column_names, content_list) {
 
             content = content_list[[name]]
 
+            if(is.null(content)){
+                content == " "
+            }
+
             if (class(content) == "list" && length(content)!=0 && name!="locus"  && name!="chromosomes") {
                 if (is.null(names(content))) {
                     formatData(content)  
@@ -146,7 +162,8 @@ objectFactory <- function(column_names, content_list) {
                 Biostrings::AAString(content)
             }
             
-            else if (name == "cdna" && !(grepl("X", content))) {
+            else if (name == "cdna") {
+                content = gsub('X','N', content)
                 Biostrings::DNAString(content)
             }
             
@@ -166,12 +183,19 @@ objectFactory <- function(column_names, content_list) {
 }
 
 
-requestFactory <- function (url) {
+requestFactory <- function (url,body=NULL) {
 
-    response = load_url(url)
+    
+    if(is.null(body)){
+        response = load_url(url)
+    }
+    else{
+        response = load_url(url,body)
+    }
     if (!is.null(response)){
         content_list = httr::content(response, as = "parsed")
         column_names = names(content_list)
+
         if(is.null(column_names)){
             if(length(content_list)==1){
                 column_names = names(content_list[[1]])
@@ -197,7 +221,7 @@ requestFactory <- function (url) {
 }
 
 formatData <- function(data) {
-
+        ## whole genome alignment
         if ("entry_1" %in% names(data[[1]])) {
             for (i in seq_along(data)) {
                 data[[i]][[1]][[7]] = rbind(data[[i]][[1]][[7]])
@@ -205,13 +229,13 @@ formatData <- function(data) {
             }
             
         }
-
+        ##hogs
         else if("alternative_levels" %in% names(data[[1]])){
             for (i in seq_along(data)) {
                 data[[i]][['alternative_levels']] = NULL
             }        
         }
-        
+        ## flatten loci
         else if ("entry_ranges" %in% names(data[[1]])) {
             
             for (i in seq_along(data)) {
@@ -221,7 +245,7 @@ formatData <- function(data) {
             }
             
         }
-
+        
         else if("sequence" %in% names(data[[1]])){
             for (i in seq_along(data)) {
                 data[[i]] = objectFactory(names(data[[i]]),data[[i]])
@@ -229,6 +253,7 @@ formatData <- function(data) {
             }
             return(data)
         }
+
      
         dfs <- lapply(data, data.frame, stringsAsFactors = FALSE)
         data = plyr::rbind.fill(dfs)

@@ -4,14 +4,14 @@
 \alias{getTaxonomy}
 \title{Get the Taxonomic tree function}
 \usage{
-getTaxonomy(root = NULL, members, newick)
+getTaxonomy(root = NULL, members, newick = TRUE)
 }
 \arguments{
 \item{root}{optional parameter, the root of the node of interest}
 
 \item{members}{optional parameter, list of member ncbi taxon or UniProt IDs that should be included in the induced taxonomy.}
 
-\item{newick}{optional parameter, boolean}
+\item{newick}{optional parameter, boolean default set to TRUE}
 }
 \value{
 an object containing the JSON keys as attributes
