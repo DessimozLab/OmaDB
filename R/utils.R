@@ -188,7 +188,8 @@ objectFactory <- function(column_names, content_list) {
 
 largeRequestFactory <- function(url, n) {
 
-    n_requests = round(n/10000)
+
+    n_requests = round(as.numeric(n)/10000)
 
     url_list = list()
 
@@ -252,7 +253,7 @@ requestFactory <- function (url,body=NULL,per_page=NULL) {
         if(per_page=='all'){
             n_items = headers(response)[['x-total-count']]
             
-            if(n_items>10000){
+            if(as.numeric(n_items)>10000){
                 largeRequestFactory(url,n = n_items)
             }
 
