@@ -4,12 +4,14 @@
 \alias{getData}
 \title{Get the Data Function}
 \usage{
-getData(type, id = NULL)
+getData(type, id = NULL, attribute = NULL)
 }
 \arguments{
 \item{type}{the type for the entry to be returned - either protein, genome or group}
 
-\item{id}{an identifier for the entry to be returned. For more information, see the "Get started with Roma" vignette.}
+\item{id}{an identifier for the entry to be returned. For more information, see the "Get started with OmaDB" vignette.}
+
+\item{attribute}{an extra attribute}
 }
 \value{
 an object containing the JSON keys as attributes

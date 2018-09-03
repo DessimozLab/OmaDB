@@ -1,5 +1,6 @@
 
-API_URL = "https://omabrowser.org/api"
+API = "https://omabrowser.org/api/"
+
 
 depth <- function(list) ifelse(is.list(list), 1L + max(sapply(list, depth)), 0L)
 
@@ -23,7 +24,7 @@ urlGenerator <- function(type = NULL, id = NULL, detail = NULL, query_param1 = N
     }
     
     
-    url_prefix = paste0(API_URL, "/", type, "/")
+    url_prefix = paste0(API, type, "/")
     if (!is.null(id)) {
         id = paste0(id, "/")
     }
@@ -67,6 +68,7 @@ simpleRequest <- function (url,body = NULL){
 
 load_url <- function(url, body = NULL){
 
+
     count = 0
     while(count<3){
         response <- tryCatch(
@@ -75,7 +77,7 @@ load_url <- function(url, body = NULL){
 
             }
             else {
-                 httr::GET(url)
+                httr::GET(url)
             }
             , 
             error = function(cond){
@@ -87,10 +89,12 @@ load_url <- function(url, body = NULL){
                 return(NULL)
             }
         )
+
         if (is.null(response)){
             count = count + 1
             next
         }
+
         if (response$status_code < 500){
             break
         }
@@ -182,8 +186,59 @@ objectFactory <- function(column_names, content_list) {
     
 }
 
+largeRequestFactory <- function(url, n) {
 
-requestFactory <- function (url,body=NULL) {
+    n_requests = round(n/10000)
+
+    url_list = list()
+
+    for(i in seq_along(1:n_requests)){
+
+        url_list[[i]] = paste0(url,'?per_page=10000&page=',i)
+
+    }
+
+    response_list = lapply(url_list, FUN = function(x) { load_url(x) } )
+
+    json_list = lapply(response_list, FUN = function(x) { httr::content(x,as = 'parsed') } )
+
+    content_list = do.call("c",json_list)
+
+    column_names = names(content_list)
+
+    if(is.null(column_names)){
+        if(length(content_list)==1){
+            column_names = names(content_list[[1]])
+            content_list = content_list[[1]]
+
+            return(objectFactory(column_names, content_list))
+         
+        }  
+
+        else if (length(content_list)!=1 && length(content_list)!=0){
+
+            return(formatData(content_list))
+
+            }
+   
+        else if (length(content_list)==0){
+
+            return(" ")
+
+        }
+            
+    } 
+
+    else {
+
+        return( objectFactory(column_names,content_list))
+
+    }
+
+return(NULL)
+}
+
+requestFactory <- function (url,body=NULL,per_page=NULL) {
 
     
     if(is.null(body)){
@@ -192,6 +247,30 @@ requestFactory <- function (url,body=NULL) {
     else{
         response = load_url(url,body)
     }
+
+    if(!is.null(per_page)){
+        if(per_page=='all'){
+            n_items = headers(response)[['x-total-count']]
+            
+            if(n_items>10000){
+                largeRequestFactory(url,n = n_items)
+            }
+
+            new_url = paste0(url,"?per_page=",as.character(n_items))
+        }
+        else{
+
+            if(per_page>10000){
+                largeRequestFactory(url,n = per_page)
+            }
+
+            new_url = paste0(url,"?per_page=",as.character(per_page))
+            
+        }
+
+        response = load_url(new_url)
+    }
+
     if (!is.null(response)){
         content_list = httr::content(response, as = "parsed")
         column_names = names(content_list)

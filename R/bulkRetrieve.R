@@ -9,10 +9,11 @@
 #' orthologs = resolveURL(getData(type="protein",id='YEAST58')$orthologs)
 #' bulkRetrieve(orthologs)
 
+#' @importFrom  jsonlite toJSON
 
 
 bulkRetrieve <- function(protein_list){
-	body = jsonlite::toJSON(list(ids=protein_list,auto_unbox=T))
-	url = "https://omabrowser.org/api/protein/bulk_retrieve/"
+	body = jsonlite::toJSON(list(ids=protein_list,auto_unbox=TRUE))
+	url = "api/protein/bulk_retrieve/"
 	return(requestFactory(url = url, body = body))
 }

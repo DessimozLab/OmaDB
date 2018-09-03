@@ -99,11 +99,11 @@ orthologs
 
 ```
 
-The orthologs for a protein are returned as a data.frame. This structure is also found in other areas of the package (e.g. the data on the members of a particular OMA group or a HOG) and hence features a number of functions to simplify its processing. For example, the user can obtain a set of genomic ranges for the proteins in a dataframe as so:
+The orthologs for a protein are returned as a data.frame. This structure is also found in other areas of the package (e.g. the data on the members of a particular OMA group or a HOG) and hence features a function getInfo() to simplify its processing. For example, the user can obtain a set of genomic ranges for the proteins in a dataframe as so:
 
 ```{r, warning=FALSE, message=FALSE}
 
-gRanges = getGRanges(orthologs)
+gRanges = getInfo(orthologs,type='genomic_ranges')
 
 str(gRanges)
 

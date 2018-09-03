@@ -12,7 +12,7 @@
 
 <meta name="author" content="Klara Kaleb" />
 
-<meta name="date" content="2018-04-27" />
+<meta name="date" content="2018-08-29" />
 
 <title>Get started with OmaDB</title>
 
@@ -70,7 +70,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">Get started with OmaDB</h1>
 <h4 class="author"><em>Klara Kaleb</em></h4>
-<h4 class="date"><em>2018-04-27</em></h4>
+<h4 class="date"><em>2018-08-29</em></h4>
 
 
 
@@ -306,8 +306,8 @@ orthologs </code></pre></div>
 ## 18           -1            TRUE      1:1  35.3357 5201.71
 ## 19           -1            TRUE      1:1  42.1286 4655.84
 ## 20           -1            TRUE      1:1   0.3903 7730.37</code></pre>
-<p>The orthologs for a protein are returned as a data.frame. This structure is also found in other areas of the package (e.g. the data on the members of a particular OMA group or a HOG) and hence features a number of functions to simplify its processing. For example, the user can obtain a set of genomic ranges for the proteins in a dataframe as so:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">gRanges =<span class="st"> </span><span class="kw">getGRanges</span>(orthologs)
+<p>The orthologs for a protein are returned as a data.frame. This structure is also found in other areas of the package (e.g. the data on the members of a particular OMA group or a HOG) and hence features a function getInfo() to simplify its processing. For example, the user can obtain a set of genomic ranges for the proteins in a dataframe as so:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">gRanges =<span class="st"> </span><span class="kw">getInfo</span>(orthologs,<span class="dt">type=</span><span class="st">'genomic_ranges'</span>)
 
 <span class="kw">str</span>(gRanges)</code></pre></div>
 <pre><code>## Formal class 'GRanges' [package &quot;GenomicRanges&quot;] with 7 slots

@@ -37,7 +37,7 @@ orthologs
 
 ## ---- warning=FALSE, message=FALSE---------------------------------------
 
-gRanges = getGRanges(orthologs)
+gRanges = getInfo(orthologs,type='genomic_ranges')
 
 str(gRanges)
 
