@@ -54,5 +54,22 @@ getInfo <- function(df,type){
 
 }
 
+getGRanges <- function(df){
+
+	return('This function has been discontinued - please use getInfo().')
+
+}
+
+getOntologies <- function(df){
+
+	return('This function has been discontinued - please use getInfo().')
+
+}
+
+getSequences <- function(df){
+
+	return('This function has been discontinued - please use getInfo().')
+}
+
 
 
