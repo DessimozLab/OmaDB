@@ -1,6 +1,6 @@
 Package: OmaDB
 Title: R wrapper for the OMA REST API
-Version: 1.1.3
+Version: 1.1.4
 Author: Klara Kaleb 
 Maintainer: Klara Kaleb <klarakaleb@outlook.com>, Adrian Altenhoff <adrian.altenhoff@inf.ethz.ch>
 Description: A package for the orthology prediction data download from OMA database.

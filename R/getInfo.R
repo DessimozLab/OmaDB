@@ -4,6 +4,7 @@
 #'
 #' @param df the dataframe or a list of dataframes containing the genomic range data of interest
 #' @param type the type of information to be retrieved
+#' @param format currently only relevant to type = ontologies where it can be set to either "geneID2GO" or "GO2geneID". Default is "geneID2GO"
 #' @return an list 
 #' @export
 #' @importFrom GenomicRanges makeGRangesFromDataFrame
@@ -11,7 +12,7 @@
 #' sequences = getInfo(df = getData("group","YEAST58")['members'],type='sequences')
 
 
-getInfo <- function(df,type){
+getInfo <- function(df,type, format = NULL){
 
 	if(!(type %in% c('genomic_ranges','domains','sequences','ontologies'))){
 		stop("You must enter a valid type of information to be retrieved.")
@@ -31,7 +32,18 @@ getInfo <- function(df,type){
 
 		object_list = lapply(df$omaid, FUN = function (x) getData(type = "protein", x))
 
-		response = formatTopGO(object_list,format="geneID2GO")
+		if(is.null(format)){
+
+			response = formatTopGO(object_list,format="geneID2GO")
+
+		}
+
+		if (!is.null(format)){
+			
+			response = formatTopGO(object_list,format= format)
+
+		}
+
 	}
 	if(type == 'sequences'){
 
