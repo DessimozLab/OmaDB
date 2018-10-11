@@ -181,6 +181,8 @@ objectFactory <- function(column_names, content_list) {
     names(list_of_variables) = column_names
     
     value <- list_of_variables
+
+    class(value) <- 'omadb_obj'
     
     return(value)
     
@@ -341,6 +343,21 @@ formatData <- function(data) {
         return(data)
     
 }
+
+
+# resolve URLs automatically when accessed
+'$.omadb_obj' <- function(x,name) {
+    if(grepl('https://',x[[name]])){
+
+        x[[name]] = resolveURL(x[[name]])
+
+    }
+
+    return(x[[name]])
+
+}
+
+
 
 
 
