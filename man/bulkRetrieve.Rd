@@ -16,6 +16,6 @@ a list of S3 objects
 The function to bulk retrieve information for a list of proteins.
 }
 \examples{
-orthologs = resolveURL(getData(type="protein",id='YEAST58')$orthologs)
+orthologs = getData(type="protein",id='YEAST58')$orthologs
 bulkRetrieve(orthologs)
 }

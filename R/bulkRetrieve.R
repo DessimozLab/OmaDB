@@ -6,7 +6,7 @@
 #' @return a list of S3 objects
 #' @export
 #' @examples
-#' orthologs = resolveURL(getData(type="protein",id='YEAST58')$orthologs)
+#' orthologs = getData(type="protein",id='YEAST58')$orthologs
 #' bulkRetrieve(orthologs)
 
 #' @importFrom  jsonlite toJSON

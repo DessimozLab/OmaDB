@@ -354,15 +354,27 @@ formatData <- function(data) {
 #' @export
 
 '$.omadb_obj' <- function(x,name) {
+
     if(grepl('https://',x[[name]])){
 
-        x[[name]] = resolveURL(x[[name]])
+        value <- resolveURL(x[[name]])
+        obj_name = deparse(substitute(x))
+        set_new_val(x, name) = value
+        assign(obj_name, x, envir = .GlobalEnv)
 
     }
 
     return(x[[name]])
 
 }
+
+"set_new_val<-" = function(x, name, value) {
+
+    x[[name]] = value
+    x
+}
+
+
 
 
 

@@ -1,6 +1,6 @@
 # OmaDB 1.1.4 (Release date: 2018-10-11)
 - format option (geneID2GO or GO2geneID) included in getInfo()
-- automatic loading of object attributes which are given as URLs upon accession
+- automatic loading and updating of object attributes which are given as URLs upon accession 
 
 # OmaDB 1.1.3 (Release date: 2018-09-03)
 - Merging of the functions dealing with the members df into one master function getInfo()
