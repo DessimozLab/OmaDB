@@ -344,8 +344,15 @@ formatData <- function(data) {
     
 }
 
+#' Resolve URLs automatically when accessed
+#' 
+#' The function to obtain further information from a given url. 
+#'
+#' @param x object
+#' @param name attribute
+#' @return API response behind the URL
+#' @export
 
-# resolve URLs automatically when accessed
 '$.omadb_obj' <- function(x,name) {
     if(grepl('https://',x[[name]])){
 
