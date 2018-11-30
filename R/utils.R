@@ -188,7 +188,7 @@ objectFactory <- function(column_names, content_list) {
     
 }
 
-largeRequestFactory <- function(url, n) {
+largeRequestFactory <- function(url, n, prefix) {
 
 
     n_requests = round(as.numeric(n)/10000)
@@ -197,7 +197,7 @@ largeRequestFactory <- function(url, n) {
 
     for(i in seq_along(1:n_requests)){
 
-        url_list[[i]] = paste0(url,'?per_page=10000&page=',i)
+        url_list[[i]] = paste0(url,prefix,'10000&page=',i)
 
     }
 
@@ -252,22 +252,31 @@ requestFactory <- function (url,body=NULL,per_page=NULL) {
     }
 
     if(!is.null(per_page)){
+
+
+        if(substr(url, nchar(url), nchar(url))=='/'){
+            prefix = '?per_page='
+        }
+        else{
+            prefix = '&per_page='
+        }
+
         if(per_page=='all'){
             n_items = headers(response)[['x-total-count']]
             
             if(as.numeric(n_items)>10000){
-                largeRequestFactory(url,n = n_items)
+                largeRequestFactory(url,n = n_items, prefix = prefix)
             }
 
-            new_url = paste0(url,"?per_page=",as.character(n_items))
+            new_url = paste0(url,prefix,as.character(n_items))
         }
         else{
 
             if(per_page>10000){
-                largeRequestFactory(url,n = per_page)
+                largeRequestFactory(url,n = per_page, prefix = prefix)
             }
 
-            new_url = paste0(url,"?per_page=",as.character(per_page))
+            new_url = paste0(url,prefix,as.character(per_page))
             
         }
 
