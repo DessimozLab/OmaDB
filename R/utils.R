@@ -364,7 +364,7 @@ formatData <- function(data) {
 
 '$.omadb_obj' <- function(x,name) {
 
-    if(grepl('https://',x[[name]])){
+    if(is.character(x[[name]]) && grepl('https://',x[[name]])){
 
         value <- resolveURL(x[[name]])
         obj_name = deparse(substitute(x))
