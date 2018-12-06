@@ -15,12 +15,8 @@ depth <- function(list) ifelse(is.list(list), 1L + max(sapply(list, depth)), 0L)
 #' @importFrom GenomicRanges makeGRangesFromDataFrame
 #' @importFrom IRanges IRanges
 
-urlGenerator <- function(type = NULL, id = NULL, detail = NULL, ...) {
-    if (!is.null(type)) {
-        type = tolower(type)
-    }
-    
-    url_prefix = paste0(API, type, "/")
+urlGenerator <- function(endpoint, id = NULL, detail = NULL, ...) {
+    url_prefix = paste0(API, tolower(endpoint), "/")
     if (!is.null(id)) {
         id = paste0(utils::URLencode(id), "/")
     }
