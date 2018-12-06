@@ -13,35 +13,22 @@
 
 
 
-mapSequence <- function(query,search,full_length=FALSE){
-	
+mapSequence <- function(query, search=NULL, full_length=FALSE){
 	if(missing(query)){
 		stop("You must provide a sequence to query.")
 	}
+	if (!is.null(search)){
+		search = tolower(search)
+		search_values = c('approximate','exact','mixed')
+		if(!search %in% search_values ){
+			stop("search parameter invalid. Must be one of 'approximate', 'exact', 'mixed'")
+		}
+    }
 
 	if(class(query)=="AAString"){
 		query = as.character(query)
 	}
-	
-	if(missing(search)){
-		url = urlGenerator(type="sequence",query_param1="query",query_param1_value=query,
-			query_param2="full_length",query_param2_value=as.character(full_length))
-	}
-
-	else{
-
-		search_values = c('approximate','exact','mixed')
-		
-		if(!search %in% search_values ){
-			stop("search parameter invalid. Must be one of 'approximate', 'exact', 'mixed'")
-		}
-		else{
-			url = urlGenerator(type="sequence",query_param1="query",query_param1_value=query,query_param2="full_length",
-				query_param2_value=as.character(full_length),query_param3="search",query_param3_value=search)
-
-		}
-	}
-	
-
+	url = urlGenerator(endpoint('sequence', query=query, full_length=full_length, 
+	                            search=search)
 	return(requestFactory(url))
 }

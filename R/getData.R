@@ -25,7 +25,7 @@ getData <- function(type, id=NULL, attribute = NULL){
 	}
 
 	if(is.null(attribute)){
-		url = urlGenerator(type=type,id=id)
+		url = urlGenerator(endpoint=type,id=id)
 
 	}
 
@@ -38,7 +38,7 @@ getData <- function(type, id=NULL, attribute = NULL){
 	}
 
 	if(!is.null(attribute) && attribute %in% c('domains','homeologs','ontology')){
-		url = urlGenerator(type=type,id = id, detail = attribute)
+		url = urlGenerator(endpoint=type, id=id, detail=attribute)
 	}
 
 	return(requestFactory(url))

@@ -9,7 +9,6 @@
 #' getXref(pattern="MAL")
 
 getXref <- function(pattern) {
-	
-	url = urlGenerator(type="xref",query_param1="search",query_param1_value=pattern)
+	url = urlGenerator(endpoint="xref",search=pattern)
 	return(requestFactory(url))
 }

@@ -29,23 +29,8 @@ getHOG <- function(id, level = NULL, members = FALSE) {
             stop("You must provide a valid identifier for a taxonomic level - 
                 it can only be idenitifed by its full capitalised name.")
         }
-    
-    if (!is.null(level)) {
-        if (members == FALSE) {
-            url = urlGenerator(type = "hog", id = id, query_param1 = "level", 
-                query_param1_value = level)
-        } else {
-            url = urlGenerator(type = "hog", id = id, detail = "members", 
-                query_param1 = "level", query_param1_value = level)
-        }
-    } else {
-        if (members == FALSE) {
-            url = urlGenerator(type = "hog", id = id)
-        } else {
-            url = urlGenerator(type = "hog", id = id, detail = "members")
-        }
-    }
-    
+    memb = if (members) "members" else NULL;
+    url = urlGenerator(endpoint="hog", id=id, detail=memb, level=level)
     return(requestFactory(url))
 }
 

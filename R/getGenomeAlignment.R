@@ -20,53 +20,11 @@ getGenomeAlignment <- function(genome_id1,genome_id2,chr1=NULL,chr2=NULL,per_pag
 		stop("You must provide IDs for both genomes.")
 	}
 	if(!is.null(rel_type)){
-		if(!(rel_type %in% c("1:1","1:n"))){
+		if(!(rel_type %in% c("1:1","1:n","m:n","m:1"))){
 			stop("You must enter a valid relationship type.")
 			}	
 	}
-
-	if(!is.null(chr1) && !is.null(chr2) && !is.null(rel_type)) {
-		
-		url = urlGenerator(type = 'pairs', id=genome_id1, detail = genome_id2,query_param1='chr1',query_param1_value=chr1,query_param2='chr2',query_param2_value=chr2,query_param3='rel_type',query_param3_value=rel_type)
-	}
-
-
-	if(is.null(chr1) && is.null(chr2) && !is.null(rel_type)) {
-		
-		url = urlGenerator(type = 'pairs', id=genome_id1, detail = genome_id2,query_param1='rel_type',query_param1_value=rel_type)
-	}
-
-	if(!is.null(chr1) && !is.null(chr2) && is.null(rel_type)) {
-		
-		url = urlGenerator(type = 'pairs', id=genome_id1, detail = genome_id2,query_param1='chr1',query_param1_value=chr1,query_param2='chr2',query_param2_value=chr2)
-	}
-
-
-	if(!is.null(chr1) && is.null(chr2) && is.null(rel_type)) {
-		
-		url = urlGenerator(type = 'pairs', id=genome_id1, detail = genome_id2,query_param1='chr1',query_param1_value=chr1)
-	}
-
-	if(is.null(chr1) && !is.null(chr2) && is.null(rel_type)) {
-		
-		url = urlGenerator(type = 'pairs', id=genome_id1, detail = genome_id2,query_param1='chr2',query_param1_value=chr2)
-	}
-
-	if(is.null(chr1) && !is.null(chr2) && !is.null(rel_type)) {
-		
-		url = urlGenerator(type = 'pairs', id=genome_id1, detail = genome_id2,query_param1='chr2',query_param1_value=chr2,query_param3='rel_type',query_param3_value=rel_type)
-	}
-
-	if(!is.null(chr1) && is.null(chr2) && !is.null(rel_type)) {
-		
-		url = urlGenerator(type = 'pairs', id=genome_id1, detail = genome_id2,query_param1='chr1',query_param1_value=chr1,query_param3='rel_type',query_param3_value=rel_type)
-	}
-
-	if(is.null(chr1) && is.null(chr2) && is.null(rel_type)) {
-		
-		url = urlGenerator(type = 'pairs', id=genome_id1, detail = genome_id2)
-	}
-	
+	url = urlGenerator(endpoint='pairs', id=genome_id1, detail=genome_id2, chr1=chr1, chr2=chr2, rel_type=rel_type);
 	return(requestFactory(url,per_page = per_page))	
 }
 
