@@ -16,21 +16,36 @@ depth <- function(list) ifelse(is.list(list), 1L + max(sapply(list, depth)), 0L)
 #' @importFrom IRanges IRanges
 
 urlGenerator <- function(endpoint, id = NULL, detail = NULL, ...) {
+
     url_prefix = paste0(API, tolower(endpoint), "/")
+
     if (!is.null(id)) {
-        id = paste0(utils::URLencode(id), "/")
+        id = paste0(utils::URLencode(as.character(id)), "/")
     }
     if (!is.null(detail)) {
-        detail = paste0(detail, "/")
+        detail = paste0(as.character(detail), "/")
     }
-    qargs = list(...)
+
+    base_url = paste0(url_prefix, id, detail)
+
+    qargs = unlist(list(...))
+
+    if (length(qargs) == 0){ return(base_url); }
+
     # remove all qargs that are NULL
     qargs[sapply(qargs, is.null)] <- NULL
-    qarg_vals = lapply(lapply(qargs, as.character), URLencode)
-    qargs = mapply(paste, names(qargs), qarg_vals, sep='=', USE.NAMES=F)
-    query_param = paste(qargs, collapse='&')
+
+    if (length(qargs) == 0){ return(base_url); }
+
+    if(length(qargs)!=0){
+
+        qarg_vals = lapply(lapply(qargs, as.character), URLencode)
+        qargs = mapply(paste, names(qargs), qarg_vals, sep='=', USE.NAMES=F)
+        query_param = paste(qargs, collapse='&')
+    }
     
-    final_url = paste(paste0(url_prefix, id, detail), query_param, sep='?')
+    final_url = paste(base_url, query_param, sep='?')
+
     return(final_url)
 }
 
@@ -154,106 +169,27 @@ objectFactory <- function(column_names, content_list) {
     names(list_of_variables) = column_names
     value <- list_of_variables
     class(value) <- 'omadb_obj'
+
     return(value)
 }
 
-largeRequestFactory <- function(url, n, prefix) {
+largeRequestFactory <- function(url, n, per_page) {
 
-
-    n_requests = round(as.numeric(n)/10000)
-
+    n_requests = round(as.numeric(n)/per_page)
+    prefix = if(substr(url,nchar(url), nchar(url))=='/') "?per_page=" else "&per_page=";
     url_list = list()
-
     for(i in seq_along(1:n_requests)){
-
-        url_list[[i]] = paste0(url,prefix,'10000&page=',i)
-
+        url_list[[i]] = paste0(url,prefix,per_page,'&page=',i)
     }
 
     response_list = lapply(url_list, FUN = function(x) { load_url(x) } )
-
     json_list = lapply(response_list, FUN = function(x) { httr::content(x,as = 'parsed') } )
-
     content_list = do.call("c",json_list)
-
-    column_names = names(content_list)
-
-    if(is.null(column_names)){
-        if(length(content_list)==1){
-            column_names = names(content_list[[1]])
-            content_list = content_list[[1]]
-
-            return(objectFactory(column_names, content_list))
-         
-        }  
-
-        else if (length(content_list)!=1 && length(content_list)!=0){
-
-            return(formatData(content_list))
-
-            }
-   
-        else if (length(content_list)==0){
-
-            return(" ")
-
-        }
-            
-    } 
-
-    else {
-
-        return( objectFactory(column_names,content_list))
-
-    }
-
-return(NULL)
+    return(content_list)
 }
 
-requestFactory <- function (url,body=NULL,per_page=NULL) {
+extractdata <- function(content_list){
 
-    
-    if(is.null(body)){
-        response = load_url(url)
-    }
-    else{
-        response = load_url(url,body)
-    }
-
-    if(!is.null(per_page)){
-
-
-        if(substr(url, nchar(url), nchar(url))=='/'){
-            prefix = '?per_page='
-        }
-        else{
-            prefix = '&per_page='
-        }
-
-        if(per_page=='all'){
-            n_items = headers(response)[['x-total-count']]
-            
-            if(as.numeric(n_items)>10000){
-                largeRequestFactory(url,n = n_items, prefix = prefix)
-            }
-
-            new_url = paste0(url,prefix,as.character(n_items))
-        }
-        else{
-
-            if(per_page>10000){
-                largeRequestFactory(url,n = per_page, prefix = prefix)
-            }
-
-            new_url = paste0(url,prefix,as.character(per_page))
-            
-        }
-
-        response = load_url(new_url)
-    }
-
-    if (!is.null(response)){
-        content_list = httr::content(response, as = "parsed")
         column_names = names(content_list)
 
         if(is.null(column_names)){
@@ -265,22 +201,58 @@ requestFactory <- function (url,body=NULL,per_page=NULL) {
              
             }  
 
-            else if (length(content_list)!=1 && length(content_list)!=0){
-                return(formatData(content_list))
-                }
-       
-            else if (length(content_list)==0){
-                return(" ")
+        else if (length(content_list)!=1 && length(content_list)!=0){
+            return(formatData(content_list))
             }
+   
+        else if (length(content_list)==0){
+            return(" ")
+        }
                 
-        } else {
-            return( objectFactory(column_names,content_list))
+        } 
+
+        else {
+            return(objectFactory(column_names,content_list))
         }
     }
-    return(NULL)
-}
 
+
+
+requestFactory <- function (url,body=NULL, per_page=50000, page=NULL) {
+
+    # sep for per_page query params is either ? or & depending if no query param so far or not
+    sep = if(substr(url, nchar(url), nchar(url))=='/') '?' else '&';
+    qq = paste0("per_page=", per_page, "&page=", if(is.null(page)) 1 else page)
+    first_url = paste(url, qq, sep=sep)
+
+
+    response = load_url(first_url, body=body)
+
+    if (is.null(response)){
+        return(NULL)
+    }
+
+    content_list = httr::content(response, as = "parsed")
+
+    n_items = headers(response)[['x-total-count']]
+
+    if (is.null(page) && !is.null(n_items)){
+        # if we need all data and data is pageinated, check if we 
+        # already have all data. if not, retrieve in parallel
+        nr_elem = length(content_list);
+        n_items = as.numeric(n_items)
+        if (nr_elem < n_items){
+            content_list = largeRequestFactory(url, n_items, per_page);
+        }
+    }
+
+    return(extractdata(content_list))
+}
+    
+
+   
 formatData <- function(data) {
+
         ## whole genome alignment
         if ("entry_1" %in% names(data[[1]])) {
             for (i in seq_along(data)) {
@@ -307,11 +279,14 @@ formatData <- function(data) {
         }
         
         else if("sequence" %in% names(data[[1]])){
+
+
             for (i in seq_along(data)) {
-                data[[i]] = objectFactory(names(data[[i]]),data[[i]])
-                
+                data[[i]] = objectFactory(names(data[[i]]),data[[i]])  
             }
+
             return(data)
+
         }
 
      

@@ -28,7 +28,7 @@ mapSequence <- function(query, search=NULL, full_length=FALSE){
 	if(class(query)=="AAString"){
 		query = as.character(query)
 	}
-	url = urlGenerator(endpoint('sequence', query=query, full_length=full_length, 
+	url = urlGenerator(endpoint='sequence', query=query, full_length=full_length, 
 	                            search=search)
 	return(requestFactory(url))
 }

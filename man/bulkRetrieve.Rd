@@ -7,15 +7,15 @@
 bulkRetrieve(protein_list)
 }
 \arguments{
-\item{protein_list}{list of protein members}
+\item{protein_list}{list of protein identifiers}
 }
 \value{
-a list of S3 objects
+a list of S3 objects containing information on the given proteins
 }
 \description{
 The function to bulk retrieve information for a list of proteins.
 }
 \examples{
 orthologs = getData(type="protein",id='YEAST58')$orthologs
-bulkRetrieve(orthologs)
+bulkRetrieve(orthologs$omaid)
 }

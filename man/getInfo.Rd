@@ -14,7 +14,7 @@ getInfo(df, type, format = NULL)
 \item{format}{currently only relevant to type = ontologies where it can be set to either "geneID2GO" or "GO2geneID". Default is "geneID2GO"}
 }
 \value{
-an list
+a list
 }
 \description{
 The function to obtain further information from a dataframe containing a list of members.

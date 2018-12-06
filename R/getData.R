@@ -14,8 +14,6 @@
 
 getData <- function(type, id=NULL, attribute = NULL){
 
-	type = tolower(type)
-
 	if(missing(type) || !(type %in% list("group","protein","genome"))){
 		stop("You must provide a valid object type.")
 	}
@@ -37,12 +35,11 @@ getData <- function(type, id=NULL, attribute = NULL){
 		stop('You must choose a valid attribute.')
 	}
 
-	if(!is.null(attribute) && attribute %in% c('domains','homeologs','ontology')){
+	if(!is.null(attribute) && attribute %in% c('domains','homeologs','ontology','orthologs')){
 		url = urlGenerator(endpoint=type, id=id, detail=attribute)
 	}
 
 	return(requestFactory(url))
 	
-
 	
 }

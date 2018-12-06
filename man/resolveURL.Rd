@@ -16,5 +16,5 @@ a data.frame containing the information behind an URL
 The function to obtain further information from a given url.
 }
 \examples{
-resolveURL(url_field="http://omadev.cs.ucl.ac.uk/api/protein/YEAST58/ontology/")
+resolveURL(url_field="https://omabrowser.org/api/protein/YEAST58/ontology/")
 }

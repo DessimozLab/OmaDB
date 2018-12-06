@@ -4,7 +4,7 @@
 \alias{getTaxonomy}
 \title{Get the Taxonomic tree function}
 \usage{
-getTaxonomy(root = NULL, members, newick = TRUE)
+getTaxonomy(root = NULL, members = NULL, newick = TRUE)
 }
 \arguments{
 \item{root}{optional parameter, the root of the node of interest}

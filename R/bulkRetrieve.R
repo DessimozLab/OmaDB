@@ -2,12 +2,12 @@
 #' 
 #' The function to bulk retrieve information for a list of proteins.
 #'
-#' @param protein_list list of protein members
-#' @return a list of S3 objects
+#' @param protein_list list of protein identifiers
+#' @return a list of S3 objects containing information on the given proteins
 #' @export
 #' @examples
 #' orthologs = getData(type="protein",id='YEAST58')$orthologs
-#' bulkRetrieve(orthologs)
+#' bulkRetrieve(orthologs$omaid)
 
 #' @importFrom  jsonlite toJSON
 

@@ -4,7 +4,7 @@
 \alias{mapSequence}
 \title{Map the Protein Sequence Function}
 \usage{
-mapSequence(query, search, full_length = FALSE)
+mapSequence(query, search = NULL, full_length = FALSE)
 }
 \arguments{
 \item{query}{the sequence to be searched, it can be either a string or an AAString object from the Biostrings package}

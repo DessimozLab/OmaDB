@@ -5,7 +5,7 @@
 #' @param df the dataframe or a list of dataframes containing the genomic range data of interest
 #' @param type the type of information to be retrieved
 #' @param format currently only relevant to type = ontologies where it can be set to either "geneID2GO" or "GO2geneID". Default is "geneID2GO"
-#' @return an list 
+#' @return a list 
 #' @export
 #' @importFrom GenomicRanges makeGRangesFromDataFrame
 #' @examples

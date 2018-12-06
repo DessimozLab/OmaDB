@@ -7,15 +7,15 @@
 #' @param chr1 the chromosome of interest for the first genome 
 #' @param chr2 the chromosome of interest for the second genome 
 #' @param rel_type the pairs relationship type
-#' @param per_page the number of instances to be returned or 'all'. default is set to a 100. 
+#' @param ... qwargs
 #' @return a dataframe containing information about both the entries in the orthologous pair and their relationship
 #' @export
 #' @examples
 #' getGenomeAlignment(genome_id1="YEAST",genome_id2="ASHGO")
-#' getGenomeAlignment(genome_id1="YEAST",genome_id2="ASHGO",chr1="1")
 
 
-getGenomeAlignment <- function(genome_id1,genome_id2,chr1=NULL,chr2=NULL,per_page=NULL,rel_type=NULL){
+
+getGenomeAlignment <- function(genome_id1,genome_id2,chr1=NULL,chr2=NULL,rel_type=NULL, ...){
 	if(missing(genome_id1) || missing(genome_id2)){
 		stop("You must provide IDs for both genomes.")
 	}
@@ -24,8 +24,12 @@ getGenomeAlignment <- function(genome_id1,genome_id2,chr1=NULL,chr2=NULL,per_pag
 			stop("You must enter a valid relationship type.")
 			}	
 	}
-	url = urlGenerator(endpoint='pairs', id=genome_id1, detail=genome_id2, chr1=chr1, chr2=chr2, rel_type=rel_type);
-	return(requestFactory(url,per_page = per_page))	
+	
+	url = urlGenerator(endpoint='pairs', id=genome_id1, detail=genome_id2, chr1=chr1, chr2=chr2, rel_type=rel_type)
+
+	print(url)
+
+	return(requestFactory(url, ... ))	
 }
 
 
