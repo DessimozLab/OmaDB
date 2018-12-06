@@ -15,38 +15,27 @@ depth <- function(list) ifelse(is.list(list), 1L + max(sapply(list, depth)), 0L)
 #' @importFrom GenomicRanges makeGRangesFromDataFrame
 #' @importFrom IRanges IRanges
 
-urlGenerator <- function(type = NULL, id = NULL, detail = NULL, query_param1 = NULL, 
-    query_param1_value = NULL, query_param2 = NULL, query_param2_value = NULL, 
-    query_param3 = NULL, query_param3_value = NULL) {
-    
+urlGenerator <- function(type = NULL, id = NULL, detail = NULL, ...) {
     if (!is.null(type)) {
         type = tolower(type)
     }
     
-    
     url_prefix = paste0(API, type, "/")
     if (!is.null(id)) {
-        id = paste0(id, "/")
+        id = paste0(utils::URLencode(id), "/")
     }
     if (!is.null(detail)) {
         detail = paste0(detail, "/")
     }
+    qargs = list(...)
+    # remove all qargs that are NULL
+    qargs[sapply(qargs, is.null)] <- NULL
+    qarg_vals = lapply(lapply(qargs, as.character), URLencode)
+    qargs = mapply(paste, names(qargs), qarg_vals, sep='=', USE.NAMES=F)
+    query_param = paste(qargs, collapse='&')
     
-    if (!is.null(query_param1_value)) {
-        query_param1 = paste0("?", query_param1, "=", utils::URLencode(query_param1_value))
-    }
-    if (!is.null(query_param2_value)) {
-        query_param2 = paste0("&", query_param2, "=", utils::URLencode(query_param2_value))
-    }
-    if (!is.null(query_param3_value)) {
-        query_param3 = paste0("&", query_param3, "=", utils::URLencode(query_param3_value))
-    }
-    
-    final_url = paste0(url_prefix, id, detail, query_param1, query_param2, 
-        query_param3)
-    
+    final_url = paste(paste0(url_prefix, id, detail), query_param, sep='?')
     return(final_url)
-    
 }
 
 
