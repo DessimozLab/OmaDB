@@ -35,14 +35,8 @@ urlGenerator <- function(endpoint, id = NULL, detail = NULL, ...) {
 }
 
 
-simpleRequest <- function (url,body = NULL){
-    if(is.null(body)){
-        response = load_url(url)
-    }
-    else{
-        response = load_url(url,body)
-    }
-
+simpleRequest <- function (url, body = NULL){
+    response = load_url(url, body=body)
     if (!is.null(response)){
         content_list = httr::content(response, as = "parsed")
         column_names = names(content_list)
@@ -52,14 +46,11 @@ simpleRequest <- function (url,body = NULL){
 }
 
 load_url <- function(url, body = NULL){
-
-
     count = 0
     while(count<3){
         response <- tryCatch(
             if(!is.null(body)){
-                 httr::POST(url, body = body, encode = "raw", accept('application/json'),content_type('application/json'))
-
+                 httr::POST(url, body=body, encode="raw", accept('application/json'),content_type('application/json'))
             }
             else {
                 httr::GET(url)
@@ -118,14 +109,12 @@ load_url <- function(url, body = NULL){
 
 
 objectFactory <- function(column_names, content_list) {
-    
-
     list_of_variables = lapply(column_names, FUN = function(name) {
 
             content = content_list[[name]]
 
             if(is.null(content)){
-                content == " "
+                content == ""
             }
 
             if (class(content) == "list" && length(content)!=0 && name!="locus"  && name!="chromosomes") {
@@ -162,15 +151,10 @@ objectFactory <- function(column_names, content_list) {
 
         })
 
-
     names(list_of_variables) = column_names
-    
     value <- list_of_variables
-
     class(value) <- 'omadb_obj'
-    
     return(value)
-    
 }
 
 largeRequestFactory <- function(url, n, prefix) {
