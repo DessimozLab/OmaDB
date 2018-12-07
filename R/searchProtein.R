@@ -6,9 +6,9 @@
 #' @return a data.frame containing information on the cross references for a given pattern
 #' @export
 #' @examples
-#' getXref(pattern="MAL")
+#' searchProtein(pattern="MAL")
 
-getXref <- function(pattern) {
+searchProtein <- function(pattern) {
 	url = urlGenerator(endpoint="xref",search=pattern)
 	return(requestFactory(url))
 }

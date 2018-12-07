@@ -1,4 +1,4 @@
-#' Get Whole Genome Alignment Function
+#' Get Genome Pairs Function
 #' 
 #' The function to obtain the list of orthologs for 2 whole genomes.
 #'
@@ -11,11 +11,11 @@
 #' @return a dataframe containing information about both the entries in the orthologous pair and their relationship
 #' @export
 #' @examples
-#' getGenomeAlignment(genome_id1="YEAST",genome_id2="ASHGO")
+#' getGenomePairs(genome_id1="YEAST",genome_id2="ASHGO")
 
 
 
-getGenomeAlignment <- function(genome_id1,genome_id2,chr1=NULL,chr2=NULL,rel_type=NULL, ...){
+getGenomePairs <- function(genome_id1,genome_id2,chr1=NULL,chr2=NULL,rel_type=NULL, ...){
 	if(missing(genome_id1) || missing(genome_id2)){
 		stop("You must provide IDs for both genomes.")
 	}
