@@ -65,7 +65,7 @@ load_url <- function(url, body = NULL){
     while(count<3){
         response <- tryCatch(
             if(!is.null(body)){
-                 httr::POST(url, body=body, encode="raw", accept('application/json'),content_type('application/json'))
+                httr::POST(url, body=body, encode="raw", httr::accept('application/json'),httr::content_type('application/json'))
             }
             else {
                 httr::GET(url)
@@ -225,7 +225,6 @@ requestFactory <- function (url,body=NULL, per_page=50000, page=NULL) {
     qq = paste0("per_page=", per_page, "&page=", if(is.null(page)) 1 else page)
     first_url = paste(url, qq, sep=sep)
 
-
     response = load_url(first_url, body=body)
 
     if (is.null(response)){
@@ -234,7 +233,7 @@ requestFactory <- function (url,body=NULL, per_page=50000, page=NULL) {
 
     content_list = httr::content(response, as = "parsed")
 
-    n_items = headers(response)[['x-total-count']]
+    n_items = httr::headers(response)[['x-total-count']]
 
     if (is.null(page) && !is.null(n_items)){
         # if we need all data and data is pageinated, check if we 
@@ -310,7 +309,7 @@ formatData <- function(data) {
 
     if(is.character(x[[name]]) && grepl('https://',x[[name]])){
 
-        value <- resolveURL(x[[name]])
+        value <- requestFactory(x[[name]])
         obj_name = deparse(substitute(x))
         set_new_val(x, name) = value
         assign(obj_name, x, envir = .GlobalEnv)
