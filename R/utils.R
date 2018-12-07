@@ -132,13 +132,14 @@ objectFactory <- function(column_names, content_list) {
                 content == ""
             }
 
-            if (class(content) == "list" && length(content)!=0 && name!="locus"  && name!="chromosomes") {
+            if (class(content) == "list" && length(content)!=0 && name!="locus" && name!="chromosomes") {
                 if (is.null(names(content))) {
-                    formatData(content)  
+                    formatData(content)  # if list, make into DF.
                 }
             }
 
             else if (name == "chromosomes") {
+
                 content = formatData(content)
                 GenomicRanges::makeGRangesFromDataFrame(content, 
                     start.field = "entry_ranges.1", end.field = "entry_ranges.2", 
@@ -192,7 +193,7 @@ extractdata <- function(content_list){
 
         column_names = names(content_list)
 
-        if(is.null(column_names)){
+        if(is.null(column_names)){ ## this is due to /hog/ formatting in the API
             if(length(content_list)==1){
                 column_names = names(content_list[[1]])
                 content_list = content_list[[1]]
@@ -252,22 +253,9 @@ requestFactory <- function (url,body=NULL, per_page=50000, page=NULL) {
    
 formatData <- function(data) {
 
-        ## whole genome alignment
-        if ("entry_1" %in% names(data[[1]])) {
-            for (i in seq_along(data)) {
-                data[[i]][[1]][[7]] = rbind(data[[i]][[1]][[7]])
-                data[[i]][[2]][[7]] = rbind(data[[i]][[2]][[7]])
-            }
-            
-        }
-        ##hogs
-        else if("alternative_levels" %in% names(data[[1]])){
-            for (i in seq_along(data)) {
-                data[[i]][['alternative_levels']] = NULL
-            }        
-        }
-        ## flatten loci
-        else if ("entry_ranges" %in% names(data[[1]])) {
+        ## flatten chromosomes in genome so that GRanges object can form
+
+        if ("entry_ranges" %in% names(data[[1]])) {
             
             for (i in seq_along(data)) {
                 data[[i]][['entry_ranges.1']] = data[[i]]['entry_ranges'][[1]][[1]][[1]]
@@ -276,9 +264,10 @@ formatData <- function(data) {
             }
             
         }
-        
-        else if("sequence" %in% names(data[[1]])){
 
+        ## to ensure bulk retrieve does not form a df
+
+        else if("sequence" %in% names(data[[1]])){
 
             for (i in seq_along(data)) {
                 data[[i]] = objectFactory(names(data[[i]]),data[[i]])  

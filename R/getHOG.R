@@ -29,8 +29,11 @@ getHOG <- function(id, level = NULL, members = FALSE) {
             stop("You must provide a valid identifier for a taxonomic level - 
                 it can only be idenitifed by its full capitalised name.")
         }
+
     memb = if (members) "members" else NULL;
+
     url = urlGenerator(endpoint="hog", id=id, detail=memb, level=level)
+    
     return(requestFactory(url))
 }
 
