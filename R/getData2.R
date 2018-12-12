@@ -1,7 +1,7 @@
 
 #' Get the Protein data function
 #' 
-#' The function to obtain the information available for a single protein or multiple proteins in the datase.
+#' The function to obtain the information available for a single protein or multiple proteins in the database.
 #'
 #' @param id identifier(s) for the entry or entries to be returned. a character string if single entry or a vector if multiple.
 #' @param attribute an extra attribute to be returned.
@@ -9,11 +9,11 @@
 #' @return an object containing the JSON keys as attributes or a dataframe
 #' @export
 #' @examples
-#' getProtein(id="MAL")
 #' getProtein(id="YEAST00001")
 #' getProtein(id="YEAST00001",attribute='ontology')
-#' getProtein(id=c("YEAST00001","YEAST00002","YEAST00002"))
-#' getProtein(id=c("YEAST00001","YEAST00002","YEAST00002"),attribute='ontology')
+#' getProtein(id=c("YEAST00001","YEAST00002","YEAST00012"))
+#' getProtein(id=c("YEAST00001","YEAST00002","YEAST00012"),attribute='ontology')
+#' getProtein(id="MAL", matchPartially=TRUE)
 
 
 getProtein <- function(id, attribute = NULL, matchPartially = FALSE){
@@ -23,45 +23,28 @@ getProtein <- function(id, attribute = NULL, matchPartially = FALSE){
 	}
 
 	if(matchPartially==TRUE){
-		
-		url = urlGenerator(endpoint="xref",search=id)
+	    if (!length(id)==1){ stop("You can only search with a single partial ID"); }
+		url = urlGenerator(endpoint="xref", search=id)
 	}
 
 	else if(length(id)==1){
-
 		url = urlGenerator(endpoint='protein', id=id, detail=attribute)	
-
 	}
 
-	else if(length(id)!=1){
- 		
- 		body = jsonlite::toJSON(list(ids=id, auto_unbox=TRUE))
+	else if(length(id) > 1){
+		body = jsonlite::toJSON(list(ids=id, auto_unbox=TRUE))
+		url = urlGenerator(endpoint = "protein", id = "bulk_retrieve")
+		data = requestFactory(url = url, body = body)
 
- 		url = urlGenerator(endpoint = "protein", id = "bulk_retrieve")
-
- 		data = requestFactory(url = url, body = body)
-
-
- 		if(is.null(attribute)){
-
- 			return(data)
-
- 		}
-
- 		else{
-
- 			attribute_data = lapply(data, function(x) if(grepl('https://',x[[attribute]])){requestFactory(x[[attribute]]) } else{ x[[attribute]] })
-
- 			return(attribute_data)
-
- 		}
-
+		if(is.null(attribute)){
+			return(data)
+		} else {
+			attribute_data = lapply(data, function(x) if(grepl('https://',x[[attribute]])){requestFactory(x[[attribute]]) } else{ x[[attribute]] })
+			return(attribute_data)
+		}
 	}
-
 	return(requestFactory(url))
-
-
-	}
+}
 
 #' Get the Genome data function
 #' 
@@ -98,23 +81,12 @@ getGenome <- function(id,attribute=NULL){
 #' getOMAGroup(id="58")
 #' getOMAGroup(id="58",attribute='close_groups')
 
-getOMAGroup <- function(id,attribute=NULL){
+getOMAGroup <- function(id, attribute=NULL){
 
 	if(!is.null(attribute) && !(attribute %in% c('close_groups'))){
 		stop("You must provide a valid attribute.")
 	}
-
 	url = urlGenerator(endpoint='group', id=id, detail=attribute)	
-
 	return(requestFactory(url))
 }
-
-
-
-
-
-
-
-
-
 
