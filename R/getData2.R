@@ -35,6 +35,7 @@ getProtein <- function(id, attribute = NULL, matchPartially = FALSE){
 		body = jsonlite::toJSON(list(ids=id, auto_unbox=TRUE))
 		url = urlGenerator(endpoint = "protein", id = "bulk_retrieve")
 		data = requestFactory(url = url, body = body)
+		names(data) <- id
 
 		if(is.null(attribute)){
 			return(data)
