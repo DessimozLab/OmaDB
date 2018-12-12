@@ -131,6 +131,10 @@ objectFactory <- function(column_names, content_list) {
             if(is.null(content)){
                 content == ""
             }
+            if (class(content) == "list" && name %in% c("children_hogs", "alternative_levels", "parent_hogs")){
+                # delete these fields
+                return(NULL)
+            }
 
             if (class(content) == "list" && length(content)!=0 && name!="locus" && name!="chromosomes") {
                 if (is.null(names(content))) {
@@ -168,6 +172,7 @@ objectFactory <- function(column_names, content_list) {
         })
 
     names(list_of_variables) = column_names
+    list_of_variables[sapply(list_of_variables, is.null)] = NULL
     value <- list_of_variables
     class(value) <- 'omadb_obj'
 
@@ -194,22 +199,20 @@ extractdata <- function(content_list){
         column_names = names(content_list)
 
         if(is.null(column_names)){ ## this is due to /hog/ formatting in the API
+            if (length(content_list) == 0){
+                return(content_list)
+            }
+            
             if(length(content_list)==1){
                 column_names = names(content_list[[1]])
                 content_list = content_list[[1]]
-
                 return(objectFactory(column_names, content_list))
              
             }  
 
-        else if (length(content_list)!=1 && length(content_list)!=0){
-            return(formatData(content_list))
+            else if (length(content_list) > 1) {
+                return(formatData(content_list))
             }
-   
-        else if (length(content_list)==0){
-            return(" ")
-        }
-                
         } 
 
         else {
@@ -265,24 +268,17 @@ formatData <- function(data) {
             
         }
 
-        ## to ensure bulk retrieve does not form a df
-
-        else if("sequence" %in% names(data[[1]])){
-
+        ## to ensure bulk retrieve nor hog-info does not form a df
+        else if("sequence" %in% names(data[[1]]) || "alternative_levels" %in% names(data[[1]])){
             for (i in seq_along(data)) {
                 data[[i]] = objectFactory(names(data[[i]]),data[[i]])  
             }
-
             return(data)
-
         }
 
-     
         dfs <- lapply(data, data.frame, stringsAsFactors = FALSE)
         data = plyr::rbind.fill(dfs)
-        
         return(data)
-    
 }
 
 #' Resolve URLs automatically when accessed
