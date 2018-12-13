@@ -1,33 +1,38 @@
-
-#' Get the Protein data function
+#' Retrieve a protein from the OMA Browser
 #' 
-#' The function to obtain the information available for a single protein or multiple proteins in the database.
+#' This function enables to retrieve information on one or several proteins from the 
+#' OMA Browser database. 
 #'
-#' @param id identifier(s) for the entry or entries to be returned. a character string if single entry or a vector if multiple.
-#' @param attribute an extra attribute to be returned.
-#' @param matchPartially boolean. If set to TRUE, in case there is no exact match is found in the database it will return top hits.
-#' @return an object containing the JSON keys as attributes or a dataframe
+#' In its simplest form the function returns the base data of the query protein.
+#' The query protein can be selected with any unique id, for example with a 
+#' UniProtKB accession (P12345), an OMA id (YEAST00012), or a RefSeq id (NP_001226).
+#' To retrieve more than one protein, you should pass a vector of IDs.
+#'
+#' Non-scalar properties of proteins such as their domains, GO annotations, 
+#' orthologs or homeologs will get loaded upon accessing them, or if you only
+#' need this information you can set the attribute parameter to the property name
+#' and retrieve this information directly.
+#'
+#' @seealso searchProtein
+#'
+#' @param id Identifier(s) for the entry or entries to be returned. a character string if single entry or a vector if multiple.
+#' @param attribute Instead of the protein, return the attribute property of the protein. Attriute needs to be one of 'domains', 'orthologs', 'ontology', or 'homoeologs'.
+#' @return An object containing the JSON keys as attributes or a dataframe containing the non-scalar protein property.
 #' @export
 #' @examples
 #' getProtein(id="YEAST00001")
-#' getProtein(id="YEAST00001",attribute='ontology')
+#' getProtein(id="YEAST00001", attribute='orthologs')
 #' getProtein(id=c("YEAST00001","YEAST00002","YEAST00012"))
-#' getProtein(id=c("YEAST00001","YEAST00002","YEAST00012"),attribute='ontology')
-#' getProtein(id="MAL", matchPartially=TRUE)
+#' getProtein(id=c("YEAST00001","YEAST00002","YEAST00012"), attribute='ontology')
 
 
-getProtein <- function(id, attribute = NULL, matchPartially = FALSE){
+getProtein <- function(id, attribute = NULL){
 
 	if(!is.null(attribute) && !(attribute %in% c('domains','homeologs','ontology','orthologs'))){
 		stop("You must provide a valid attribute.")
 	}
 
-	if(matchPartially==TRUE){
-	    if (!length(id)==1){ stop("You can only search with a single partial ID"); }
-		url = urlGenerator(endpoint="xref", search=id)
-	}
-
-	else if(length(id)==1){
+	if(length(id)==1){
 		url = urlGenerator(endpoint='protein', id=id, detail=attribute)	
 	}
 
