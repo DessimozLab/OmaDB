@@ -13,7 +13,7 @@
 #' need this information you can set the attribute parameter to the property name
 #' and retrieve this information directly.
 #'
-#' @seealso searchProtein
+#' @seealso For non-unique non-unique IDs or partial ID lookup, use [searchProtein()] instead.
 #'
 #' @param id Identifier(s) for the entry or entries to be returned. a character string if single entry or a vector if multiple.
 #' @param attribute Instead of the protein, return the attribute property of the protein. Attriute needs to be one of 'domains', 'orthologs', 'ontology', or 'homoeologs'.
@@ -52,19 +52,29 @@ getProtein <- function(id, attribute = NULL){
 	return(requestFactory(url))
 }
 
-#' Get the Genome data function
+#' Retrieve a genome from the OMA Browser database
 #' 
-#' The function to obtain the information available for a single protein or multiple proteins in the datase.
+#' This function obtains the basic information for one specific genome available
+#' on the OMA Browser, or - if no id is provided - a dataframe with all available
+#' genomes.
+#' 
+#' Ids can be either the scientific name of a species, the NCBI taxonomy id or 
+#' the UniProtKB mnemonic species code.
 #'
-#' @param id identifier(s) for the entry or entries to be returned. a character string if single entry or a vector if multiple.
-#' @param attribute an extra attribute to be returned (proteins)
+#' The optional argument attribute can be used to directly load the proteins 
+#' belonging to the genome. Alternatively, you can access the proteins attribute
+#' of the result which will transparently load the proteins from the OMA Browser.
+#'
+#' @param id A genome identifier. By default, all available genomes will be returned.
+#' @param attribute An extra attribute to be returned (proteins)
 #' @return an object containing the JSON keys as attributes or a dataframe 
 #' @export
 #' @examples
+#' getGenome()
 #' getGenome(id="HUMAN")
 #' getGenome(id="HUMAN",attribute='proteins')
 
-getGenome <- function(id,attribute=NULL){
+getGenome <- function(id=NULL, attribute=NULL){
 
 	if(!is.null(attribute) && !(attribute %in% c('proteins'))){
 		stop("You must provide a valid attribute.")
@@ -75,17 +85,29 @@ getGenome <- function(id,attribute=NULL){
 	return(requestFactory(url))
 }
 
-#' Get the OMA group data function
+#' Retrieve an OMA Group from the OMA Browser
 #' 
-#' The function to obtain the information available for a single protein or multiple proteins in the datase.
+#' This function obtains an OMA Group from the OMA Browser database. An OMA Group
+#' is defined to be a clique of proteins that are all orthologous to each other, 
+#' i.e. they are all related through speciation events only. An OMA Group can thus
+#' by definition not contain any inparalogs. It is a very stringent orthology
+#' grouping approach.
+#' OMA Groups are mostly useful to infer phylogenetic species tree where they
+#' can be used as marker genes.
 #'
-#' @param id identifier(s) for the entry or entries to be returned. a character string if single entry or a vector if multiple.
+#' Retrieving an OMA Group can be done using a group nr as id, its fingerprint
+#' (a 7mer AA sequence which is unique to proteins in that group), a member 
+#' protein id or any sequence pattern that is unique to the group.
+#'
+#' @param id An identifier for the group. See above for possible types of IDs.
 #' @param attribute an extra attribute to be returned (close_groups)
 #' @return an object containing the JSON keys as attributes or a dataframe
 #' @export
 #' @examples
 #' getOMAGroup(id="58")
-#' getOMAGroup(id="58",attribute='close_groups')
+#' getOMAGroup(id="P12345")
+#' getOMAGroup(id="NNRRGRI")
+#' getOMAGroup(id="58", attribute='close_groups')
 
 getOMAGroup <- function(id, attribute=NULL){
 
