@@ -5,7 +5,7 @@ API = "https://omabrowser.org/api/"
 depth <- function(list) ifelse(is.list(list), 1L + max(sapply(list, depth)), 0L)
 
 
-#' @importFrom utils URLencode
+#' @importFrom utils URLencode packageVersion
 #' @import httr
 #' @import plyr
 #' @import ape
@@ -14,6 +14,10 @@ depth <- function(list) ifelse(is.list(list), 1L + max(sapply(list, depth)), 0L)
 #' @importFrom GenomicRanges GRanges
 #' @importFrom GenomicRanges makeGRangesFromDataFrame
 #' @importFrom IRanges IRanges
+
+
+user_agent = paste0('r-omadb/', packageVersion('OmaDB'))
+
 
 urlGenerator <- function(endpoint, id = NULL, detail = NULL, ...) {
 
@@ -65,10 +69,16 @@ load_url <- function(url, body = NULL){
     while(count<3){
         response <- tryCatch(
             if(!is.null(body)){
-                httr::POST(url, body=body, encode="raw", httr::accept('application/json'),httr::content_type('application/json'))
+                httr::POST(url, body=body, encode="raw", 
+                           httr::accept('application/json'), 
+                           httr::content_type('application/json'),
+                           httr::user_agent(user_agent))
             }
             else {
-                httr::GET(url)
+                httr::GET(url,
+                          httr::accept('application/json'), 
+                          httr::content_type('application/json'),
+                          httr::user_agent(user_agent))
             }
             , 
             error = function(cond){
