@@ -195,7 +195,7 @@ objectFactory <- function(column_names, content_list) {
 
 largeRequestFactory <- function(url, n, per_page) {
 
-    n_requests = round(as.numeric(n)/per_page)
+    n_requests = ceiling(as.numeric(n)/per_page)
     prefix = if(substr(url,nchar(url), nchar(url))=='/') "?per_page=" else "&per_page=";
     url_list = list()
     for(i in seq_along(1:n_requests)){
@@ -236,7 +236,7 @@ extractdata <- function(content_list){
 
 
 
-requestFactory <- function (url,body=NULL, per_page=50000, page=NULL) {
+requestFactory <- function (url,body=NULL, per_page=5000, page=NULL) {
 
     # sep for per_page query params is either ? or & depending if no query param so far or not
     sep = if(substr(url, nchar(url), nchar(url))=='/') '?' else '&';
