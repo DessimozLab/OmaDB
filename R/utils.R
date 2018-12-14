@@ -116,18 +116,21 @@ load_url <- function(url, body = NULL){
         # request worked out 
         return(response)
     }, 
-    error = function(cond) {
-        message("THE OMA REST API request failed:", url)
-        message("Here's the original error message:")
+    http_400 = function(cond) {
+        reason = httr::content(response, as='parsed')
+        if (!is.null(reason)){
+            cond$message <- paste0(cond$message, " Reason: ", reason$detail)
+        }
         message(cond)
-        
+        return(NULL)
+    },
+    error = function(cond){
+        cond$message <- paste0("Request to ", url, " failed:\n", cond$message, "\n")
+        message(cond)
         return(NULL)
     },
     warning = function(cond) {
-        message("URL caused a warning:", url)
-        message("Here's the original warning message:")
-        message(cond)
-    
+        warning(cond)
         return(NULL)
     }
     )
