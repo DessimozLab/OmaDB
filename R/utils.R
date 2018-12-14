@@ -1,5 +1,4 @@
 
-API = "https://omabrowser.org/api/"
 
 
 depth <- function(list) ifelse(is.list(list), 1L + max(sapply(list, depth)), 0L)
@@ -16,12 +15,14 @@ depth <- function(list) ifelse(is.list(list), 1L + max(sapply(list, depth)), 0L)
 #' @importFrom IRanges IRanges
 
 
-user_agent = paste0('r-omadb/', packageVersion('OmaDB'))
+pkg.env = new.env()
+pkg.env$API_url <- "https://omabrowser.org/api/"
+pkg.env$user_agent <- paste0('r-omadb/', packageVersion('OmaDB'))
 
 
 urlGenerator <- function(endpoint, id = NULL, detail = NULL, ...) {
 
-    url_prefix = paste0(API, tolower(endpoint), "/")
+    url_prefix = paste0(pkg.env$API_url, tolower(endpoint), "/")
 
     if (!is.null(id)) {
         id = paste0(utils::URLencode(as.character(id)), "/")
@@ -72,13 +73,13 @@ load_url <- function(url, body = NULL){
                 httr::POST(url, body=body, encode="raw", 
                            httr::accept('application/json'), 
                            httr::content_type('application/json'),
-                           httr::user_agent(user_agent))
+                           httr::user_agent(pkg.env$user_agent))
             }
             else {
                 httr::GET(url,
                           httr::accept('application/json'), 
                           httr::content_type('application/json'),
-                          httr::user_agent(user_agent))
+                          httr::user_agent(pkg.env$user_agent))
             }
             , 
             error = function(cond){
@@ -322,7 +323,15 @@ formatData <- function(data) {
 }
 
 
-
+#' Set the url to the OMA Browser API
+#' 
+#' Function to set the base url to the OMA Browser API.
+#'
+#' @param url URL to the API
+#' @export
+setAPI <- function(url){
+    pkg.env$API_url <- url
+}
 
 
 
