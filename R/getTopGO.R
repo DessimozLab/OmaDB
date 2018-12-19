@@ -49,7 +49,7 @@ getTopGO <- function(annotations,format,myInterestingGenes){
 	}
 	if(format=="GO2geneID"){
 		GOdata = new("topGOdata", ontology = "MF", allGenes = geneList,
-              annot = topGO::annFUN.GO2gene, GO2gene = annotations)
+              annot = topGO::annFUN.GO2genes, GO2gene = annotations)
 	}
 
 	return(GOdata)

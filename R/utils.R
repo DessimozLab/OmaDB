@@ -1,6 +1,3 @@
-
-
-
 depth <- function(list) ifelse(is.list(list), 1L + max(sapply(list, depth)), 0L)
 
 
@@ -157,11 +154,7 @@ objectFactory <- function(column_names, content_list) {
             }
 
             else if (name == "chromosomes") {
-
-                content = formatData(content)
-                GenomicRanges::makeGRangesFromDataFrame(content, 
-                    start.field = "entry_ranges.1", end.field = "entry_ranges.2", 
-                    seqnames.field = "id", ignore.strand = TRUE)
+                formatData(content)
             }
             
             else if (name == "locus") {
@@ -332,6 +325,7 @@ formatData <- function(data) {
 #'
 #' @param url URL to the API
 #' @export
+
 setAPI <- function(url){
     pkg.env$API_url <- url
 }
