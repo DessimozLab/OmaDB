@@ -1,5 +1,6 @@
 .Rproj.user
 .Rhistory
 .RData
+.ipynb_checkpoints
 inst/doc
 R/objects_docs.R
