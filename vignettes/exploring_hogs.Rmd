@@ -9,7 +9,7 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-This little vignette shows you how to get started with the data available for HOGs in the `roma` package.
+This little vignette shows you how to get started with the data available for HOGs in the `OmaDB` package.
 
 ## The HOGs
 

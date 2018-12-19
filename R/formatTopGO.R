@@ -8,7 +8,7 @@
 #' @return a list containing the GO2geneID or geneID2GO information
 #' @export
 #' @examples
-#' geneList = list(getData(type="protein",id="YEAST01"),getData(type="protein",id="YEAST03"))
+#' geneList = list(getProtein(id="YEAST01"),getProtein(id="YEAST03"))
 #' annotations = formatTopGO(geneList,format="geneID2GO")
 
 

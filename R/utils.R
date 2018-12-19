@@ -135,6 +135,7 @@ load_url <- function(url, body = NULL){
 
 
 objectFactory <- function(column_names, content_list) {
+    
     list_of_variables = lapply(column_names, FUN = function(name) {
 
             content = content_list[[name]]
