@@ -2,18 +2,24 @@
 % Please edit documentation in R/annotateSequence.R
 \name{annotateSequence}
 \alias{annotateSequence}
-\title{Get GO annotation for a sequence Function}
+\title{Map GO annotation to a sequence that is not available in the OMA Browser}
 \usage{
 annotateSequence(query)
 }
 \arguments{
-\item{query}{the sequence to be annotated, it can be either a string or an AAString object from the Biostrings package}
+\item{query}{the sequence to be annotated, it can be either a string or an 
+AAString object from the Biostrings package}
 }
 \value{
-a data.frame containing the the GO annotation information of the most similar protein to the query sequence
+a data.frame containing the the GO annotation information of the 
+       most similar protein to the query sequence
 }
 \description{
-The function to obtain GO annotation for a given sequence.
+This function obtain Gene Ontology annotation for a given sequence that 
+does not need to exist in the OMA Browser so far. The query sequence will 
+analysed and a fast homology detection approach based on kmers will be used
+to detect the closest sequences in OMA. GO annotations for these top hits
+will be used to annotated the query sequence.
 }
 \examples{
 annotateSequence(query="MNDPSLLGYPNVGPQQQQQQQQQQHAGLLGKGTPNALQQQLHMNQLTGIPPPGLMNNSDVHTSSNNNSRQLLDQLANGNANMLNMNMDNNNNNNNNNNNNNNNGGGSGVMMNASTAAVNSIGMVPTVGTPVNINVNASNPLLHPHLDDPSLLNNPIWKLQLHLAAVSAQSLGQPNIYARQNAMKKYLATQQAQQAQQQAQQQAQQQVPGPFGPGPQAAPPALQPTDFQQSHIAEASKSLVDCTKQALMEMADTLTDSKTAKKQQPTGDSTPSGTATNSAVSTPLTPKIELFANGKDEANQALLQHKKLSQYSIDEDDDIENRMVMPKDSKYDDQLWHALDLSNLQIFNISANIFKYDFLTRLYLNGNSLTELPAEIKNLSNLRVLDLSHNRLTSLPAELGSCFQLKYFYFFDNMVTTLPWEFGNLCNLQFLGVEGNPLEKQFLKILTEKSVTGLIFYLRDNRPEIPLPHERRFIEINTDGEPQREYDSLQQSTEHLATDLAKRTFTVLSYNTLCQHYATPKMYRYTPSWALSWDYRRNKLKEQILSYDSDLLCLQEVESKTFEEYWVPLLDKHGYTGIFHAKARAKTMHSKDSKKVDGCCIFFKRDQFKLITKDAMDFSGAWMKHKKFQRTEDYLNRAMNKDNVALFLKLQHIPSGDTIWAVTTHLHWDPKFNDVKTFQVGVLLDHLETLLKEETSHNFRQDIKKFPVLICGDFNSYINSAVYELINTGRVQIHQEGNGRDFGYMSEKNFSHNLALKSSYNCIGELPFTNFTPSFTDVIDYIWFSTHALRVRGLLGEVDPEYVSKFIGFPNDKFPSDHIPLLARFEFMKTNTGSKKV")

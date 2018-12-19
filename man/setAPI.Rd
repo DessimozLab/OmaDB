@@ -7,8 +7,9 @@
 setAPI(url)
 }
 \arguments{
-\item{url}{URL to the API}
+\item{url}{Base url to the API}
 }
 \description{
-Function to set the base url to the OMA Browser API.
+Function to set the base url to the OMA Browser API. If no url is 
+specified, the default OMA Browser API url is used.
 }

@@ -30,5 +30,6 @@ of the result which will transparently load the proteins from the OMA Browser.
 \examples{
 getGenome()
 getGenome(id="HUMAN")
+getGenome(id=9606)
 getGenome(id="HUMAN",attribute='proteins')
 }

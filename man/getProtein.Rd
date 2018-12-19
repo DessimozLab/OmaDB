@@ -9,7 +9,7 @@ getProtein(id, attribute = NULL)
 \arguments{
 \item{id}{Identifier(s) for the entry or entries to be returned. a character string if single entry or a vector if multiple.}
 
-\item{attribute}{Instead of the protein, return the attribute property of the protein. Attriute needs to be one of 'domains', 'orthologs', 'ontology', or 'homoeologs'.}
+\item{attribute}{Instead of the protein, return the attribute property of the protein. Attriute needs to be one of 'domains', 'orthologs', 'gene_ontology', 'locus', or 'homoeologs'.}
 }
 \value{
 An object containing the JSON keys as attributes or a dataframe containing the non-scalar protein property.
@@ -33,7 +33,7 @@ and retrieve this information directly.
 getProtein(id="YEAST00001")
 getProtein(id="YEAST00001", attribute='orthologs')
 getProtein(id=c("YEAST00001","YEAST00002","YEAST00012"))
-getProtein(id=c("YEAST00001","YEAST00002","YEAST00012"), attribute='ontology')
+getProtein(id=c("YEAST00001","YEAST00002","YEAST00012"), attribute='gene_ontology')
 }
 \seealso{
 For non-unique non-unique IDs or partial ID lookup, use [searchProtein()] instead.
