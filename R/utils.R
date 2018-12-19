@@ -13,7 +13,8 @@ depth <- function(list) ifelse(is.list(list), 1L + max(sapply(list, depth)), 0L)
 
 
 pkg.env = new.env()
-pkg.env$API_url <- "https://omabrowser.org/api/"
+pkg.env$API_default_url <- "https://omabrowser.org/api/"
+pkg.env$API_url <- pkg.env$API_default_url
 pkg.env$user_agent <- paste0('r-omadb/', packageVersion('OmaDB'))
 
 
@@ -322,12 +323,19 @@ formatData <- function(data) {
 
 #' Set the url to the OMA Browser API
 #' 
-#' Function to set the base url to the OMA Browser API.
+#' Function to set the base url to the OMA Browser API. If no url is 
+#' specified, the default OMA Browser API url is used.
 #'
-#' @param url URL to the API
+#' @param url Base url to the API
 #' @export
 
 setAPI <- function(url){
+    if (missing(url)){
+        url <- pkg.env$API_default_url
+    }
+    if (substr(url, nchar(url), nchar(url)) != '/'){
+        url <- paste0(url, '/')
+    }
     pkg.env$API_url <- url
 }
 
