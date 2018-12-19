@@ -16,7 +16,7 @@
 #' @seealso For non-unique non-unique IDs or partial ID lookup, use [searchProtein()] instead.
 #'
 #' @param id Identifier(s) for the entry or entries to be returned. a character string if single entry or a vector if multiple. 
-#' @param attribute Instead of the protein, return the attribute property of the protein. Attriute needs to be one of 'domains', 'orthologs', 'gene_ontology', or 'homoeologs'.
+#' @param attribute Instead of the protein, return the attribute property of the protein. Attriute needs to be one of 'domains', 'orthologs', 'gene_ontology', 'locus', or 'homoeologs'.
 #' @return An object containing the JSON keys as attributes or a dataframe containing the non-scalar protein property.
 #' @export
 #' @examples
@@ -51,30 +51,18 @@ getProtein <- function(id, attribute = NULL){
 			
 			if( attribute == 'locus'){
 				# list of g range objects - needs to be merged into a single object
-
 				for (i in 1:length(attribute_data)){
 					if(i==1){
 						g = attribute_data[[1]]
-					}
-					else{
+					} else{
 						g = c(g,attribute_data[[i]])
-
 					}
-
-					}
-
+				}
 				return(g)
-
-			}
-
-			else{
-
+			} else{
 				attribute_data = plyr::rbind.fill(attribute_data)
 			}
-
 			return(attribute_data)
-
-
 		}
 	}
 	return(requestFactory(url))
