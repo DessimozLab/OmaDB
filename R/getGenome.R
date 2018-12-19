@@ -18,6 +18,7 @@
 #' @examples
 #' getGenome()
 #' getGenome(id="HUMAN")
+#' getGenome(id=9606)
 #' getGenome(id="HUMAN",attribute='proteins')
 
 getGenome <- function(id=NULL, attribute=NULL){
