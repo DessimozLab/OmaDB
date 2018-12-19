@@ -3,8 +3,10 @@
 #' The function to create a topGO object containing the GO annotations for the given protein list. 
 #'
 #' @param annotations list of GO annoatations obtained from the formatTopGO()
-#' @param foregroundGenes list of identifiers for the genes of interest or a dataframe containing them
-#' @param format format for the data to be returned in - either 'GO2geneID' or 'geneID2GO'
+#' @param foregroundGenes List of identifiers for the foreground genes
+#' @param format Format for the data to be returned in - either 'GO2geneID' or 'geneID2GO'
+#' @param ontology The ontology for which the enrichment should be done. This 
+#'        parameter is passed directly to the topGOdata constructor.
 #' @return topGO object
 #' @export
 #' @import topGO
@@ -15,9 +17,6 @@
 #' annotations = formatTopGO(geneList,format="geneID2GO")
 #' library(topGO)
 #' getTopGO(annotations, foregroundGenes = list("YEAST00058"), format = "geneID2GO")
-
-
-
 
 getTopGO <- function(annotations, format, foregroundGenes, ontology){
 	
@@ -38,9 +37,7 @@ getTopGO <- function(annotations, format, foregroundGenes, ontology){
 	}
 
 	geneNames <- names(annotations)
-
 	geneList <- factor(as.integer(geneNames %in% foregroundGenes))
-
 	names(geneList) <- geneNames
 
 	if(format=="geneID2GO"){
@@ -51,9 +48,7 @@ getTopGO <- function(annotations, format, foregroundGenes, ontology){
 		GOdata = new("topGOdata", ontology = ontology, allGenes = geneList,
               annot = topGO::annFUN.GO2genes, GO2gene = annotations)
 	}
-
 	return(GOdata)
-	
 }
 
 

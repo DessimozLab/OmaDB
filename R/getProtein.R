@@ -16,19 +16,19 @@
 #' @seealso For non-unique non-unique IDs or partial ID lookup, use [searchProtein()] instead.
 #'
 #' @param id Identifier(s) for the entry or entries to be returned. a character string if single entry or a vector if multiple. 
-#' @param attribute Instead of the protein, return the attribute property of the protein. Attriute needs to be one of 'domains', 'orthologs', 'ontology', or 'homoeologs'.
+#' @param attribute Instead of the protein, return the attribute property of the protein. Attriute needs to be one of 'domains', 'orthologs', 'gene_ontology', or 'homoeologs'.
 #' @return An object containing the JSON keys as attributes or a dataframe containing the non-scalar protein property.
 #' @export
 #' @examples
 #' getProtein(id="YEAST00001")
 #' getProtein(id="YEAST00001", attribute='orthologs')
 #' getProtein(id=c("YEAST00001","YEAST00002","YEAST00012"))
-#' getProtein(id=c("YEAST00001","YEAST00002","YEAST00012"), attribute='ontology')
+#' getProtein(id=c("YEAST00001","YEAST00002","YEAST00012"), attribute='gene_ontology')
 
 
 getProtein <- function(id, attribute = NULL){
 
-	if(!is.null(attribute) && !(attribute %in% c('domains','homeologs','ontology','orthologs','locus'))){
+	if(!is.null(attribute) && !(attribute %in% c('domains','homeologs','gene_ontology','orthologs','locus'))){
 		stop("You must provide a valid attribute.")
 	}
 
