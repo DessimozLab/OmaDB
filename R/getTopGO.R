@@ -19,7 +19,7 @@
 
 
 
-getTopGO <- function(annotations,format,myInterestingGenes){
+getTopGO <- function(annotations,format,myInterestingGenes,ontology){
 	
 	if(missing(annotations) || class(annotations) != "list"){
 		stop("You must provide a valid list of annotations.")
@@ -44,11 +44,11 @@ getTopGO <- function(annotations,format,myInterestingGenes){
 	names(geneList) <- geneNames
 
 	if(format=="geneID2GO"){
-		GOdata = new("topGOdata", ontology = "MF", allGenes = geneList,
+		GOdata = new("topGOdata", ontology = ontology, allGenes = geneList,
               annot = topGO::annFUN.gene2GO, gene2GO = annotations)
 	}
 	if(format=="GO2geneID"){
-		GOdata = new("topGOdata", ontology = "MF", allGenes = geneList,
+		GOdata = new("topGOdata", ontology = ontology, allGenes = geneList,
               annot = topGO::annFUN.GO2genes, GO2gene = annotations)
 	}
 

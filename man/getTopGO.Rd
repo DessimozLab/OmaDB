@@ -4,7 +4,7 @@
 \alias{getTopGO}
 \title{Get the topGO Object function}
 \usage{
-getTopGO(annotations, format, myInterestingGenes)
+getTopGO(annotations, format, myInterestingGenes, ontology)
 }
 \arguments{
 \item{annotations}{list of GO annoatations obtained from the formatTopGO()}

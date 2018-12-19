@@ -10,7 +10,7 @@ annotateSequence(query)
 \item{query}{the sequence to be annotated, it can be either a string or an AAString object from the Biostrings package}
 }
 \value{
-a data.frame containg the best matched GO annotaition information to the query sequence
+a data.frame containing the the GO annotation information of the most similar protein to the query sequence
 }
 \description{
 The function to obtain GO annotation for a given sequence.
