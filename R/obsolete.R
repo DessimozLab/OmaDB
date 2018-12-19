@@ -1,17 +1,17 @@
 getXref <- function(pattern) {
     .Deprecated("searchProtein")
-    return searchProtein(pattern)
+    return(searchProtein(pattern))
 }
 
 
 getAnnotation <- function(query){
     .Deprecated("annotateSequence")
-    return annotateSequence(query)
+    return(annotateSequence(query))
 }
 
 getGenomeAlignment <- function(genome1, genome2, chr1, chr2){
     .Deprecated("getGenomePair")
-    return getGenomePair(genome1, genome2, chr1, chr2)
+    return(getGenomePair(genome1, genome2, chr1, chr2))
 }
 
 getOntologies <- function(df){
