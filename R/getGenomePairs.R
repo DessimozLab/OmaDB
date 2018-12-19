@@ -27,8 +27,6 @@ getGenomePairs <- function(genome_id1,genome_id2,chr1=NULL,chr2=NULL,rel_type=NU
 	
 	url = urlGenerator(endpoint='pairs', id=genome_id1, detail=genome_id2, chr1=chr1, chr2=chr2, rel_type=rel_type)
 
-	print(url)
-
 	return(requestFactory(url, ... ))	
 }
 

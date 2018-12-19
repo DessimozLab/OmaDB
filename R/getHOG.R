@@ -41,9 +41,7 @@ getHOG <- function(id, level = NULL, members = FALSE) {
         }
 
     memb = if (members) "members" else NULL;
-
     url = urlGenerator(endpoint="hog", id=id, detail=memb, level=level)
-    print(url)
     return(requestFactory(url))
 }
 
