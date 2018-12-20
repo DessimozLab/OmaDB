@@ -188,7 +188,7 @@ objectFactory <- function(column_names, content_list) {
     return(value)
 }
 
-largeRequestFactory <- function(url, n, per_page, body) {
+largeRequestFactory <- function(url, n, per_page, body=NULL) {
 
     n_requests = ceiling(as.numeric(n)/per_page)
 

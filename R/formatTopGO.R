@@ -3,7 +3,7 @@
 #' 
 #' The function to create a list of GO annotations that is compatible with topGO from protein objects in roma 
 #'
-#' @param geneList the list of roma protein objects to be included in the analysis - this is where the GO annotations are extracted from
+#' @param geneList the list of OmaDB protein objects or a dataframe of ontologies to be included in the analysis - this is where the GO annotations are extracted from.
 #' @param format format for the data to be returned in - either 'GO2geneID' or 'geneID2GO'
 #' @return a list containing the GO2geneID or geneID2GO information
 #' @export
