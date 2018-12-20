@@ -1,3 +1,4 @@
+brew reinstall imagemagick@6 --with-fontconfig --with-librsvg
 #' Get the topGO Object function
 #' 
 #' The function to create a topGO object containing the GO annotations for the given protein list. 
