@@ -37,8 +37,14 @@ getProtein <- function(id, attribute = NULL){
 	}
 
 	else if(length(id) > 1){
+    MAXLEN = 100
+    nr_req = ceiling(length(id)/MAXLEN)
+    req_nr = rep(1:nr_req, each=MAXLEN)[1:length(id)]
+    split_ids = split(id, req_nr)
+    body = lapply(split_ids, FUN=function(x){
+      jsonlite::toJSON(list(ids=x, auto_unbox=TRUE))
+    })
 
-		body = jsonlite::toJSON(list(ids=id, auto_unbox=TRUE))
 		url = urlGenerator(endpoint = "protein", id = "bulk_retrieve")
 		data = requestFactory(url = url, body = body)
 		names(data) <- id

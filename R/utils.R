@@ -1,5 +1,3 @@
-depth <- function(list) ifelse(is.list(list), 1L + max(sapply(list, depth)), 0L)
-
 
 #' @importFrom utils URLencode packageVersion
 #' @import httr
@@ -189,35 +187,20 @@ objectFactory <- function(column_names, content_list) {
 }
 
 largeRequestFactory <- function(url, n, per_page, body=NULL) {
-
-    n_requests = ceiling(as.numeric(n)/per_page)
-
     if(!is.null(body)){
-
-        body_decoded = jsonlite::fromJSON(body)[[1]]
-
-        body_list = split(body_decoded, rep(1:n_requests, each = 100))
-
-        response_list = lapply(1:n_requests, FUN = function(x) { load_url(url, body = jsonlite::toJSON(list(ids=body_list[[x]], auto_unbox=TRUE))) } )
-
-
-    }
-
-    else{
-
+        response_list = lapply(body, FUN = function(x){load_url(url, body = x)})
+    } else {
+        n_requests = ceiling(as.numeric(n)/per_page)
         prefix = if(substr(url,nchar(url), nchar(url))=='/') "?per_page=" else "&per_page=";
         url_list = list()
         for(i in seq_along(1:n_requests)){
             url_list[[i]] = paste0(url, prefix, per_page,'&page=', i)
         }
-
         response_list = lapply(url_list, FUN = function(x) { load_url(x,body) } )
     }
 
     json_list = lapply(response_list, FUN = function(x) { httr::content(x,as = 'parsed') } )
-
     content_list = do.call("c",json_list)
-
     return(content_list)
 }
 
@@ -250,30 +233,21 @@ extractdata <- function(content_list){
 
 
 requestFactory <- function (url,body=NULL, per_page=5000, page=NULL) {
-
+    if (!is.null(body)){
+        return(largeRequestFactory(url, body=body))
+    }
     # sep for per_page query params is either ? or & depending if no query param so far or not
     sep = if(substr(url, nchar(url), nchar(url))=='/') '?' else '&';
     qq = paste0("per_page=", per_page, "&page=", if(is.null(page)) 1 else page)
     first_url = paste(url, qq, sep=sep)
 
-    if(!is.null(body) && length(jsonlite::fromJSON(body)[[1]])>100){
-        n_items = length(jsonlite::fromJSON(body)[[1]])
-        content_list = largeRequestFactory(url, n_items, per_page=100,body);
-
-        return(content_list)
-
-    }
-
     response = load_url(first_url, body=body)
-
     if (is.null(response)){
         return(NULL)
     }
 
     content_list = httr::content(response, as = "parsed")
-
     n_items = httr::headers(response)[['x-total-count']]
-
     if (is.null(page) && !is.null(n_items)){
         # if we need all data and data is pageinated, check if we 
         # already have all data. if not, retrieve in parallel
@@ -283,7 +257,6 @@ requestFactory <- function (url,body=NULL, per_page=5000, page=NULL) {
             content_list = largeRequestFactory(url, n_items, per_page);
         }
     }
-
     return(extractdata(content_list))
 }
     
