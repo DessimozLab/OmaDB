@@ -58,21 +58,19 @@ getProtein <- function(id, attribute = NULL){
 			return(data)
 		} else {
 
-			attribute_data = lapply(data, function(x) if(grepl('https://',x[[attribute]])){requestFactory(x[[attribute]]) } else{ x[[attribute]] })
+			attribute_data = lapply(data, function(x){
+			    if(grepl('https://',x[[attribute]])){
+			        requestFactory(x[[attribute]]) 
+			    } else { 
+			        x[[attribute]]
+			    }
+			})
 			
 			if( attribute == 'locus'){
-				# list of g range objects - needs to be merged into a single object
-				for (i in 1:length(attribute_data)){
-					if(i==1){
-						g = attribute_data[[1]]
-					} else{
-						g = c(g,attribute_data[[i]])
-					}
-				}
-				return(g)
+	  			# list of g range objects - needs to be merged into a single object
+		  	  attribute_data = suppressWarnings(do.call('c', unlist(attribute_data, use.names = FALSE)))
 			} else{
-
-				attribute_data = plyr::rbind.fill(attribute_data[sapply(attribute_data, function(x) class(x) == 'data.frame')])
+			  	attribute_data = plyr::rbind.fill(attribute_data[sapply(attribute_data, function(x) class(x) == 'data.frame')])
 			}
 			return(attribute_data)
 		}
