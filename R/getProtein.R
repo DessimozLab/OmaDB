@@ -47,6 +47,11 @@ getProtein <- function(id, attribute = NULL){
 
 		url = urlGenerator(endpoint = "protein", id = "bulk_retrieve")
 		data = requestFactory(url = url, body = body)
+		# make all proteins objects
+		data = lapply(data, FUN=function(prot){
+		    n = names(prot);
+		    objectFactory(n, prot)
+		})
 		names(data) <- id
 
 		if(is.null(attribute)){
