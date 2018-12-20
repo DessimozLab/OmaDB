@@ -19,7 +19,19 @@ formatTopGO <- function(geneList,format){
 		stop("Invalid format. Must be either 'GO2geneID' or 'geneID2GO'")
 	}
 
-	geneID2GO = lapply(geneList, FUN = function(protein) {
+	if(class(geneList) == "data.frame"){
+
+		geneNames = unique(geneList$entry_nr)
+		geneListFormatted = lapply(geneNames, function(x) geneList[geneList$entry_nr==x,]$GO_term)
+
+		names(geneListFormatted) = geneNames
+
+		geneID2GO = geneListFormatted
+
+	}
+
+	else{
+		geneID2GO = lapply(geneList, FUN = function(protein) {
 		
 		if(startsWith(protein[['gene_ontology']],"https://")){
 			annotation = protein$gene_ontology
@@ -38,7 +50,11 @@ formatTopGO <- function(geneList,format){
 		}
 	})
 
-	names(geneID2GO) = lapply(geneList, FUN = function(protein){ protein$omaid })
+		names(geneID2GO) = lapply(geneList, FUN = function(protein){ protein$omaid })
+
+	}
+
+	
 	if(format=="geneID2GO"){
 			return(geneID2GO)
 	}

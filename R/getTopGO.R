@@ -13,12 +13,16 @@
 #' @importFrom topGO annFUN.gene2GO
 #' @importFrom methods new
 #' @examples 
-#' geneList = list(getData(type="protein",id="YEAST58"),getData(type="protein",id="YEAST00059"))
+#' geneList = list(getProtein(id="YEAST58"),getProtein(id="YEAST00059"))
 #' annotations = formatTopGO(geneList,format="geneID2GO")
 #' library(topGO)
-#' getTopGO(annotations, foregroundGenes = list("YEAST00058"), format = "geneID2GO")
+#' getTopGO(annotations, foregroundGenes = list("YEAST00058"), format = "geneID2GO", ontology = 'BP')
 
 getTopGO <- function(annotations, format, foregroundGenes, ontology){
+
+	if(missing(ontology)){
+		stop('You must provide the ontology for which the enrichment should be done.')
+	}
 	
 	if(missing(annotations) || class(annotations) != "list"){
 		stop("You must provide a valid list of annotations.")

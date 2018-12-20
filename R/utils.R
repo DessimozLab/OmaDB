@@ -188,18 +188,36 @@ objectFactory <- function(column_names, content_list) {
     return(value)
 }
 
-largeRequestFactory <- function(url, n, per_page) {
+largeRequestFactory <- function(url, n, per_page, body) {
 
     n_requests = ceiling(as.numeric(n)/per_page)
-    prefix = if(substr(url,nchar(url), nchar(url))=='/') "?per_page=" else "&per_page=";
-    url_list = list()
-    for(i in seq_along(1:n_requests)){
-        url_list[[i]] = paste0(url,prefix,per_page,'&page=',i)
+
+    if(!is.null(body)){
+
+        body_decoded = jsonlite::fromJSON(body)[[1]]
+
+        body_list = split(body_decoded, rep(1:n_requests, each = 100))
+
+        response_list = lapply(1:n_requests, FUN = function(x) { load_url(url, body = jsonlite::toJSON(list(ids=body_list[[x]], auto_unbox=TRUE))) } )
+
+
     }
 
-    response_list = lapply(url_list, FUN = function(x) { load_url(x) } )
+    else{
+
+        prefix = if(substr(url,nchar(url), nchar(url))=='/') "?per_page=" else "&per_page=";
+        url_list = list()
+        for(i in seq_along(1:n_requests)){
+            url_list[[i]] = paste0(url, prefix, per_page,'&page=', i)
+        }
+
+        response_list = lapply(url_list, FUN = function(x) { load_url(x,body) } )
+    }
+
     json_list = lapply(response_list, FUN = function(x) { httr::content(x,as = 'parsed') } )
+
     content_list = do.call("c",json_list)
+
     return(content_list)
 }
 
@@ -237,6 +255,14 @@ requestFactory <- function (url,body=NULL, per_page=5000, page=NULL) {
     sep = if(substr(url, nchar(url), nchar(url))=='/') '?' else '&';
     qq = paste0("per_page=", per_page, "&page=", if(is.null(page)) 1 else page)
     first_url = paste(url, qq, sep=sep)
+
+    if(!is.null(body) && length(jsonlite::fromJSON(body)[[1]])>100){
+        n_items = length(jsonlite::fromJSON(body)[[1]])
+        content_list = largeRequestFactory(url, n_items, per_page=100,body);
+
+        return(content_list)
+
+    }
 
     response = load_url(first_url, body=body)
 

@@ -23,8 +23,8 @@ topGO object
 The function to create a topGO object containing the GO annotations for the given protein list.
 }
 \examples{
-geneList = list(getData(type="protein",id="YEAST58"),getData(type="protein",id="YEAST00059"))
+geneList = list(getProtein(id="YEAST58"),getProtein(id="YEAST00059"))
 annotations = formatTopGO(geneList,format="geneID2GO")
 library(topGO)
-getTopGO(annotations, foregroundGenes = list("YEAST00058"), format = "geneID2GO")
+getTopGO(annotations, foregroundGenes = list("YEAST00058"), format = "geneID2GO", ontology = 'BP')
 }

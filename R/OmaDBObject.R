@@ -6,7 +6,7 @@
 #' @return an list of object attributes and their data classes
 #' @export
 #' @examples
-#' attributes = getObjectAttributes(getData("group","YEAST58"))
+#' attributes = getObjectAttributes(getOMAGroup(id ="YEAST58"))
 
 
 getObjectAttributes <- function (obj){
@@ -33,7 +33,7 @@ getObjectAttributes <- function (obj){
 #' @return an value for a given object attribute
 #' @export
 #' @examples
-#' members = getAttribute(getData("group","YEAST58"),'members')
+#' members = getAttribute(getOMAGroup(id ="YEAST58"),'members')
 
 
 getAttribute <- function (obj,attribute){

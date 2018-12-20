@@ -16,5 +16,5 @@ an list of object attributes and their data classes
 The function to obtain the attributes and their data types for the object created.
 }
 \examples{
-attributes = getObjectAttributes(getData("group","YEAST58"))
+attributes = getObjectAttributes(getOMAGroup(id ="YEAST58"))
 }

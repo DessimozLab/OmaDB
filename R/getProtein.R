@@ -60,7 +60,8 @@ getProtein <- function(id, attribute = NULL){
 				}
 				return(g)
 			} else{
-				attribute_data = plyr::rbind.fill(attribute_data)
+
+				attribute_data = plyr::rbind.fill(attribute_data[sapply(attribute_data, function(x) class(x) == 'data.frame')])
 			}
 			return(attribute_data)
 		}

@@ -11,17 +11,17 @@ getAnnotation <- function(query){
 
 getGenomeAlignment <- function(genome1, genome2, chr1, chr2){
     .Deprecated("getGenomePair")
-    return(getGenomePair(genome1, genome2, chr1, chr2))
+    return(getGenomePairs(genome1, genome2, chr1, chr2))
 }
 
 getOntologies <- function(df){
     .Deprecated("getProtein")
-    return(getProtein(ids=df$oma_id)$gene_ontology)
+    return(getProtein(id=df$oma_id)$gene_ontology)
 }
 
 getSequences <- function(df){
     .Deprecated("getProtein")
-    return(getProtein(ids=df$oma_id)$sequence)
+    return(getProtein(id=df$oma_id)$sequence)
 }
 
 getData <- function(type, id, attribute){
