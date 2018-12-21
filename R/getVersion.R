@@ -1,6 +1,6 @@
 #' Get the API and database version function
-#' 
-#' The function to obtain the API and database version that the package is using. 
+#'
+#' The function to obtain the API and database version that the package is using.
 #'
 #' @return S3 object
 #' @export
@@ -8,9 +8,7 @@
 #' getVersion()
 
 
-getVersion <- function(){
-
-	url = urlGenerator(endpoint='version')
-
-	return(requestFactory(url))
+getVersion <- function() {
+    url <- urlGenerator(endpoint = "version")
+    return(requestFactory(url))
 }

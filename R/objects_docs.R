@@ -1,4 +1,4 @@
-#' An example HOG object. 
+#' An example HOG object.
 #'
 #' An object containing information for the HOG:0273533.1b.
 #'
@@ -17,7 +17,7 @@
 #' @source \url{https://omabrowser.org/api/hog/HOG:0273533.1b/}
 "hog"
 
-#' An example OMA group object. 
+#' An example OMA group object.
 #'
 #' An object containing information for the OMA group number 737636.
 #'
@@ -32,7 +32,7 @@
 #' @source \url{https://omabrowser.org/api/group/YEAST58/}
 "group"
 
-#' An example orthologs object. 
+#' An example orthologs object.
 #'
 #' A dataframe containing information for the orthologs of protein YEAST00058.
 #'
@@ -57,7 +57,7 @@
 #' @source \url{https://omabrowser.org/api/protein/YEAST00058/orthologs}
 "orthologs"
 
-#' An example genome alignment object. 
+#' An example genome alignment object.
 #'
 #' A dataframe containing information for the whole genome aligment of YEAST and ASHGO.
 #'
@@ -82,7 +82,7 @@
 #' @source \url{https://omabrowser.org/api/pairs/YEAST/ASHGO/}
 "pairs"
 
-#' An example protein object. 
+#' An example protein object.
 #'
 #' An object containing information for the YEAST00058 protein.
 #'
@@ -116,7 +116,7 @@
 #' @source \url{https://omabrowser.org/api/protein/6633022/}
 "protein"
 
-#' An example newick format taxonomy object. 
+#' An example newick format taxonomy object.
 #'
 #'
 #' @format An S3 with 2 variables:
@@ -129,7 +129,7 @@
 "taxonomy"
 
 
-#' An example dataframe containing proteins identified from a given sequence. 
+#' An example dataframe containing proteins identified from a given sequence.
 #'
 #'
 #' @format A dataframe with 3 variables:
@@ -142,7 +142,7 @@
 #' @source \url{https://omabrowser.org/api/sequences/?query=MNDPSLLGYPNVGPQQQQQQQQQQHAGLLGKGTPNALQQQLHMNQLTGIPPPGLMNNSDVHTSSNNNSRQLLDQLANGNANMLNMNMDNNNNNNNNNNNNNNNGGGSGVMMNASTAAVNSIGMVPTVGTPVNINVNASNPLLHPHLDDPSLLNNPIWKLQLHLAAVSAQSLGQPNIYARQNAMKKYLATQQAQQAQQQAQQQAQQQVPGPFGPGPQAAPPALQPTDFQQSHIAEASKSLVDCTKQALMEMADTLTDSKTAKKQQPTGDSTPSGTATNSAVSTPLTPKIELFANGKDEANQALLQHKKLSQYSIDEDDDIENRMVMPKDSKYDDQLWHALDLSNLQIFNISANIFKYDFLTRLYLNGNSLTELPAEIKNLSNLRVLDLSHNRLTSLPAELGSCFQLKYFYFFDNMVTTLPWEFGNLCNLQFLGVEGNPLEKQFLKILTEKSVTGLIFYLRDNRPEIPLPHER}
 "sequence_map"
 
-#' An example xref object. 
+#' An example xref object.
 #'
 #'
 #' @format A dataframe with 8 variables:
@@ -160,7 +160,7 @@
 #' @source \url{https://omabrowser.org/api/xref/?search=MAL}
 "xref"
 
-#' An example dataframe containing GO annotations identified from a given sequence. 
+#' An example dataframe containing GO annotations identified from a given sequence.
 #'
 #'
 #' @format A dataframe with 13 variables:

@@ -1,9 +1,9 @@
 #' @title Deprecated functions in package \pkg{OmaDB}.
-#' @description These functions are provided for compatibility with 
-#' older versions of \pkg{OmaDB} only, and will be defunct at the 
+#' @description These functions are provided for compatibility with
+#' older versions of \pkg{OmaDB} only, and will be defunct at the
 #' next release.
-#' 
-#' @details The following functions are deprecated and will be 
+#'
+#' @details The following functions are deprecated and will be
 #' made defunct; use the replacement indicated below:
 #'
 #' @name OmaDB-deprecated
@@ -18,7 +18,7 @@ NULL
 #'
 #' @param pattern the pattern to query the OMA database with - needs to be at least 3 characters long
 #' @return a data.frame containing information on the cross references for a given pattern
-#' 
+#'
 #' @templateVar fun getXref
 #' @template template-depr_fun
 NULL
@@ -26,7 +26,7 @@ NULL
 #' @templateVar old getXref
 #' @templateVar new searchProtein
 #' @template template-depr_pkg
-#'   
+#'
 #' @export
 getXref <- function(pattern) {
     .Deprecated("searchProtein")
@@ -39,7 +39,7 @@ getXref <- function(pattern) {
 #'
 #' @param query the sequence to be annotated, it can be either a string or an AAString object from the Biostrings package
 #' @return a data.frame containg the GO annotaition information linked to the query sequence
-#' 
+#'
 #' @templateVar fun getAnnotation
 #' @template template-depr_fun
 NULL
@@ -48,7 +48,7 @@ NULL
 #' @templateVar new annotateSequence
 #' @template template-depr_pkg
 #' @export
-getAnnotation <- function(query){
+getAnnotation <- function(query) {
     .Deprecated("annotateSequence")
     return(annotateSequence(query))
 }
@@ -64,7 +64,7 @@ getAnnotation <- function(query){
 #' @param rel_type the pairs relationship type
 #' @param per_page the number of instances to be returned or 'all'. default is set to a 100.
 #' @return a dataframe containing information about both the entries in the orthologous pair and their relationship
-#' 
+#'
 #' @templateVar fun getGenomeAlignment
 #' @template template-depr_fun
 NULL
@@ -72,9 +72,9 @@ NULL
 #' @templateVar old getGenomeAlignment
 #' @templateVar new getGenomePair
 #' @template template-depr_pkg
-#' 
+#'
 #' @export
-getGenomeAlignment <- function(genome1, genome2, chr1=NULL, chr2=NULL, rel_type=NULL){
+getGenomeAlignment <- function(genome1, genome2, chr1 = NULL, chr2 = NULL, rel_type = NULL) {
     .Deprecated("getGenomePair")
     return(getGenomePairs(genome1, genome2, chr1, chr2, rel_type))
 }
@@ -86,16 +86,16 @@ getGenomeAlignment <- function(genome1, genome2, chr1=NULL, chr2=NULL, rel_type=
 #' This function should no longer be used. It has been divided into several functions:
 #' Use the following functions instead.
 #' \itemize{
-#'   \item \code{\link{getProtein}} to obtain proteins (former \code{type="protein"})
-#'   \item \code{\link{getGenome}} to obtain genomes (former \code{type="genome"})
-#'   \item \code{\link{getOMAGroup}} to obtain genomes (former \code{type="group"})
+#'   \item \code{\link{getProtein}} to obtain proteins (former \code{type='protein'})
+#'   \item \code{\link{getGenome}} to obtain genomes (former \code{type='genome'})
+#'   \item \code{\link{getOMAGroup}} to obtain genomes (former \code{type='group'})
 #' }
 #'
 #' @param type the type for the entry to be returned - either protein, genome or group
-#' @param id an identifier for the entry to be returned. For more information, see the "Get started with OmaDB" vigne  tte.
+#' @param id an identifier for the entry to be returned. For more information, see the 'Get started with OmaDB' vigne  tte.
 #' @param attribute an extra attribute
 #' @return an object containing the JSON keys as attributes
-#' 
+#'
 #' @templateVar fun getData
 #' @template template-depr_fun
 NULL
@@ -105,14 +105,14 @@ NULL
 #' @template template-depr_pkg
 #'
 #' @export
-getData <- function(type, id, attribute=NULL){
-    if (type == "group"){
+getData <- function(type, id, attribute = NULL) {
+    if (type == "group") {
         .Deprecated("getOMAGroup")
         return(getOMAGroup(id, attribute))
-    } else if (type == "genome"){
+    } else if (type == "genome") {
         .Deprecated("getGenome")
         return(getGenome(id, attribute))
-    } else if (type == "protein"){
+    } else if (type == "protein") {
         .Deprecated("getProtein")
         return(getProtein(id, attribute))
     } else {
