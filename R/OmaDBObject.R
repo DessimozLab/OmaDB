@@ -37,5 +37,15 @@ getObjectAttributes <- function (obj){
 
 
 getAttribute <- function (obj,attribute){
+
+    if(is.character(obj[[attribute]]) && grepl('https://',obj[[attribute]])){
+
+	    value <- requestFactory(obj[[attribute]])
+	    obj_name = deparse(substitute(obj))
+	    set_new_val(obj, attribute) = value
+	    assign(obj_name, obj, envir = .GlobalEnv)
+
+    }
+
 	return(obj[[attribute]])
 }

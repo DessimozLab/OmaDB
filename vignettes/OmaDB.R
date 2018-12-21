@@ -5,6 +5,7 @@ xref = load('../data/xref.rda')
 
 head(xref)
 
+
 ## ---- warning=FALSE, message=FALSE---------------------------------------
 
 load('../data/pairs.rda')
@@ -22,23 +23,5 @@ group$fingerprint
 
 getAttribute(group, 'fingerprint')
 
-
-
-## ---- warning=FALSE, message=FALSE---------------------------------------
-
-load('../data/protein.rda')
-
-getAttribute(protein,'orthologs')
-
-load('../data/orthologs.rda')
-
-orthologs 
-
-
-## ---- warning=FALSE, message=FALSE---------------------------------------
-
-gRanges = getInfo(orthologs,type='genomic_ranges')
-
-str(gRanges)
 
 

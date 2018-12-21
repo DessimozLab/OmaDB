@@ -12,7 +12,7 @@
 
 <meta name="author" content="Klara Kaleb" />
 
-<meta name="date" content="2018-08-29" />
+<meta name="date" content="2018-12-21" />
 
 <title>Sequence Analysis with OmaDB</title>
 
@@ -70,14 +70,14 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">Sequence Analysis with OmaDB</h1>
 <h4 class="author"><em>Klara Kaleb</em></h4>
-<h4 class="date"><em>2018-08-29</em></h4>
+<h4 class="date"><em>2018-12-21</em></h4>
 
 
 
-<p>One useful function of the roma package is its functionality to exactly and partially match sequences. We will explore this further in this vignette.</p>
+<p>Another useful function of the OmaDB package is its functionality to exactly and partially match sequences. We will explore this further in this vignette.</p>
 <p>Let’s say we have a sequence of interest that we want to map, in this case:</p>
-<p>“MNDPSLLGYPNVGPQQQQQQQQQQHAGLLGKGTPNALQQQLHMNQLTGIPPPGLMNNSDVHTSSNNNSRQLLDQLANGNANMLNMNMDNNNNNNNNNNNNNNNGGGSGVMMNASTAAVNSIGMVPTVGTPVNINVNASNPLLHPHLDDPSLLNNPIWKLQLHLAAVSAQSLGQPNIYARQNAMKKYLATQQAQQAQQQAQQQAQQQVPGPFGPGPQAAPPALQPTDFQQSHIAEASKSLVDCTKQALMEMADTLTDSKTAKKQQPTGDSTPSGTATNSAVSTPLTPKIELFANGKDEANQALLQHKKLSQYSIDEDDDIENRMVMPKDSKYDDQLWHALDLSNLQIFNISANIFKYDFLTRLYLNGNSLTELPAEIKNLSNLRVLDLSHNRLTSLPAELGSCFQLKYFYFFDNMVTTLPWEFGNLCNLQFLGVEGNPLEKQFLKILTEKSVTGLIFYLRDNRPEIPLPHER”</p>
-<p>We can pass it to the mapSequence() function which returns a list of targets. From this list we can then construct roma protein objects for which we can obtain further infromation - such as its oma group or its domains. The example response object is below.</p>
+<p>sequence = “MNDPSLLGYPNVGPQQQQQQQQQQHAGLLGKGTPNALQQQLHMNQLTGIPPPGLMNNSDVHTSSNNNSRQLLDQLANGNANMLNMNMDNNNNNNNNNNNNNNNGGGSGVMMNASTAAVNSIGMVPTVGTPVNINVNASNPLLHPHLDDPSLLNNPIWKLQLHLAAVSAQSLGQPNIYARQNAMKKYLATQQAQQAQQQAQQQAQQQVPGPFGPGPQAAPPALQPTDFQQSHIAEASKSLVDCTKQALMEMADTLTDSKTAKKQQPTGDSTPSGTATNSAVSTPLTPKIELFANGKDEANQALLQHKKLSQYSIDEDDDIENRMVMPKDSKYDDQLWHALDLSNLQIFNISANIFKYDFLTRLYLNGNSLTELPAEIKNLSNLRVLDLSHNRLTSLPAELGSCFQLKYFYFFDNMVTTLPWEFGNLCNLQFLGVEGNPLEKQFLKILTEKSVTGLIFYLRDNRPEIPLPHER”</p>
+<p>We can pass it to the mapSequence() function which returns a list of targets. From this list we can then construct protein objects for which we can obtain further infromation - such as its oma group or its domains. The example response object, generated via mapSequence(sequence), is below.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(OmaDB)
 
 <span class="kw">load</span>(<span class="st">'../data/sequence_map.rda'</span>)
@@ -91,7 +91,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <span class="kw">length</span>(targets) </code></pre></div>
 <pre><code>## [1] 1</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">protein =<span class="st"> </span>targets[[<span class="dv">1</span>]][[<span class="st">'entry_url'</span>]]</code></pre></div>
-<p>One can also directly obtain GO annotations for a given query sequence, which results in an object as below:</p>
+<p>One can also directly obtain GO annotations for a given query sequence (protein$ogene_ontology), which results in an object as below:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">load</span>(<span class="st">'../data/sequence_annotation.rda'</span>)
 
 sequence_annotation </code></pre></div>

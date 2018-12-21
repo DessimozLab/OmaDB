@@ -1,3 +1,5 @@
+^Meta$
+^doc$
 ^.*\.Rproj$
 ^\.Rproj\.user$
 
@@ -8,3 +10,4 @@ R/.DS_Store
 man/.DS_Store
 tests/.DS_Store
 manuscript_examples.ipynb
+.ipynb_checkpoints

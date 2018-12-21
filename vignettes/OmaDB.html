@@ -12,7 +12,7 @@
 
 <meta name="author" content="Klara Kaleb" />
 
-<meta name="date" content="2018-08-29" />
+<meta name="date" content="2018-12-21" />
 
 <title>Get started with OmaDB</title>
 
@@ -70,21 +70,23 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">Get started with OmaDB</h1>
 <h4 class="author"><em>Klara Kaleb</em></h4>
-<h4 class="date"><em>2018-08-29</em></h4>
+<h4 class="date"><em>2018-12-21</em></h4>
 
 
 
-<p>This little vignette shows you how to get started with the <code>roma</code> package. roma is a wrapper for the REST API for the Orthologous MAtrix project (OMA) which is a database for the inference of orthologs among complete genomes.</p>
+<p>This little vignette shows you how to get started with the <code>OmaDB</code> package. OmaDB is a wrapper for the REST API for the Orthologous MAtrix project (OMA) which is a database for the inference of orthologs among complete genomes.</p>
 <p>For more details on the OMA project, see <a href="https://omabrowser.org/oma/home/" class="uri">https://omabrowser.org/oma/home/</a>.</p>
+<p>Note that each function in the package has its own individual documentation, which can be accessed by putting a question mark (?) in front of the function name e.g. ?getProtein() .</p>
 <div id="some-useful-functions" class="section level2">
 <h2>Some useful functions</h2>
-<p>The package contains a range of functions that are used to query the database in an R friendly way. This vignette describes some of them, whereas the rest are described in more detail in other vignettes:</p>
+<p>The package contains a range of functions that are used to query the database in an R friendly way. This vignette highlights some of them, whereas some others are described in more detail in other vignettes:</p>
 <p><a href="exploring_hogs.html">Exploring Hierarchical orthologous groups with roma</a></p>
 <p><a href="tree_visualisation.html">Exploring Taxonomic trees with roma</a></p>
 <p><a href="sequence_mapping.html">Sequence Analysis with roma</a></p>
-<div id="getxref" class="section level3">
-<h3>getXref</h3>
-<p>This function searches the OMA database for entries containing the pattern defined and returns the results in a dataframe. Hence, it is usually a good starting place. Sample response is below.</p>
+<p>Note that all of the vignettes focus on exploring the example responses generated previously, allowing them to build with or without an internet connection. For each example response, the query that generated it is given.</p>
+<div id="searchprotein" class="section level3">
+<h3>searchProtein</h3>
+<p>This function searches the OMA database for entries containing the pattern defined and returns the results in a dataframe. Hence, it is usually a good starting place. Example response, generated via searchProtein(‘MAL’), is below.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(OmaDB)
 
 xref =<span class="st"> </span><span class="kw">load</span>(<span class="st">'../data/xref.rda'</span>)
@@ -92,9 +94,9 @@ xref =<span class="st"> </span><span class="kw">load</span>(<span class="st">'..
 <span class="kw">head</span>(xref)</code></pre></div>
 <pre><code>## [1] &quot;xref&quot;</code></pre>
 </div>
-<div id="getgenomealignment" class="section level3">
-<h3>getGenomeAlignment</h3>
-<p>This function serves to obtain the orthologs for 2 whole genomes. The result is a dataframe containing information on each member in the pair and their relationship.</p>
+<div id="getgenomepairs" class="section level3">
+<h3>getGenomePairs</h3>
+<p>This function serves to obtain the orthologs for 2 whole genomes. The result is a dataframe containing information on each member in the pair and their relationship. Below is the representation of the example response, generated using getGenomePairs(‘YEAST’,‘ASHGO’).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">load</span>(<span class="st">'../data/pairs.rda'</span>)
 
 <span class="kw">head</span>(pairs)</code></pre></div>
@@ -169,36 +171,18 @@ xref =<span class="st"> </span><span class="kw">load</span>(<span class="st">'..
 ## 5  58.0000 5548.40
 ## 6  90.0000 1844.35</code></pre>
 </div>
-<div id="getdata" class="section level3">
-<h3>getData</h3>
-<p>This master-function function serves to obtain the information for a single entry in a database - either a group, protein or a genome. The data type is specified by setting the “type” argument and a specific entry by its ID - below are the possible ID’s for different object type.</p>
-<ul>
-<li>Protein
-<ul>
-<li>oma id</li>
-<li>canonical id</li>
-<li>entry number - release specific</li>
-</ul></li>
-<li>Genome
-<ul>
-<li>NCBI taxon id</li>
-<li>UniProt species code</li>
-</ul></li>
-<li>Group
-<ul>
-<li>group number</li>
-<li>group fingerprint</li>
-<li>id of one of its members</li>
-</ul></li>
-</ul>
+<div id="getprotein" class="section level3">
+<h3>getProtein</h3>
+<p>This function serves to obtain the information for either a single protein entry or multiple protein entries in a database. For more info, see ?getProtein(). There are similar functions to obtain information on genomes, OMA groups and HOGs i.e. getGenome(), getOMAGroup() and getHOG() respectively.</p>
 </div>
 <div id="getobjectattributes" class="section level3">
 <h3>getObjectAttributes</h3>
-<p>The result of the getData function is an S3 Object with attributes corresponding to the information requested. This function allows the user to list all the object attributes and their corresponding data types.</p>
+<p>Single entries in the database are represented as S3 objects, with their attributes corresponding to the information requested. These attributes vary greatly from object to object, and the helper function getObjectAttributes() allows the user to list all the object attributes and their corresponding data types.</p>
 </div>
 <div id="getattribute" class="section level3">
 <h3>getAttribute</h3>
 <p>The specific attributes of the created object can be accessed via $ or via the getAttribute() function. Below is an example of object containing information about an OMA group.</p>
+<p>Below is the exploration of the example OMA group entry response, obtained via getOMAGroup(‘737636’).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">load</span>(<span class="st">'../data/group.rda'</span>)
 
 object_attributes =<span class="st"> </span><span class="kw">getObjectAttributes</span>(group)</code></pre></div>
@@ -211,138 +195,9 @@ object_attributes =<span class="st"> </span><span class="kw">getObjectAttributes
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">getAttribute</span>(group, <span class="st">'fingerprint'</span>)</code></pre></div>
 <pre><code>## [1] &quot;FPNDKFP&quot;</code></pre>
 </div>
-<div id="resolveurl" class="section level3">
-<h3>resolveURL</h3>
-<p>In most cases there is great quantity of information available for a given entry and this impacts the data retrival time. Due to this, the information available for such entries is split into a number of endpoints and these are included appropriatelly as redirects. This function allows the user to obtain further information behind those urls.</p>
-<p>An example of use for the above function would be to obtain the list of orthologs for a given protein.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">load</span>(<span class="st">'../data/protein.rda'</span>)
-
-<span class="kw">getAttribute</span>(protein,<span class="st">'orthologs'</span>)</code></pre></div>
-<pre><code>## [1] &quot;https://omabrowser.org/api/protein/6633022/orthologs/&quot;</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">load</span>(<span class="st">'../data/orthologs.rda'</span>)
-
-orthologs </code></pre></div>
-<pre><code>##    entry_nr                                   entry_url      omaid
-## 1   6342668 https://omabrowser.org/api/protein/6342668/ COCLU03588
-## 2   6399341 https://omabrowser.org/api/protein/6399341/ COLGR10929
-## 3   6407219 https://omabrowser.org/api/protein/6407219/ COLSU06788
-## 4   6468764 https://omabrowser.org/api/protein/6468764/ FUSO411719
-## 5   6475980 https://omabrowser.org/api/protein/6475980/ GIBZA02345
-## 6   6501606 https://omabrowser.org/api/protein/6501606/ NECHA14651
-## 7   6530466 https://omabrowser.org/api/protein/6530466/ THIHE03640
-## 8   6554631 https://omabrowser.org/api/protein/6554631/ CANAL00775
-## 9   6560817 https://omabrowser.org/api/protein/6560817/ CANAW00573
-## 10  6566321 https://omabrowser.org/api/protein/6566321/ LODEL00382
-## 11  6575886 https://omabrowser.org/api/protein/6575886/ DEBHA04175
-## 12  6579264 https://omabrowser.org/api/protein/6579264/ PICGU01290
-## 13  6594625 https://omabrowser.org/api/protein/6594625/ SPAPN04932
-## 14  6595834 https://omabrowser.org/api/protein/6595834/ CANTE00168
-## 15  6608129 https://omabrowser.org/api/protein/6608129/ KOMPG00513
-## 16  6619568 https://omabrowser.org/api/protein/6619568/ ASHGO01343
-## 17  6623679 https://omabrowser.org/api/protein/6623679/ KLULA00697
-## 18  6630047 https://omabrowser.org/api/protein/6630047/ CANGA01835
-## 19  6642012 https://omabrowser.org/api/protein/6642012/ ZYGRO02696
-## 20  8837885 https://omabrowser.org/api/protein/8837885/ DROBM15099
-##    canonicalid                     sequence_md5 oma_group     oma_hog_id
-## 1              c5db7c8e6b0eee5c6bbc18fe2dbf9ba7    737617 HOG:0379998.2a
-## 2              2cf82b1ffadc581d82d920af9b0130a2    737617 HOG:0379998.2a
-## 3   A0A066XI05 d6abbfd6d6ed96217331e86733ae4aeb    737617 HOG:0379998.2a
-## 4   A0A0D2XKA6 b92bedd8c4fe61cc3667d4f108ffb528    737617 HOG:0379998.2a
-## 5              54814145e0f45beb33ac2e2cb99335a3    737618 HOG:0379998.2a
-## 6              8c85e6f457288d146cb99fbc61404cb9    737617 HOG:0379998.2a
-## 7              416de3ec8baf6df5b95a10b2145e7242    737617 HOG:0379998.2a
-## 8   CCR4_CANAL b80e7f71d278fae2335d393c82912fee    737617 HOG:0379998.2b
-## 9       C4YDK4 d1158bec0e2fface48020c27d9e6ca2b    737618 HOG:0379998.2b
-## 10      A5DSP6 58726579b898e8bc18c954e8cc7039f5    737636 HOG:0379998.2b
-## 11  CCR4_DEBHA 06ae2387578bfe3873ad4c34a339bb26    737636 HOG:0379998.2b
-## 12      A5DDD9 d796187a45010e0868d774e568bf8d75    737617 HOG:0379998.2b
-## 13      G3ATH1 fe2c181e7927a749ce89d63f0cfa99a9    737636 HOG:0379998.2b
-## 14             4ff2469626a34edf6dfc0cc18d6ae06b    737618 HOG:0379998.2b
-## 15      C4R821 eb4910adfeab0ff42a374bee5d9c2176    737618 HOG:0379998.2b
-## 16  CCR4_ASHGO dc714e8db742c3fa6e16c074c3ea9b75    737617 HOG:0379998.2b
-## 17  CCR4_KLULA bd38c48cb3b76bed0c72f5cd2a7ec92e    737636 HOG:0379998.2b
-## 18  CCR4_CANGA 3329cf643b6767b0b022622779d5daf1    737636 HOG:0379998.2b
-## 19  A0A1Q2ZZG0 f2629a0761ab52e0a1beb6b4a5d9c868    737636 HOG:0379998.2b
-## 20             11d6a871f132d98e296ba5a628cac8b4         0               
-##                                   chromosome locus.start locus.end
-## 1                                 scaffold_6       27852     30189
-## 2                                   GG697333      764822    767178
-## 3                            Scaffolds0609.1         399      2755
-## 4                                          4     4317479   4319279
-## 5                            Supercontig_3.1     6701031   6703176
-## 6                           sca_14_chr10_3_0      669785    671940
-## 7                               chromosome_2     3756431   3758803
-## 8                     supercontig_supercont4     1809654   1812017
-## 9                                          1     1390917   1393274
-## 10 supercont1.1 of Lodderomyces elongisporus     1013851   1016379
-## 11                                         F      373608    376103
-## 12                      supercontig_CH408156      187607    189769
-## 13                                scaffold_6      636379    638832
-## 14                            scaffold_00004      297506    299533
-## 15                                         4      962805    965323
-## 16                                       III      882342    884552
-## 17                                         F     1468612   1470984
-## 18                                         H      598643    601264
-## 19                                         D      453024    455597
-## 20                          scf7180000299460       79621     84056
-##    locus.strand is_main_isoform rel_type distance   score
-## 1            -1            TRUE      1:1 105.0000 1362.00
-## 2             1            TRUE      1:1 108.0000 1320.99
-## 3             1            TRUE      1:1 109.0000 1312.07
-## 4            -1            TRUE      1:1 107.0000 1326.20
-## 5            -1            TRUE      1:1 109.0000 1327.66
-## 6            -1            TRUE      1:1 105.0000 1336.03
-## 7             1            TRUE      1:1 113.0000 1251.50
-## 8             1            TRUE      1:1  72.0000 2268.69
-## 9            -1            TRUE      1:1  72.0000 2266.12
-## 10           -1            TRUE      1:1  74.0000 2267.07
-## 11           -1            TRUE      1:1  73.0000 2246.76
-## 12           -1            TRUE      1:1  76.0000 2124.66
-## 13           -1            TRUE      1:1  73.0000 2240.65
-## 14            1            TRUE      1:1  79.0000 2116.79
-## 15            1            TRUE      1:1  68.0000 2364.83
-## 16            1            TRUE      1:1  36.1210 4302.76
-## 17           -1            TRUE      1:1  36.1210 4423.53
-## 18           -1            TRUE      1:1  35.3357 5201.71
-## 19           -1            TRUE      1:1  42.1286 4655.84
-## 20           -1            TRUE      1:1   0.3903 7730.37</code></pre>
-<p>The orthologs for a protein are returned as a data.frame. This structure is also found in other areas of the package (e.g. the data on the members of a particular OMA group or a HOG) and hence features a function getInfo() to simplify its processing. For example, the user can obtain a set of genomic ranges for the proteins in a dataframe as so:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">gRanges =<span class="st"> </span><span class="kw">getInfo</span>(orthologs,<span class="dt">type=</span><span class="st">'genomic_ranges'</span>)
-
-<span class="kw">str</span>(gRanges)</code></pre></div>
-<pre><code>## Formal class 'GRanges' [package &quot;GenomicRanges&quot;] with 7 slots
-##   ..@ seqnames       :Formal class 'Rle' [package &quot;S4Vectors&quot;] with 4 slots
-##   .. .. ..@ values         : Factor w/ 20 levels &quot;ZYGRO02696&quot;,&quot;ASHGO01343&quot;,..: 7 8 9 12 13 17 20 3 4 16 ...
-##   .. .. ..@ lengths        : int [1:20] 1 1 1 1 1 1 1 1 1 1 ...
-##   .. .. ..@ elementMetadata: NULL
-##   .. .. ..@ metadata       : list()
-##   ..@ ranges         :Formal class 'IRanges' [package &quot;IRanges&quot;] with 6 slots
-##   .. .. ..@ start          : int [1:20] 27852 764822 399 4317479 6701031 669785 3756431 1809654 1390917 1013851 ...
-##   .. .. ..@ width          : int [1:20] 2338 2357 2357 1801 2146 2156 2373 2364 2358 2529 ...
-##   .. .. ..@ NAMES          : NULL
-##   .. .. ..@ elementType    : chr &quot;ANY&quot;
-##   .. .. ..@ elementMetadata: NULL
-##   .. .. ..@ metadata       : list()
-##   ..@ strand         :Formal class 'Rle' [package &quot;S4Vectors&quot;] with 4 slots
-##   .. .. ..@ values         : Factor w/ 3 levels &quot;+&quot;,&quot;-&quot;,&quot;*&quot;: 2 1 2 1 2 1 2
-##   .. .. ..@ lengths        : int [1:7] 1 2 3 2 5 3 4
-##   .. .. ..@ elementMetadata: NULL
-##   .. .. ..@ metadata       : list()
-##   ..@ seqinfo        :Formal class 'Seqinfo' [package &quot;GenomeInfoDb&quot;] with 4 slots
-##   .. .. ..@ seqnames   : chr [1:20] &quot;ZYGRO02696&quot; &quot;ASHGO01343&quot; &quot;CANAL00775&quot; &quot;CANAW00573&quot; ...
-##   .. .. ..@ seqlengths : int [1:20] NA NA NA NA NA NA NA NA NA NA ...
-##   .. .. ..@ is_circular: logi [1:20] NA NA NA NA NA NA ...
-##   .. .. ..@ genome     : chr [1:20] NA NA NA NA ...
-##   ..@ elementMetadata:Formal class 'DataFrame' [package &quot;S4Vectors&quot;] with 6 slots
-##   .. .. ..@ rownames       : NULL
-##   .. .. ..@ nrows          : int 20
-##   .. .. ..@ listData       : Named list()
-##   .. .. ..@ elementType    : chr &quot;ANY&quot;
-##   .. .. ..@ elementMetadata: NULL
-##   .. .. ..@ metadata       : list()
-##   ..@ elementType    : chr &quot;ANY&quot;
-##   ..@ metadata       : list()</code></pre>
-<p>The user can also obtain the list of sequences for a given dataframe of proteins and well as the list of their corresponding ontologies (that can be plugged into the topGO for further analysis). This can be done using the functions getSequences() and getOntologies() respectively.</p>
+<div id="lazy-loading" class="section level3">
+<h3>lazy loading</h3>
+<p>In most cases there is great quantity of information available for a given entry and this impacts the data retrival time. Due to this, the information available for such entries is split into a number of endpoints and these are included appropriatelly as redirects in URL form. These are automatically loaded upon $ or getAttribute() accession.</p>
 <p>For further information on the OMA REST API please visit <a href="http://omadev.cs.ucl.ac.uk/api/docs">OMA REST API DOCUMENTATION</a>.</p>
 </div>
 </div>

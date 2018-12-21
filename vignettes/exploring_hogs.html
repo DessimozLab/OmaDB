@@ -12,7 +12,7 @@
 
 <meta name="author" content="Klara Kaleb" />
 
-<meta name="date" content="2018-08-29" />
+<meta name="date" content="2018-12-21" />
 
 <title>Exploring Hierarchical orthologous groups with OmaDB</title>
 
@@ -70,16 +70,16 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">Exploring Hierarchical orthologous groups with OmaDB</h1>
 <h4 class="author"><em>Klara Kaleb</em></h4>
-<h4 class="date"><em>2018-08-29</em></h4>
+<h4 class="date"><em>2018-12-21</em></h4>
 
 
 
-<p>This little vignette shows you how to get started with the data available for HOGs in the <code>roma</code> package.</p>
+<p>This little vignette shows you how to get started with the data available for HOGs in the <code>OmaDB</code> package.</p>
 <div id="the-hogs" class="section level2">
 <h2>The HOGs</h2>
 <p>Hierarchical orthologous groups (also known as HOGs) are sets of genes that are defined with respect to particular taxonomic ranges of interest[1]. They group genes that have descended from a single common ancestral genes in that taxonomic range.</p>
 <p>HOGs hold a lot of useful information and have many applications in various contexts, including inference of gene function, study of gene evolution dynamics and comparative genomics. Each HOG has a taxonomic range - within it, a given HOG can branch into constructs known as subHOGs which arise in an event of gene duplication.</p>
-<p>HOGs can be retrived either by their hog id or by one of their members. Let’s say we are interested in a gene that goes by the name of HUMAN22168, which can be simply accessed using the getHOG() function. The exploration of the example response object is below.</p>
+<p>HOGs can be retrived either by their hog id or by one of their members. Let’s say we are interested in a gene that goes by the name of HUMAN22168, which can be simply accessed using getHOG(“HOG:0273533.1b”). The exploration of the example response object is below.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(OmaDB)
 
 <span class="kw">load</span>(<span class="st">'../data/hog.rda'</span>)
@@ -199,7 +199,7 @@ children_hogs</code></pre></div>
 ## 2 https://omabrowser.org/api/hog/HOG:0273533.1b.1a/members/</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">child_hog_ids  =<span class="st"> </span>children_hogs[[<span class="st">'hog_id'</span>]]</code></pre></div>
 <p>From above, we can recognise that HOG:0261495.1a is a subhog of its parent hog HOG:0261495 and that it further splits into 2 children subhogs, HOG:0261495.1a.1a and HOG:0261495.1a.1b respectively. We further investigate at what taxonomic level this split has occured by looking at the root levels of the children subhogs.</p>
-<p>We have just detected a gene duplication - it would be interesting to see if there is any gene differentiation as a consenquence. We can check this by looking at the member protein annotations for each subhog_id using the function childrenMembers() and perform a GO enrichment analysis on this by utilising the Bioconductor package topGO.</p>
+<p>We have just detected a gene duplication - it would be interesting to see if there is any gene differentiation as a consenquence. We can check this by looking at the member protein annotations for each subhog_id and perform a GO enrichment analysis on this by using the Bioconductor package topGO.</p>
 <ol style="list-style-type: decimal">
 <li>Altenhoff, A., Gil, M., Gonnet, G., &amp; Dessimoz, C. (2013). Inferring Hierarchical Orthologous Groups from Orthologous Gene Pairs PLoS ONE, 8 DOI: 10.1371/journal.pone.0053786</li>
 </ol>

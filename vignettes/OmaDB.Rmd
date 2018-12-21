@@ -13,8 +13,11 @@ This little vignette shows you how to get started with the `OmaDB` package. OmaD
 
 For more details on the OMA project, see https://omabrowser.org/oma/home/.
 
+Note that each function in the package has its own individual documentation, which can be accessed by putting a question mark (?) in front of the function name e.g. ?getProtein() .
+
 ## Some useful functions
-The package contains a range of functions that are used to query the database in an R friendly way. This vignette describes some of them, whereas the rest are described in more detail in other vignettes:
+The package contains a range of functions that are used to query the database in an R friendly way. 
+This vignette highlights some of them, whereas some others are described in more detail in other vignettes:
 
 [Exploring Hierarchical orthologous groups with roma](exploring_hogs.html)
 
@@ -22,9 +25,10 @@ The package contains a range of functions that are used to query the database in
 
 [Sequence Analysis with roma](sequence_mapping.html)
 
+Note that all of the vignettes focus on exploring the example responses generated previously, allowing them to build with or without an internet connection. For each example response, the query that generated it is given. 
 
 ###searchProtein
-This function searches the OMA database for entries containing the pattern defined and returns the results in a dataframe. Hence, it is usually a good starting place. Sample response is below.
+This function searches the OMA database for entries containing the pattern defined and returns the results in a dataframe. Hence, it is usually a good starting place. Example response, generated via searchProtein('MAL'), is below.
 
 ```{r, warning=FALSE, message=FALSE}
 library(OmaDB)
@@ -32,10 +36,11 @@ library(OmaDB)
 xref = load('../data/xref.rda')
 
 head(xref)
+
 ```
 
 ###getGenomePairs
-This function serves to obtain the orthologs for 2 whole genomes. The result is a dataframe containing information on each member in the pair and their relationship. 
+This function serves to obtain the orthologs for 2 whole genomes. The result is a dataframe containing information on each member in the pair and their relationship. Below is the representation of the example response, generated using getGenomePairs('YEAST','ASHGO').
 
 ```{r, warning=FALSE, message=FALSE}
 
@@ -46,14 +51,15 @@ head(pairs)
 ```
 
 ###getProtein
-This function serves to obtain the information for either a single protein entry or multiple protein entries in a database. For more info, see ?getProtein().
-
+This function serves to obtain the information for either a single protein entry or multiple protein entries in a database. For more info, see ?getProtein(). There are similar functions to obtain information on genomes, OMA groups and HOGs i.e. getGenome(), getOMAGroup() and getHOG() respectively. 
 
 ###getObjectAttributes
-The result of the getData function is an S3 Object with attributes corresponding to the information requested. This function allows the user to list all the object attributes and their corresponding data types. 
+Single entries in the database are represented as S3 objects, with their attributes corresponding to the information requested. These attributes vary greatly from object to object, and the helper function getObjectAttributes() allows the user to list all the object attributes and their corresponding data types. 
 
 ###getAttribute
 The specific attributes of the created object can be accessed via $ or via the getAttribute() function. Below is an example of object containing information about an OMA group. 
+
+Below is the exploration of the example OMA group entry response, obtained via getOMAGroup('737636').
 
 ```{r, warning=FALSE, message=FALSE}
 
@@ -69,7 +75,7 @@ getAttribute(group, 'fingerprint')
 ```
 
 ###lazy loading
-In most cases there is great quantity of information available for a given entry and this impacts the data retrival time. Due to this, the information available for such entries is split into a number of endpoints and these are included appropriatelly as redirects in URL form. These are loaded upon $ attribute accession. 
+In most cases there is great quantity of information available for a given entry and this impacts the data retrival time. Due to this, the information available for such entries is split into a number of endpoints and these are included appropriatelly as redirects in URL form. These are automatically loaded upon $ or getAttribute() accession. 
 
 
 For further information on the OMA REST API please visit [OMA REST API DOCUMENTATION](http://omadev.cs.ucl.ac.uk/api/docs).
