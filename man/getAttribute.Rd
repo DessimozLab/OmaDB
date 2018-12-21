@@ -18,5 +18,5 @@ an value for a given object attribute
 The function to obtain the value for an object attribute.
 }
 \examples{
-members = getAttribute(getData("group","YEAST58"),'members')
+members = getAttribute(getOMAGroup(id ='YEAST58'),'members')
 }

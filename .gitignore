@@ -1,4 +1,9 @@
+Meta
+doc
 .Rproj.user
 .Rhistory
 .RData
+.ipynb_checkpoints
+.DS_Store
 inst/doc
+R/objects_docs.R

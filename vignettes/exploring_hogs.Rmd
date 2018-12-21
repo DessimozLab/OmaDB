@@ -9,7 +9,7 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-This little vignette shows you how to get started with the data available for HOGs in the `roma` package.
+This little vignette shows you how to get started with the data available for HOGs in the `OmaDB` package.
 
 ## The HOGs
 
@@ -17,7 +17,7 @@ Hierarchical orthologous groups (also known as HOGs) are sets of genes that are 
 
 HOGs hold a lot of useful information and have many applications in various contexts, including inference of gene function, study of gene evolution dynamics and comparative genomics. Each HOG has a taxonomic range - within it, a given HOG can branch into constructs known as subHOGs which arise in an event of gene duplication.
 
-HOGs can be retrived either by their hog id or by one of their members. Let's say we are interested in a gene that goes by the name of HUMAN22168, which can be simply accessed using the getHOG() function. The exploration of the example response object is below.
+HOGs can be retrived either by their hog id or by one of their members. Let's say we are interested in a gene that goes by the name of HUMAN22168, which can be simply accessed using getHOG("HOG:0273533.1b"). The exploration of the example response object is below.
 
 ```{r, warning=FALSE, message=FALSE}
 library(OmaDB)
@@ -46,7 +46,6 @@ child_hog_ids  = children_hogs[['hog_id']]
 ```
 From above, we can recognise that  HOG:0261495.1a is a subhog of its parent hog HOG:0261495 and that it further splits into 2 children subhogs, HOG:0261495.1a.1a and HOG:0261495.1a.1b respectively. We further investigate at what taxonomic level this split has occured by looking at the root levels of the children subhogs.
 
-We have just detected a gene duplication - it would be interesting to see if there is any gene differentiation as a consenquence. We can check this by looking at the member protein annotations for each subhog_id using the function childrenMembers() and perform a GO enrichment analysis on this by utilising the Bioconductor package topGO.
-
+We have just detected a gene duplication - it would be interesting to see if there is any gene differentiation as a consenquence. We can check this by looking at the member protein annotations for each subhog_id and perform a GO enrichment analysis on this by using the Bioconductor package topGO.
 
 (1) Altenhoff, A., Gil, M., Gonnet, G., & Dessimoz, C. (2013). Inferring Hierarchical Orthologous Groups from Orthologous Gene Pairs PLoS ONE, 8 DOI: 10.1371/journal.pone.0053786

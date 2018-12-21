@@ -7,7 +7,7 @@
 formatTopGO(geneList, format)
 }
 \arguments{
-\item{geneList}{the list of roma protein objects to be included in the analysis - this is where the GO annotations are extracted from}
+\item{geneList}{the list of OmaDB protein objects or a dataframe of ontologies to be included in the analysis - this is where the GO annotations are extracted from.}
 
 \item{format}{format for the data to be returned in - either 'GO2geneID' or 'geneID2GO'}
 }
@@ -18,6 +18,6 @@ a list containing the GO2geneID or geneID2GO information
 The function to create a list of GO annotations that is compatible with topGO from protein objects in roma
 }
 \examples{
-geneList = list(getData(type="protein",id="YEAST01"),getData(type="protein",id="YEAST03"))
-annotations = formatTopGO(geneList,format="geneID2GO")
+geneList = list(getProtein(id='YEAST01'),getProtein(id='YEAST03'))
+annotations = formatTopGO(geneList,format='geneID2GO')
 }

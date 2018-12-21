@@ -1,3 +1,11 @@
+# OmaDB 1.99.0 (Release data: 2018-12-21)
+- major refactoring of codebase:
+  - getData split into getProtein, getGenome, getOMAGroup
+  - renamed getAnnotation -> annotateSequence
+  - renamed getXref -> searchSequence
+- getProtein allows to retrieve many protein ids at once
+- improved documenation by a lot.
+
 # OmaDB 1.1.4 (Release date: 2018-10-11)
 - format option (geneID2GO or GO2geneID) included in getInfo()
 - automatic loading and updating of object attributes which are given as URLs upon accession 
