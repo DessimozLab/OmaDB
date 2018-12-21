@@ -20,5 +20,5 @@ no longer be true, in which case one can access the data behind this
 attribute using this function.
 }
 \examples{
-resolveURL("http://omabrowser.org/api/protein/YEAST58/gene_ontology/")
+resolveURL('http://omabrowser.org/api/protein/YEAST58/gene_ontology/')
 }

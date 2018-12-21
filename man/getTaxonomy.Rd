@@ -21,6 +21,6 @@ The function to obtain the taxonomic tree from the database in the newick format
 }
 \examples{
 getTaxonomy()
-getTaxonomy(members="YEAST,ASHGO")
-getTaxonomy(root="Alveolata")
+getTaxonomy(members='YEAST,ASHGO')
+getTaxonomy(root='Alveolata')
 }

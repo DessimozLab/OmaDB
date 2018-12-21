@@ -16,7 +16,7 @@ an object containing the JSON keys as attributes or a dataframe
 }
 \description{
 This function obtains an OMA Group from the OMA Browser database. An OMA Group
-is defined to be a clique of proteins that are all orthologous to each other, 
+is defined to be a clique of proteins that are all orthologous to each other,
 i.e. they are all related through speciation events only. An OMA Group can thus
 by definition not contain any inparalogs. It is a very stringent orthology
 grouping approach.
@@ -25,12 +25,12 @@ can be used as marker genes.
 }
 \details{
 Retrieving an OMA Group can be done using a group nr as id, its fingerprint
-(a 7mer AA sequence which is unique to proteins in that group), a member 
+(a 7mer AA sequence which is unique to proteins in that group), a member
 protein id or any sequence pattern that is unique to the group.
 }
 \examples{
-getOMAGroup(id="58")
-getOMAGroup(id="P12345")
-getOMAGroup(id="NNRRGRI")
-getOMAGroup(id="58", attribute='close_groups')
+getOMAGroup(id='58')
+getOMAGroup(id='P12345')
+getOMAGroup(id='NNRRGRI')
+getOMAGroup(id='58', attribute='close_groups')
 }

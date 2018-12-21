@@ -18,6 +18,6 @@ a list containing the GO2geneID or geneID2GO information
 The function to create a list of GO annotations that is compatible with topGO from protein objects in roma
 }
 \examples{
-geneList = list(getProtein(id="YEAST01"),getProtein(id="YEAST03"))
-annotations = formatTopGO(geneList,format="geneID2GO")
+geneList = list(getProtein(id='YEAST01'),getProtein(id='YEAST03'))
+annotations = formatTopGO(geneList,format='geneID2GO')
 }

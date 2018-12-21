@@ -9,7 +9,7 @@ getData(type, id, attribute = NULL)
 \arguments{
 \item{type}{the type for the entry to be returned - either protein, genome or group}
 
-\item{id}{an identifier for the entry to be returned. For more information, see the "Get started with OmaDB" vigne  tte.}
+\item{id}{an identifier for the entry to be returned. For more information, see the 'Get started with OmaDB' vigne  tte.}
 
 \item{attribute}{an extra attribute}
 }
@@ -21,9 +21,9 @@ The function to obtain the information available for a single entry in the datas
 This function should no longer be used. It has been divided into several functions:
 Use the following functions instead.
 \itemize{
-  \item \code{\link{getProtein}} to obtain proteins (former \code{type="protein"})
-  \item \code{\link{getGenome}} to obtain genomes (former \code{type="genome"})
-  \item \code{\link{getOMAGroup}} to obtain genomes (former \code{type="group"})
+  \item \code{\link{getProtein}} to obtain proteins (former \code{type='protein'})
+  \item \code{\link{getGenome}} to obtain genomes (former \code{type='genome'})
+  \item \code{\link{getOMAGroup}} to obtain genomes (former \code{type='group'})
 }
 }
 \seealso{

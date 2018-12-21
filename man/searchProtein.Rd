@@ -16,5 +16,5 @@ a data.frame containing information on the cross references for a given pattern
 The function to list all the crossreferences that match a certain defined pattern.
 }
 \examples{
-searchProtein(pattern="MAL")
+searchProtein(pattern='MAL')
 }

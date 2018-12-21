@@ -13,7 +13,7 @@ getTopGO(annotations, format, foregroundGenes, ontology)
 
 \item{foregroundGenes}{List of identifiers for the foreground genes}
 
-\item{ontology}{The ontology for which the enrichment should be done. This 
+\item{ontology}{The ontology for which the enrichment should be done. This
 parameter is passed directly to the topGOdata constructor.}
 }
 \value{
@@ -23,8 +23,8 @@ topGO object
 The function to create a topGO object containing the GO annotations for the given protein list.
 }
 \examples{
-geneList = list(getProtein(id="YEAST58"),getProtein(id="YEAST00059"))
-annotations = formatTopGO(geneList,format="geneID2GO")
+geneList = list(getProtein(id='YEAST58'),getProtein(id='YEAST00059'))
+annotations = formatTopGO(geneList,format='geneID2GO')
 library(topGO)
-getTopGO(annotations, foregroundGenes = list("YEAST00058"), format = "geneID2GO", ontology = 'BP')
+getTopGO(annotations, foregroundGenes = list('YEAST00058'), format = 'geneID2GO', ontology = 'BP')
 }

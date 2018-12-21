@@ -35,10 +35,10 @@ need this information you can set the attribute parameter to the property
 name and retrieve this information directly.
 }
 \examples{
-getProtein(id="YEAST00001")
-getProtein(id="YEAST00001", attribute='orthologs')
-getProtein(id=c("YEAST00001","YEAST00002","YEAST00012"))
-getProtein(id=c("YEAST00001","YEAST00002","YEAST00012"), attribute='gene_ontology')
+getProtein(id='YEAST00001')
+getProtein(id='YEAST00001', attribute='orthologs')
+getProtein(id=c('YEAST00001','YEAST00002','YEAST00012'))
+getProtein(id=c('YEAST00001','YEAST00002','YEAST00012'), attribute='gene_ontology')
 }
 \seealso{
 For non-unique non-unique IDs or partial ID lookup, use

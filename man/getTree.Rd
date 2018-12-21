@@ -17,6 +17,6 @@ A convenience function to obtain a tree object from newick tree,
 essentially wraps read.tree from the ape package.
 }
 \examples{
-taxonomy = getTaxonomy(root="Alveolata")
+taxonomy = getTaxonomy(root='Alveolata')
 getTree(newick=taxonomy$newick)
 }

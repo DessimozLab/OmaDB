@@ -18,12 +18,12 @@ getGenomeAlignment(genome1, genome2, chr1 = NULL, chr2 = NULL,
 getData(type, id, attribute = NULL)
 }
 \description{
-These functions are provided for compatibility with 
-older versions of \pkg{OmaDB} only, and will be defunct at the 
+These functions are provided for compatibility with
+older versions of \pkg{OmaDB} only, and will be defunct at the
 next release.
 }
 \details{
-The following functions are deprecated and will be 
+The following functions are deprecated and will be
 made defunct; use the replacement indicated below:
 }
 \section{\code{getXref}}{

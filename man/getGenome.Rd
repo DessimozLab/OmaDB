@@ -20,16 +20,16 @@ on the OMA Browser, or - if no id is provided - a dataframe with all available
 genomes.
 }
 \details{
-Ids can be either the scientific name of a species, the NCBI taxonomy id or 
+Ids can be either the scientific name of a species, the NCBI taxonomy id or
 the UniProtKB mnemonic species code.
 
-The optional argument attribute can be used to directly load the proteins 
+The optional argument attribute can be used to directly load the proteins
 belonging to the genome. Alternatively, you can access the proteins attribute
 of the result which will transparently load the proteins from the OMA Browser.
 }
 \examples{
 getGenome()
-getGenome(id="HUMAN")
+getGenome(id='HUMAN')
 getGenome(id=9606)
-getGenome(id="HUMAN",attribute='proteins')
+getGenome(id='HUMAN',attribute='proteins')
 }

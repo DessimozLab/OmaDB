@@ -2,7 +2,7 @@
 % Please edit documentation in R/getGenomePairs.R
 \name{getGenomePairs}
 \alias{getGenomePairs}
-\title{Get Genome Pairs Function}
+\title{Retrieves the pairwise relations among two genomes}
 \usage{
 getGenomePairs(genome_id1, genome_id2, chr1 = NULL, chr2 = NULL,
   rel_type = NULL, ...)
@@ -24,8 +24,21 @@ getGenomePairs(genome_id1, genome_id2, chr1 = NULL, chr2 = NULL,
 a dataframe containing information about both the entries in the orthologous pair and their relationship
 }
 \description{
-The function to obtain the list of orthologs for 2 whole genomes.
+This function retrieves the pairwise relations among two genomes from
+the OMA Browser database. The relations are orthologs in case the 
+genomes are different and "close paralogs" and "homoeologs" in case 
+they are the same.
+}
+\details{
+By using the parameters chr1 and chr2, one can limit the relations 
+to a certain chromosome for one or both genomes. The id of the 
+chromosome corresponds to the chromosome ids from the 
+\code{\link{getGenome}} result.
+
+The rel_type parameter further limits the returned relations to a
+specific subtype of orthologs (i.e. "1:1", "1:n", "m:1", "m:n") or 
+- within a genome to either "close paralogs" or "homeologs".
 }
 \examples{
-getGenomePairs(genome_id1="YEAST",genome_id2="ASHGO")
+getGenomePairs(genome_id1='YEAST',genome_id2='ASHGO')
 }

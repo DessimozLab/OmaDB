@@ -16,5 +16,5 @@ genomic range object from the GenomicRanges package in Bioconductor
 Function to obtain loci in genomic range format for a given list of proteins
 }
 \examples{
-loci = getLocus(proteins = getOMAGroup("YEAST58")['members'])
+loci = getLocus(proteins = getOMAGroup('YEAST58')['members'])
 }
