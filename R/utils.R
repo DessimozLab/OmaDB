@@ -339,6 +339,22 @@ setAPI <- function(url){
 }
 
 
+#' Load data for a given url from the OMA Browser API.
+#'
+#' This function is usualy not needed by users. In most circumstances
+#' an attribute containing a URL is automatically loaded when accessed.
+#' However, in case the data is transformed into a dataframe, this will
+#' no longer be true, in which case one can access the data behind this
+#' attribute using this function.
+#'
+#' @param url The url of interest
+#' @return a data.frame containing the information behind an URL
+#' @export
+#' @examples
+#' resolveURL("http://omabrowser.org/api/protein/YEAST58/gene_ontology/")
+resolveURL <- function (url) {
+    return(requestFactory(url))
+}
 
 
 

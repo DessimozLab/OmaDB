@@ -1,23 +1,29 @@
 #' Retrieve a protein from the OMA Browser
-#' 
-#' This function enables to retrieve information on one or several proteins from the 
-#' OMA Browser database. 
+#'
+#' This function enables to retrieve information on one or several proteins from
+#' the OMA Browser database.
 #'
 #' In its simplest form the function returns the base data of the query protein.
-#' The query protein can be selected with any unique id, for example with a 
-#' UniProtKB accession (P12345), an OMA id (YEAST00012), or a RefSeq id (NP_001226).
-#' To retrieve more than one protein, you should pass a vector of IDs.
+#' The query protein can be selected with any unique id, for example with a
+#' UniProtKB accession (P12345), an OMA id (YEAST00012), or a RefSeq id
+#' (NP_001226). To retrieve more than one protein, you should pass a vector of
+#' IDs.
 #'
-#' Non-scalar properties of proteins such as their domains, GO annotations, 
+#' Non-scalar properties of proteins such as their domains, GO annotations,
 #' orthologs or homeologs will get loaded upon accessing them, or if you only
-#' need this information you can set the attribute parameter to the property name
-#' and retrieve this information directly.
+#' need this information you can set the attribute parameter to the property
+#' name and retrieve this information directly.
 #'
-#' @seealso For non-unique non-unique IDs or partial ID lookup, use [searchProtein()] instead.
+#' @seealso For non-unique non-unique IDs or partial ID lookup, use
+#'   \code{\link{searchProtein}} instead.
 #'
-#' @param id Identifier(s) for the entry or entries to be returned. a character string if single entry or a vector if multiple. 
-#' @param attribute Instead of the protein, return the attribute property of the protein. Attriute needs to be one of 'domains', 'orthologs', 'gene_ontology', 'locus', or 'homoeologs'.
-#' @return An object containing the JSON keys as attributes or a dataframe containing the non-scalar protein property.
+#' @param id Identifier(s) for the entry or entries to be returned. a character
+#'   string if single entry or a vector if multiple.
+#' @param attribute Instead of the protein, return the attribute property of the
+#'   protein. Attriute needs to be one of 'domains', 'orthologs',
+#'   'gene_ontology', 'locus', or 'homoeologs'.
+#' @return An object containing the JSON keys as attributes or a dataframe
+#'   containing the non-scalar protein property.
 #' @export
 #' @examples
 #' getProtein(id="YEAST00001")
