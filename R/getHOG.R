@@ -20,13 +20,9 @@
 #' @return an object containing HOG attributes, or a list of those
 #' @export
 #' @examples
-#' getHOG(id = 'YEAST
-0')
-#' getHOG(id = 'YEAST
-0', level='root')
-#' getHOG(id = 'YEAST
-0', level='Saccharomycetaceae', members=TRUE)
-
+#' getHOG(id = 'YEAST590')
+#' getHOG(id = 'YEAST590', level='root')
+#' getHOG(id = 'YEAST590', level='Saccharomycetaceae', members=TRUE)
 
 getHOG <- function(id, level = NULL, members = FALSE) {
 

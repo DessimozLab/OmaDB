@@ -204,8 +204,9 @@ requestFactory <- function(url, body = NULL, per_page = 5000, page = NULL) {
     if (!is.null(body)) {
         return(largeRequestFactory(url, body = body))
     }
-    # sep for per_page query params is either ? or & depending if no query param so
-    # far or not
+    
+    # sep for per_page query params is either ? or & depending if 
+    # no query param so far or not
     sep <- if (substr(url, nchar(url), nchar(url)) == "/")
         "?" else "&"
     qq <- paste0("per_page=", per_page, "&page=", if (is.null(page))
