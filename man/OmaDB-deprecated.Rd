@@ -38,7 +38,7 @@ For \code{getAnnotation}, use \code{\link{annotateSequence}}.
 
 \section{\code{getGenomeAlignment}}{
 
-For \code{getGenomeAlignment}, use \code{\link{getGenomePair}}.
+For \code{getGenomeAlignment}, use \code{\link{getGenomePairs}}.
 }
 
 \section{\code{getData}}{

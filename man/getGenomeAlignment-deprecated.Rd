@@ -4,8 +4,8 @@
 \alias{getGenomeAlignment-deprecated}
 \title{Get Whole Genome Alignment Function}
 \usage{
-getGenomeAlignment(genome1, genome2, chr1 = NULL, chr2 = NULL,
-  rel_type = NULL)
+getGenomeAlignment(genome1, genome2, chr1 = NULL, chr2 = NULL,
+  rel_type = NULL)
 }
 \arguments{
 \item{genome_id1}{an identifier for the first genome, which can be either its taxon id or UniProt species code}
@@ -24,7 +24,7 @@ getGenomeAlignment(genome1, genome2, chr1 = NULL, chr2 = NULL,
 a dataframe containing information about both the entries in the orthologous pair and their relationship
 }
 \description{
-This function should no longer be used. Use instaed \code{\link{getGenomePair}}.
+This function should no longer be used. Use instaed \code{\link{getGenomePairs}}.
 }
 \seealso{
 \code{\link{OmaDB-deprecated}}

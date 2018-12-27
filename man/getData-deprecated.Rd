@@ -4,12 +4,12 @@
 \alias{getData-deprecated}
 \title{Get the Data Function}
 \usage{
-getData(type, id, attribute = NULL)
+getData(type, id, attribute = NULL)
 }
 \arguments{
 \item{type}{the type for the entry to be returned - either protein, genome or group}
 
-\item{id}{an identifier for the entry to be returned. For more information, see the 'Get started with OmaDB' vigne  tte.}
+\item{id}{an identifier for the entry to be returned. For more information, see the 'Get started with OmaDB' vignette.}
 
 \item{attribute}{an extra attribute}
 }

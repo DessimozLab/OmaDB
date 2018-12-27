@@ -55,7 +55,7 @@ getAnnotation <- function(query) {
 
 #' Get Whole Genome Alignment Function
 #'
-#' This function should no longer be used. Use instaed \code{\link{getGenomePair}}.
+#' This function should no longer be used. Use instaed \code{\link{getGenomePairs}}.
 #'
 #' @param genome_id1 an identifier for the first genome, which can be either its taxon id or UniProt species code
 #' @param genome_id2 an an identifier for the second genome, which can be either its taxon id or UniProt species code
@@ -70,7 +70,7 @@ getAnnotation <- function(query) {
 NULL
 
 #' @templateVar old getGenomeAlignment
-#' @templateVar new getGenomePair
+#' @templateVar new getGenomePairs
 #' @template template-depr_pkg
 #'
 #' @export
@@ -92,7 +92,7 @@ getGenomeAlignment <- function(genome1, genome2, chr1 = NULL, chr2 = NULL, rel_t
 #' }
 #'
 #' @param type the type for the entry to be returned - either protein, genome or group
-#' @param id an identifier for the entry to be returned. For more information, see the 'Get started with OmaDB' vigne  tte.
+#' @param id an identifier for the entry to be returned. For more information, see the 'Get started with OmaDB' vignette.
 #' @param attribute an extra attribute
 #' @return an object containing the JSON keys as attributes
 #'
