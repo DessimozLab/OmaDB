@@ -27,7 +27,8 @@ This vignette highlights some of them, whereas some others are described in more
 
 Note that all of the vignettes focus on exploring the example responses generated previously, allowing them to build with or without an internet connection. For each example response, the query that generated it is given. 
 
-###searchProtein
+### searchProtein
+
 This function searches the OMA database for entries containing the pattern defined and returns the results in a dataframe. Hence, it is usually a good starting place. Example response, generated via searchProtein('MAL'), is below.
 
 ```{r, warning=FALSE, message=FALSE}
@@ -39,7 +40,8 @@ head(xref)
 
 ```
 
-###getGenomePairs
+### getGenomePairs
+
 This function serves to obtain the orthologs for 2 whole genomes. The result is a dataframe containing information on each member in the pair and their relationship. Below is the representation of the example response, generated using getGenomePairs('YEAST','ASHGO').
 
 ```{r, warning=FALSE, message=FALSE}
@@ -50,13 +52,16 @@ head(pairs)
 
 ```
 
-###getProtein
+### getProtein
+
 This function serves to obtain the information for either a single protein entry or multiple protein entries in a database. For more info, see ?getProtein(). There are similar functions to obtain information on genomes, OMA groups and HOGs i.e. getGenome(), getOMAGroup() and getHOG() respectively. 
 
-###getObjectAttributes
+### getObjectAttributes
+
 Single entries in the database are represented as S3 objects, with their attributes corresponding to the information requested. These attributes vary greatly from object to object, and the helper function getObjectAttributes() allows the user to list all the object attributes and their corresponding data types. 
 
-###getAttribute
+### getAttribute
+
 The specific attributes of the created object can be accessed via $ or via the getAttribute() function. Below is an example of object containing information about an OMA group. 
 
 Below is the exploration of the example OMA group entry response, obtained via getOMAGroup('737636').
@@ -74,7 +79,8 @@ getAttribute(group, 'fingerprint')
 
 ```
 
-###lazy loading
+### lazy loading
+
 In most cases there is great quantity of information available for a given entry and this impacts the data retrival time. Due to this, the information available for such entries is split into a number of endpoints and these are included appropriatelly as redirects in URL form. These are automatically loaded upon $ or getAttribute() accession. 
 
 
