@@ -2,6 +2,7 @@ Meta
 doc
 .Rproj.user
 .Rhistory
+.Rapp.history
 .RData
 .ipynb_checkpoints
 .DS_Store
