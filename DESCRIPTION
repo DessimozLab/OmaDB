@@ -8,7 +8,7 @@ Depends: R (>= 3.5), httr (>= 1.2.1), plyr(>= 1.8.4)
 Imports: utils, ape, Biostrings, GenomicRanges, IRanges, methods, topGO, jsonlite
 URL: https://github.com/DessimozLab/OmaDB
 BugReports: https://github.com/DessimozLab/OmaDB/issues
-License: GPL-2
+License: GPL-3
 LazyData: true
 Suggests: knitr,
     rmarkdown, 
