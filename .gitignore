@@ -8,11 +8,5 @@ doc
 .DS_Store
 inst/doc
 R/objects_docs.R
-vignettes/exploring_hogs.html
-vignettes/exploring_hogs.R
-vignettes/OmaDB.html
-vignettes/OmaDB.R
-vignettes/sequence_mapping.html
-vignettes/sequence_mapping.R
-vignettes/tree_visualisation.html
-vignettes/tree_visualisation.R
+vignettes/*.html
+vignettes/*.R

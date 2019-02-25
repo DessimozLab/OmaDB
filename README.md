@@ -1,6 +1,6 @@
 # OmaDB: R wrapper for the OMA REST API
 
-R package providing access to the data in the OMA browser, using the REST API. As such, it requires a stable internet connection to operate. 
+R package providing access to the data in the OMA browser, using the REST API. As such, it requires a stable internet connection to operate. We also provide a similar _wrapper for python (https://github.com/DessimozLab/pyOmaDB)_.
 
 ## Citation
 If you use our package in your work, please consider citing:
@@ -14,13 +14,10 @@ The package is available via Bioconductor (https://bioconductor.org) and can be 
 
 ```
 if (!requireNamespace("BiocManager"))
-
-install.packages("BiocManager")
-
+    install.packages("BiocManager")
 BiocManager::install('OmaDB')
 
 #load the package
-
 library(OmaDB)
 
 ```
@@ -30,7 +27,7 @@ Note that the v2.0 of the package requires R version >= 3.6 and Bioconductor ver
 ```
 BiocManager::install('OmaDB', version = 'devel')
 ```
-or directly from the github repository as below:
+Alternatively, the latest version of the OmaDB package can also be directly installed from the github repository as below:
 
 ```
 install.packages('devtools')
