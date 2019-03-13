@@ -2,6 +2,10 @@
 
 R package providing access to the data in the OMA browser, using the REST API. As such, it requires a stable internet connection to operate. We also provide a similar _wrapper for python (https://github.com/DessimozLab/pyOmaDB)_.
 
+An notebook containing examples of how to use the package is available <a href="https://github.com/DessimozLab/omadb/blob/master/manuscript_examples.ipynb">here</a>.
+
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/DessimozLab/omadb/master?filepath=manuscript_examples.ipynb)
+
 ## Citation
 If you use our package in your work, please consider citing:
 
