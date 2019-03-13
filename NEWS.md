@@ -1,7 +1,14 @@
-# OmaDB 1.99.1 (Release data: 2018-12-28)
+# OmaDB 1.99.2 (Release date: 2019-03-13)
+- re-license under GPLv3
+- updated ipython notebook with examples from manuscript to new release of OMA browser
+- improve package according to bioconductor guidelines:
+  - improve README and DESCRIPTION
+  - various cleanups of code and data
+
+# OmaDB 1.99.1 (Release date: 2018-12-28)
 - fixes bioconductor CI warnings on missing links in deprecated functions
 
-# OmaDB 1.99.0 (Release data: 2018-12-21)
+# OmaDB 1.99.0 (Release date: 2018-12-21)
 - major refactoring of codebase:
   - getData split into getProtein, getGenome, getOMAGroup
   - renamed getAnnotation -> annotateSequence
