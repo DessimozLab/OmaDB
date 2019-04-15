@@ -1,0 +1,16 @@
+citHeader("To cite OmaDB in publications use:")
+
+citEntry(entry="article",
+         title = "Expanding the Orthologous Matrix (OMA) programmatic interfaces: REST API and the OmaDB packages for R and Python",
+         author = personList( as.person("Klara Kaleb"),
+                              as.person("Alex Warwick Vesztrocy"),
+                              as.person("Adrian Altenhoff"),
+                              as.person("Christophe Dessimoz")),
+         year = 2019,
+         journal = "F1000Research",
+         url = "https://doi.org/10.12688/f1000research.17548.2",
+         textVersion = 
+         paste("Kaleb K, Warwick Vesztrocy A, Altenhoff A and Dessimoz C (2019):", 
+               "Expanding the Orthologous Matrix (OMA) programmatic interfaces: REST API and the OmaDB packages for R and Python.",
+               "F1000Research,",
+                "URL: https://doi.org/10.12688/f1000research.17548.2") )
