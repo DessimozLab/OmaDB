@@ -10,7 +10,7 @@ An notebook containing examples of how to use the package is available <a href="
 If you use our package in your work, please consider citing:
 
 _Kaleb K, Warwick Vesztrocy A, Altenhoff A and Dessimoz C. Expanding the Orthologous Matrix (OMA) programmatic interfaces: REST API and the OmaDB packages for R and Python. F1000Research 2019, 8:42
-(https://doi.org/10.12688/f1000research.17548.1)_
+(https://doi.org/10.12688/f1000research.17548.2)_
 
 ## Installation
 
@@ -26,12 +26,9 @@ library(OmaDB)
 
 ```
 
-Note that the v2.0 of the package requires R version >= 3.6 and Bioconductor version >=3.9. At the time of writting this, this is the Bioconductor development version and so the package can be installed as follows:
+Note that the v2.0 of the package requires R version >= 3.6 and Bioconductor version >=3.9. 
 
-```
-BiocManager::install('OmaDB', version = 'devel')
-```
-Alternatively, the latest version of the OmaDB package can also be directly installed from the github repository as below:
+The latest version of the OmaDB package can also be directly installed from the github repository as below:
 
 ```
 install.packages('devtools')
