@@ -11,3 +11,4 @@
 ^runtime\.txt$
 ^\.git$
 ^\.Rhistory$
+^LICENSE\.md$
