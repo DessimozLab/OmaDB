@@ -7,7 +7,7 @@
 ^\.gitignore$
 ^manuscript_examples\.ipynb$
 ^\.ipynb_checkpoints
-^install\.R$      # needed by binder
-^runtime.txt$     # needed by binder
+^install\.R$
+^runtime\.txt$
 ^\.git$
 ^\.Rhistory$
