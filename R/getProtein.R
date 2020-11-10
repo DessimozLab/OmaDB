@@ -62,7 +62,6 @@ getProtein <- function(id, attribute = NULL) {
         if (is.null(attribute)) {
             return(data)
         } else {
-
             attribute_data <- lapply(data, function(x) {
                 if (grepl("https://", x[[attribute]])) {
                   requestFactory(x[[attribute]])

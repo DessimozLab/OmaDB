@@ -13,6 +13,7 @@
 pkg.env <- new.env()
 pkg.env$API_default_url <- "https://omabrowser.org/api/"
 pkg.env$API_url <- pkg.env$API_default_url
+pkg.env$API_version <- "1.6"
 pkg.env$user_agent <- paste0("r-omadb/", packageVersion("OmaDB"))
 
 
@@ -57,12 +58,13 @@ simpleRequest <- function(url, body = NULL) {
 
 load_url <- function(url, body = NULL) {
     count <- 0
+    accept_header = paste0("application/json; version=", pkg.env$API_version)
     while (count < 3) {
         response <- tryCatch(if (!is.null(body)) {
-            httr::POST(url, body = body, encode = "raw", httr::accept("application/json"),
+            httr::POST(url, body = body, encode = "raw", httr::accept(accept_header),
                 httr::content_type("application/json"), httr::user_agent(pkg.env$user_agent))
         } else {
-            httr::GET(url, httr::accept("application/json"), httr::content_type("application/json"),
+            httr::GET(url, httr::accept(accept_header), httr::content_type("application/json"),
                 httr::user_agent(pkg.env$user_agent))
         }, error = function(cond) {
             Sys.sleep(0.5)
