@@ -2,12 +2,12 @@
 ^doc$
 ^.*\.Rproj$
 ^\.Rproj\.user$
-
-.DS_Store
-.Rapp.history
-.gitignore
-R/.DS_Store
-man/.DS_Store
-tests/.DS_Store
-manuscript_examples.ipynb
-.ipynb_checkpoints
+\.DS_Store
+^\.Rapp.history
+^\.gitignore$
+^manuscript_examples\.ipynb$
+^\.ipynb_checkpoints
+^install\.R$      # needed by binder
+^runtime.txt$     # needed by binder
+^\.git$
+^\.Rhistory$
