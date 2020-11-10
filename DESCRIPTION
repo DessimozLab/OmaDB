@@ -8,6 +8,7 @@ Depends: R (>= 3.5), httr (>= 1.2.1), plyr(>= 1.8.4)
 Imports: utils, ape, Biostrings, GenomicRanges, IRanges, methods, topGO, jsonlite
 URL: https://github.com/DessimozLab/OmaDB
 BugReports: https://github.com/DessimozLab/OmaDB/issues
+Encoding: UTF-8
 License: GPL-3
 LazyData: true
 Suggests: knitr,
@@ -15,4 +16,4 @@ Suggests: knitr,
     testthat
 VignetteBuilder: knitr
 biocViews: Software, ComparativeGenomics, FunctionalGenomics, Genetics, Annotation, GO, FunctionalPrediction
-RoxygenNote: 6.1.1
+RoxygenNote: 7.1.1
