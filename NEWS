@@ -1,3 +1,6 @@
+Changes in version 2.7.1 (2020-11-11)
++ fix problem after OMA API version change
+
 Changes in version 1.99.3 (2019-04-15)
 + update format of NEWS file
 
