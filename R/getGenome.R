@@ -19,7 +19,7 @@
 #' getGenome()
 #' getGenome(id='HUMAN')
 #' getGenome(id=9606)
-#' getGenome(id='HUMAN',attribute='proteins')
+#' getGenome(id='YEAST',attribute='proteins')
 
 getGenome <- function(id = NULL, attribute = NULL) {
 

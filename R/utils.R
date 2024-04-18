@@ -114,6 +114,23 @@ load_url <- function(url, body = NULL) {
     })
 }
 
+filterNullData <- function(column_names, content_list){
+   list_of_vars <- lapply(column_names, FUN = function(name){
+     c <- content_list[[name]]
+     if (is.null(c)){
+       return(NULL)
+     }
+     if (class(c) == "list"){
+       return(filterNullData(names(c), c))
+     }
+     return(c)
+   })
+   names(list_of_vars) <- column_names
+   list_of_vars[sapply(list_of_vars, is.null)] <- NULL
+   value <- list_of_vars
+   return(value)
+}
+
 
 objectFactory <- function(column_names, content_list) {
     list_of_variables <- lapply(column_names, FUN = function(name) {
@@ -206,8 +223,8 @@ requestFactory <- function(url, body = NULL, per_page = 5000, page = NULL) {
     if (!is.null(body)) {
         return(largeRequestFactory(url, body = body))
     }
-    
-    # sep for per_page query params is either ? or & depending if 
+
+    # sep for per_page query params is either ? or & depending if
     # no query param so far or not
     sep <- if (substr(url, nchar(url), nchar(url)) == "/")
         "?" else "&"
@@ -250,6 +267,11 @@ formatData <- function(data) {
             data[[i]] <- objectFactory(names(data[[i]]), data[[i]])
         }
         return(data)
+    } else if ("entry_1" %in% names(data[[1]])){
+      # we are dealing with an getGenomePairs. Ensure no NULL values
+      for (i in seq_along(data)){
+        data[[i]] <- filterNullData(names(data[[i]]), data[[i]])
+      }
     }
 
     dfs <- lapply(data, data.frame, stringsAsFactors = FALSE)
