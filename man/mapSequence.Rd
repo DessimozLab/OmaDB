@@ -2,24 +2,36 @@
 % Please edit documentation in R/mapSequence.R
 \name{mapSequence}
 \alias{mapSequence}
-\title{Map the Protein Sequence Function}
+\title{Map a protein sequence to the OMA Browser}
 \usage{
 mapSequence(query, search = NULL, full_length = FALSE)
 }
 \arguments{
-\item{query}{the sequence to be searched, it can be either a string or an AAString object from the Biostrings package}
+\item{query}{the sequence to be searched, it can be either a string or an
+AAString object from the Biostrings package}
 
-\item{search}{argument to choose search strategy. Can be set to 'exact', 'approximate' or 'mixed'. Defaults to 'mixed', meaning first tries to find exact match. If no target can be found, uses approximate search strategy to identify query sequence in database.}
+\item{search}{argument to choose search strategy. Can be set to 'exact',
+'approximate' or 'mixed'. Defaults to 'mixed', meaning first tries to
+find exact match. If no target can be found, uses approximate search
+strategy to identify query sequence in database.}
 
-\item{full_length}{a boolean indicating whether or not for exact matches, the query sequence must be matching the full target sequence. By default, a partial exact match is also reported as exact match.}
+\item{full_length}{a logical indicating whether or not for exact matches,
+the query sequence must be matching the full target sequence. By
+default, a partial exact match is also reported as exact match.}
 }
 \value{
-a data.frame containing the information of matches for the query sequence
+an \code{\link{omadb_obj}} with the attributes \code{query},
+    \code{identified_by} (the type of match) and \code{targets}, a
+    data.frame with the matching proteins.
 }
 \description{
-The function to identify a sequence.
+The function identifies the protein(s) in the OMA Browser that match a
+query sequence, either exactly or approximately.
 }
 \examples{
-mapSequence(query='MNDPSLLGYPNVGPQQQQQQQQQQHAGLLGKGTPNALQQQLHMNQLTGIPPPGLMNNSDVHTSSNNNSRQLLDQLANGNANMLNMNMDNNNNNNNNNNNNNNNGGGSGVMMNASTAAVNSIGMVPTVGTPVNINVNASNPLLHPHLDDPSLLNNPIWKLQLHLAAVSAQSLGQPNIYARQNAMKKYLATQQAQQAQQQAQQQAQQQVPGPFGPGPQAAPPALQPTDFQQSHIAEASKSLVDCTKQALMEMADTLTDSKTAKKQQPTGDSTPSGTATNSAVSTPLTPKIELFANGKDEANQALLQHKKLSQYSIDEDDDIENRMVMPKDSKYDDQLWHALDLSNLQIFNISANIFKYDFLTRLYLNGNSLTELPAEIKNLSNLRVLDLSHNRLTSLPAELGSCFQLKYFYFFDNMVTTLPWEFGNLCNLQFLGVEGNPLEKQFLKILTEKSVTGLIFYLRDNRPEIPLPHERRFIEINTDGEPQREYDSLQQSTEHLATDLAKRTFTVLSYNTLCQHYATPKMYRYTPSWALSWDYRRNKLKEQILSYDSDLLCLQEVESKTFEEYWVPLLDKHGYTGIFHAKARAKTMHSKDSKKVDGCCIFFKRDQFKLITKDAMDFSGAWMKHKKFQRTEDYLNRAMNKDNVALFLKLQHIPSGDTIWAVTTHLHWDPKFNDVKTFQVGVLLDHLETLLKEETSHNFRQDIKKFPVLICGDFNSYINSAVYELINTGRVQIHQEGNGRDFGYMSEKNFSHNLALKSSYNCIGELPFTNFTPSFTDVIDYIWFSTHALRVRGLLGEVDPEYVSKFIGFPNDKFPSDHIPLLARFEFMKTNTGSKKV')
-mapSequence(search='mixed',query='NKLLQPTDFQQSHIAEASKSLVDCTKQALMEMADTLTDSKTAKKQQPTGDSTPSGTATNSAVSTPLTPKIELFANGKDEANQALLQHKKLSQYSIDEDDDIENRMVMPKDSKYDDQLWHALDLSNLQIFNISANIFKYDFLTRLYLNGNSLTELPAEIKNLSNLRVLDLSHNRLTSLPAELGSCFQLKYFYFFDNMVTTLPWEFGNLCNLQFLGVEGNPLEKQFLKILTEKSVTGLIFYLRDNRPEIPLPHERRFIEINTDGEPQREYDSLQQSTEHLATDLAKRTFTVLSYNTLCQHYATPKMYRYTPSWALSWDYRRNKLKEQILSYDSDLLCLQEVESKTFEEYWVPLLDKHGYTGIFHAKARAKTMHSKDSKKVDGCCIFFKRDQFKLITKDAMDFSGAWMKHKKFQRTEDYLNRAMNKDNVALFLKLQHIPSGDTIWAVTTHLHWDPKFNDVKTFQVGVLLDHLETLLKEETSHNFRQDIKKFPVLICGDFNSYINSAVYELINTGRVQIHQEGNGRDFGYMSEKNFSHNLALKSSYNCIGELPFTNFTPSFTDVIDYIWFSTHALRVRGLLGEVDPEYVSKFIGFPNDKFPSDHIPLLARFEFMKTNTGSKKV')
+seq <- paste0("MNDPSLLGYPNVGPQQQQQQQQQQHAGLLGKGTPNALQQQLHMNQLTGIPPPGLMN",
+    "NSDVHTSSNNNSRQLLDQLANGNANMLNMNMDNNNNNNNNNNNNNNNGGGSGVMMNASTAAVNSIGM")
+res <- mapSequence(query = seq)
+res$identified_by
+res$targets[, c("omaid", "canonicalid")]
 }

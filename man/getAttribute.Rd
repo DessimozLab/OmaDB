@@ -2,21 +2,25 @@
 % Please edit documentation in R/OmaDBObject.R
 \name{getAttribute}
 \alias{getAttribute}
-\title{Get the value for the Object Attribute}
+\title{Get the value of an attribute of an object}
 \usage{
 getAttribute(obj, attribute)
 }
 \arguments{
-\item{obj}{the object of interest}
+\item{obj}{an object of class \code{\link{omadb_obj}}}
 
-\item{attribute}{the attribute of interest}
+\item{attribute}{the name of the attribute}
 }
 \value{
-an value for a given object attribute
+the value of the attribute
 }
 \description{
-The function to obtain the value for an object attribute.
+Returns the value of an attribute of an object returned by the package.
+If the attribute is a url pointing to the OMA Browser API, the data
+behind the url is loaded and returned. This is equivalent to
+\code{obj$attribute}.
 }
 \examples{
-members = getAttribute(getOMAGroup(id ='YEAST58'),'members')
+members <- getAttribute(getOMAGroup(id = "YEAST58"), "members")
+head(members$omaid)
 }

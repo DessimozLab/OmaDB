@@ -2,19 +2,21 @@
 % Please edit documentation in R/OmaDBObject.R
 \name{getObjectAttributes}
 \alias{getObjectAttributes}
-\title{Get the Object Attributes}
+\title{Get the attributes of an object}
 \usage{
 getObjectAttributes(obj)
 }
 \arguments{
-\item{obj}{the object of interest}
+\item{obj}{an object of class \code{\link{omadb_obj}}}
 }
 \value{
-an list of object attributes and their data classes
+a named character vector with the data type of each attribute
 }
 \description{
-The function to obtain the attributes and their data types for the object created.
+Lists the attributes of an object returned by the package and their
+data types. Attributes of type "url" are loaded from the OMA Browser when
+they are accessed.
 }
 \examples{
-attributes = getObjectAttributes(getOMAGroup(id ='YEAST58'))
+getObjectAttributes(getOMAGroup(id = "YEAST58"))
 }

@@ -7,14 +7,24 @@
 getLocus(proteins)
 }
 \arguments{
-\item{proteins}{the dataframe or a list of dataframes containing the protein data of interest. this can either be the members df or a list of protein ids.}
+\item{proteins}{the proteins of interest. Either a character vector of
+protein ids, a data.frame with protein data (e.g. the members of an
+OMA group or HOG, which have the columns \code{omaid},
+\code{chromosome}, \code{locus.start}, \code{locus.end} and
+\code{locus.strand}), a list of such data.frames or an
+\code{\link{omadb_obj}} of a protein.}
 }
 \value{
-genomic range object from the GenomicRanges package in Bioconductor
+a \code{\link[GenomicRanges]{GRanges}} object with the loci of the
+    proteins. The seqnames are the chromosomes, the names are the OMA ids
+    of the proteins.
 }
 \description{
-Function to obtain loci in genomic range format for a given list of proteins
+Function to obtain the genomic loci of a set of proteins as a GRanges
+object.
 }
 \examples{
-loci = getLocus(proteins = getOMAGroup('YEAST58')['members'])
+loci <- getLocus(proteins = getOMAGroup("YEAST58")$members)
+loci
+getLocus(c("YEAST00001", "YEAST00002"))
 }

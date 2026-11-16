@@ -10,3 +10,7 @@ inst/doc
 R/objects_docs.R
 vignettes/*.html
 vignettes/*.R
+CLAUDE.md
+..Rcheck/
+*.Rcheck/
+*.tar.gz

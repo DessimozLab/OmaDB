@@ -1,0 +1,16 @@
+structure(list(method = "GET", url = "https://omabrowser.org/api/version/", 
+    status_code = 200L, headers = structure(list(date = "Fri, 13 Nov 2026 17:14:23 GMT", 
+        `content-type` = "application/json", server = "cloudflare", 
+        nel = "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}", 
+        vary = "Accept, origin, Cookie", vary = "accept-encoding", 
+        allow = "GET, HEAD, OPTIONS", `cache-control` = "public, max-age=86400", 
+        `x-frame-options` = "DENY", `x-content-type-options` = "nosniff", 
+        `referrer-policy` = "same-origin", `cross-origin-opener-policy` = "same-origin", 
+        `set-cookie` = "REDACTED", `strict-transport-security` = "max-age=15768000", 
+        `content-encoding` = "gzip", `cf-cache-status` = "DYNAMIC", 
+        `report-to` = "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=vvdxmlW5LaXrg0YcB1%2B%2F1g6O5e8im9p3uIiYKa2GAnhwNscTMqko9NDbBDVu6TAQxErb2HG%2FTIuusobZzsEbpusOFD9%2BT5Oliv9r3RhaCdRRJJYb5rMuicugerBin8KE\"}]}", 
+        `cf-ray` = "a59f6996dd6e31a4-ZRH"), class = "httr2_headers"), 
+    body = charToRaw("{\"oma_version\":\"All.May2026\",\"api_version\":\"1.11\"}"), 
+    timing = c(redirect = 0, namelookup = 0.002876, connect = 0.031878, 
+    pretransfer = 0.062403, starttransfer = 0.094479, total = 0.094593
+    ), cache = new.env(parent = emptyenv())), class = "httr2_response")

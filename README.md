@@ -1,6 +1,6 @@
 # OmaDB: R wrapper for the OMA REST API
 
-R package providing access to the data in the OMA browser, using the REST API. As such, it requires a stable internet connection to operate. We also provide a similar _wrapper for python (https://github.com/DessimozLab/pyOmaDB)_.
+R package providing access to the data in the OMA browser, using the REST API. As such, it requires a stable internet connection to operate. All responses are cached in memory, and optionally on disk (see `?setOmaCache`). We also provide a similar _wrapper for python (https://github.com/DessimozLab/pyOmaDB)_.
 
 An notebook containing examples of how to use the package is available <a href="https://github.com/DessimozLab/omadb/blob/master/manuscript_examples.ipynb">here</a>.
 
@@ -26,28 +26,38 @@ library(OmaDB)
 
 ```
 
-Note that the v2.0 of the package requires R version >= 3.6 and Bioconductor version >=3.9. 
+The current version of the package requires R version >= 4.6.
 
 The latest version of the OmaDB package can also be directly installed from the github repository as below:
 
 ```
-install.packages('devtools')
-library(devtools)
-install_github('dessimozlab/omadb')
+BiocManager::install('DessimozLab/OmaDB')
 ```
+
+## Example
+
+```
+library(OmaDB)
+
+prot <- getProtein('P53_HUMAN')   # a single protein
+prot$orthologs                    # a data.frame, loaded on access
+getHOG('P53_HUMAN', members = TRUE)
+```
+
+See `browseVignettes('OmaDB')` for more examples.
 
 
 ## License
 
 OmaDB is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
+it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
 
 OmaDB is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-You should have received a copy of the GNU Lesser General Public License
+GNU General Public License for more details.
+You should have received a copy of the GNU General Public License
 along with OmaDB.  If not, see <http://www.gnu.org/licenses/>.
 

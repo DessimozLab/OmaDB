@@ -2,29 +2,45 @@
 % Please edit documentation in R/getTopGO.R
 \name{getTopGO}
 \alias{getTopGO}
-\title{Get the topGO Object function}
+\title{Get the topGO Object}
 \usage{
 getTopGO(annotations, format, foregroundGenes, ontology)
 }
 \arguments{
-\item{annotations}{list of GO annoatations obtained from the formatTopGO()}
+\item{annotations}{list of GO annotations obtained from
+\code{\link{formatTopGO}}}
 
-\item{format}{Format for the data to be returned in - either 'GO2geneID' or 'geneID2GO'}
+\item{format}{Format of the annotations - either 'GO2geneID' or
+'geneID2GO'}
 
-\item{foregroundGenes}{List of identifiers for the foreground genes}
+\item{foregroundGenes}{identifiers of the foreground genes, i.e. the genes
+of interest. Either a character vector or a data.frame with a column
+\code{omaid}.}
 
-\item{ontology}{The ontology for which the enrichment should be done. This
-parameter is passed directly to the topGOdata constructor.}
+\item{ontology}{The ontology for which the enrichment should be done
+('BP', 'MF' or 'CC'). This parameter is passed directly to the
+topGOdata constructor.}
 }
 \value{
-topGO object
+a \code{topGOdata} object
 }
 \description{
-The function to create a topGO object containing the GO annotations for the given protein list.
+The function creates a \code{topGOdata} object containing the GO
+annotations for the given genes, which can be used to perform a GO
+enrichment analysis with the topGO package.
+}
+\details{
+The topGO package must be attached with \code{library(topGO)} before
+calling this function, as topGO requires it to find its GO term
+environments.
 }
 \examples{
-geneList = list(getProtein(id='YEAST58'),getProtein(id='YEAST00059'))
-annotations = formatTopGO(geneList,format='geneID2GO')
 library(topGO)
-getTopGO(annotations, foregroundGenes = list('YEAST00058'), format = 'geneID2GO', ontology = 'BP')
+members <- getHOG("HOG:F0411479", level = "Saccharomycetaceae",
+    members = TRUE)
+go <- getProtein(members$omaid, attribute = "gene_ontology")
+annotations <- formatTopGO(go, format = "geneID2GO")
+GOdata <- getTopGO(annotations, foregroundGenes = head(members$omaid, 3),
+    format = "geneID2GO", ontology = "BP")
+GOdata
 }

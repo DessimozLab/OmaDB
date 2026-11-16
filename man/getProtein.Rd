@@ -4,43 +4,66 @@
 \alias{getProtein}
 \title{Retrieve a protein from the OMA Browser}
 \usage{
-getProtein(id, attribute = NULL)
+getProtein(id, attribute = NULL, rel_type = NULL)
 }
 \arguments{
-\item{id}{Identifier(s) for the entry or entries to be returned. a character
-string if single entry or a vector if multiple.}
+\item{id}{Identifier(s) for the entry or entries to be returned. A
+character string for a single entry or a vector for several entries.}
 
-\item{attribute}{Instead of the protein, return the attribute property of the
-protein. Attriute needs to be one of 'domains', 'orthologs',
-'gene_ontology', 'locus', or 'homoeologs'.}
+\item{attribute}{Instead of the protein, return the attribute property of
+the protein. See details for the available attributes. 'homeologs' is
+accepted as an alias for 'homoeologs'.}
+
+\item{rel_type}{For \code{attribute = "orthologs"}, restrict the orthologs
+to a type of relationship, i.e. '1:1', '1:n', 'm:1' or 'm:n'.}
 }
 \value{
-An object containing the JSON keys as attributes or a dataframe
-  containing the non-scalar protein property.
+For a single id, an \code{\link{omadb_obj}} with the protein's
+    attributes. For several ids, a named list of such objects (with
+    \code{NULL} for ids that are not found). If \code{attribute} is given,
+    a data.frame with the requested data (combined for all ids, with a
+    column \code{query_id}), except for 'locus' which returns a GRanges
+    object and 'domains' which returns an \code{omadb_obj} for a single id
+    and a list of them for several ids.
 }
 \description{
-This function enables to retrieve information on one or several proteins from
-the OMA Browser database.
+This function enables to retrieve information on one or several proteins
+from the OMA Browser database.
 }
 \details{
-In its simplest form the function returns the base data of the query protein.
-The query protein can be selected with any unique id, for example with a
-UniProtKB accession (P12345), an OMA id (YEAST00012), or a RefSeq id
-(NP_001226). To retrieve more than one protein, you should pass a vector of
-IDs.
+In its simplest form the function returns the base data of the query
+protein. The query protein can be selected with any unique id, for example
+with a UniProtKB accession (P12345), an OMA id (YEAST00012), or a RefSeq
+id (NP_001226). To retrieve more than one protein, pass a vector of IDs.
 
 Non-scalar properties of proteins such as their domains, GO annotations,
-orthologs or homeologs will get loaded upon accessing them, or if you only
-need this information you can set the attribute parameter to the property
-name and retrieve this information directly.
+orthologs or homoeologs are loaded upon accessing them, or - if you only
+need this information - you can set the attribute parameter to the
+property name and retrieve this information directly:
+\describe{
+    \item{orthologs}{the orthologs of the protein, optionally restricted to
+    a type of relationship with \code{rel_type}}
+    \item{hog_derived_orthologs}{the orthologs of the protein derived from
+    its hierarchical orthologous groups}
+    \item{homoeologs}{the homoeologs of the protein (only for proteins of
+    polyploid genomes)}
+    \item{gene_ontology}{the Gene Ontology annotations of the protein}
+    \item{domains}{the domain annotations of the protein}
+    \item{xref}{the cross-references of the protein to other databases}
+    \item{isoforms}{the splicing isoforms of the protein's gene}
+    \item{locus}{the genomic locus of the protein as a GRanges object}
+}
 }
 \examples{
-getProtein(id='YEAST00001')
-getProtein(id='YEAST00001', attribute='orthologs')
-getProtein(id=c('YEAST00001','YEAST00002','YEAST00012'))
-getProtein(id=c('YEAST00001','YEAST00002','YEAST00012'), attribute='gene_ontology')
+getProtein(id = "YEAST00001")
+head(getProtein(id = "YEAST00001", attribute = "orthologs"))
+prots <- getProtein(id = c("YEAST00001", "YEAST00002", "YEAST00012"))
+names(prots)
+go <- getProtein(id = c("YEAST00001", "YEAST00002"),
+    attribute = "gene_ontology")
+table(go$query_id)
 }
 \seealso{
-For non-unique non-unique IDs or partial ID lookup, use
-  \code{\link{searchProtein}} instead.
+For non-unique IDs or partial ID lookup, use
+    \code{\link{searchProtein}} instead.
 }

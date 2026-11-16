@@ -2,25 +2,46 @@
 % Please edit documentation in R/getTaxonomy.R
 \name{getTaxonomy}
 \alias{getTaxonomy}
-\title{Get the Taxonomic tree function}
+\title{Get the taxonomy of the genomes in the OMA Browser}
 \usage{
-getTaxonomy(root = NULL, members = NULL, newick = TRUE)
+getTaxonomy(root = NULL, members = NULL, newick = TRUE, collapse = TRUE)
 }
 \arguments{
-\item{root}{optional parameter, the root of the node of interest}
+\item{root}{optional parameter, the root of the subtree of interest, i.e.
+a taxonomic level, a taxon id or a UniProt species code.}
 
-\item{members}{optional parameter, list of member ncbi taxon or UniProt IDs that should be included in the induced taxonomy.}
+\item{members}{optional parameter, vector (or comma-separated string) of
+NCBI taxon ids, species codes or taxonomic levels that should be
+included in the induced taxonomy.}
 
-\item{newick}{optional parameter, boolean default set to TRUE}
+\item{newick}{logical, whether to return the taxonomy in newick format
+(default) or as a nested object.}
+
+\item{collapse}{logical, whether levels with a single child should be
+collapsed (default TRUE).}
 }
 \value{
-an object containing the JSON keys as attributes
+an \code{\link{omadb_obj}}. If \code{newick = TRUE}, it contains
+    the attributes \code{newick} (labels containing special characters
+    are quoted) and \code{root_taxon}. Otherwise it contains the attributes
+    \code{name}, \code{id} and \code{children}, a data.frame with one row
+    per child taxon, where a list column \code{children} again contains
+    the children of internal nodes and the column \code{code} the species
+    code of leaves.
 }
 \description{
-The function to obtain the taxonomic tree from the database in the newick format that can be plugged into phylo.io for visualisation.
+The function obtains the taxonomic tree of the genomes in the OMA
+Browser, either as a newick string (that can for example be converted into
+a \code{phylo} object with \code{\link{getTree}}) or as a nested
+object.
+}
+\details{
+The taxonomy can be restricted to a subtree by specifying its root, or
+to the taxonomy induced by a set of member genomes or taxonomic levels.
+Only one of \code{root} and \code{members} can be specified.
 }
 \examples{
-getTaxonomy()
-getTaxonomy(members='YEAST,ASHGO')
-getTaxonomy(root='Alveolata')
+getTaxonomy(members = c("YEAST", "ASHGO"))$newick
+tax <- getTaxonomy(root = "Alveolata", newick = FALSE)
+tax$name
 }

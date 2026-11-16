@@ -4,13 +4,21 @@
 \alias{getGenomePairs}
 \title{Retrieves the pairwise relations among two genomes}
 \usage{
-getGenomePairs(genome_id1, genome_id2, chr1 = NULL, chr2 = NULL,
-  rel_type = NULL, ...)
+getGenomePairs(
+  genome_id1,
+  genome_id2,
+  chr1 = NULL,
+  chr2 = NULL,
+  rel_type = NULL,
+  ...
+)
 }
 \arguments{
-\item{genome_id1}{an identifier for the first genome, which can be either its taxon id or UniProt species code}
+\item{genome_id1}{an identifier for the first genome, which can be either
+its taxon id or UniProt species code}
 
-\item{genome_id2}{an an identifier for the second genome, which can be either its taxon id or UniProt species code}
+\item{genome_id2}{an identifier for the second genome, which can be
+either its taxon id or UniProt species code}
 
 \item{chr1}{the chromosome of interest for the first genome}
 
@@ -18,27 +26,31 @@ getGenomePairs(genome_id1, genome_id2, chr1 = NULL, chr2 = NULL,
 
 \item{rel_type}{the pairs relationship type}
 
-\item{...}{qwargs}
+\item{...}{ignored; kept for backwards compatibility.}
 }
 \value{
-a dataframe containing information about both the entries in the orthologous pair and their relationship
+a data.frame containing information about both the entries in
+    the pair (columns starting with \code{entry_1.} and \code{entry_2.})
+    and their relationship.
 }
 \description{
 This function retrieves the pairwise relations among two genomes from
-the OMA Browser database. The relations are orthologs in case the 
-genomes are different and "close paralogs" and "homoeologs" in case 
+the OMA Browser database. The relations are orthologs in case the
+genomes are different and "close paralogs" and "homeologs" in case
 they are the same.
 }
 \details{
-By using the parameters chr1 and chr2, one can limit the relations 
-to a certain chromosome for one or both genomes. The id of the 
-chromosome corresponds to the chromosome ids from the 
+By using the parameters chr1 and chr2, one can limit the relations
+to a certain chromosome for one or both genomes. The id of the
+chromosome corresponds to the chromosome ids from the
 \code{\link{getGenome}} result.
 
 The rel_type parameter further limits the returned relations to a
-specific subtype of orthologs (i.e. "1:1", "1:n", "m:1", "m:n") or 
+specific subtype of orthologs (i.e. "1:1", "1:n", "m:1", "m:n") or
 - within a genome to either "close paralogs" or "homeologs".
 }
 \examples{
-getGenomePairs(genome_id1='YEAST',genome_id2='ASHGO')
+pairs <- getGenomePairs(genome_id1 = "YEAST", genome_id2 = "ASHGO",
+    chr2 = "I", rel_type = "1:1")
+head(pairs[, c("entry_1.omaid", "entry_2.omaid", "rel_type")])
 }

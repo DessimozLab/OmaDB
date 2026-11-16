@@ -1,3 +1,51 @@
+Changes in version 2.29.1 (2026-11-13)
++ NEW FEATURES
+  o caching of all API responses in memory, and optionally on disk with
+    setOmaCache(persistent = TRUE). The persistent cache is cleared
+    automatically when a new OMA release is available. clearOmaCache()
+    empties the caches.
+  o new functions getHOGs() (all HOGs / ancestral genes at a taxonomic
+    level), getSynteny() (ancestral synteny), getSharedAncestry() and
+    getOrthoXML(), providing similar functionality as the pyomadb package
+  o getProtein() gains the attributes 'hog_derived_orthologs', 'xref' and
+    'isoforms', and the argument rel_type to filter orthologs
+  o getHOG() gains the argument attribute to retrieve the members, the
+    Gene Ontology annotations and HOGs with similar phylogenetic profiles
+  o getGenome() gains the attribute 'genes'
+  o getTaxonomy() gains the argument collapse
+  o as.data.frame() and print() methods for omadb_obj objects
++ BUG FIXES
+  o resolveURL() always returns a data.frame for endpoints that return a
+    list of entries, also if the list contains a single entry (GitHub
+    issue #4)
+  o getProtein(attribute = 'homeologs') queried a non-existing endpoint
+  o getTopGO() with format 'GO2geneID' and formatTopGO() for lists of
+    proteins failed
+  o getTree() keeps the full names of species containing special
+    characters
++ CHANGES IN RETURN TYPES AND BEHAVIOUR
+  o all functions return results of consistent types: a single entity is
+    an omadb_obj, a list of entities a data.frame - independent of the
+    number of entries
+  o getHOG() always returns a data.frame (one row per matching HOG)
+  o loci are GRanges objects with the chromosome as seqnames and the OMA
+    id as names (previously the OMA id was used as seqnames)
+  o errors of the OMA Browser API (e.g. unknown ids) raise R errors with
+    the explanation of the server instead of returning NULL
+  o accessing an attribute of an omadb_obj that is loaded from the OMA
+    Browser no longer modifies the object in the global environment;
+    the data is cached instead
+  o getObjectAttributes() returns a named character vector
+  o getTopGO() requires topGO to be attached with library(topGO)
+  o the deprecated functions getXref(), getAnnotation(),
+    getGenomeAlignment() and getData() are now defunct
++ INTERNAL
+  o the package uses httr2 instead of httr and no longer depends on plyr
+  o example datasets were regenerated from the current OMA release (see
+    inst/scripts/make-data.R); LazyData is no longer used, load them with
+    data()
+  o extensive unit tests using recorded API responses
+
 Changes in version 2.19.1 (2024-04-18)
 + fix problem with getGenomePairs function after OMA API change
 

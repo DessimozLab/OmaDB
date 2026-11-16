@@ -1,28 +1,91 @@
 ---
-title: "Exploring Taxonomic trees with OmaDB"
-author: "Klara Kaleb"
-date: "`r Sys.Date()`"
-output: rmarkdown::html_vignette
+title: "Exploring the taxonomy with OmaDB"
+author:
+- name: Klara Kaleb
+- name: Adrian Altenhoff
+  affiliation: ETH Zurich and SIB Swiss Institute of Bioinformatics
+date: "`r format(Sys.Date(), '%B %d, %Y')`"
+package: OmaDB
+output:
+  BiocStyle::html_document:
+    toc: true
 vignette: >
   %\VignetteIndexEntry{Exploring Taxonomic trees with OmaDB}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 
-Using OmaDB, a user can easily obtain a taxonomic tree of interest using the getTaxonomy structure. The tree can be restricted to a certain root or by a list of members and the data is returned in the newick format. The newick can then be exported and used to create a tree object using ape which can then be visualised using ggtree. 
-
-This is done below using the getTaxonomy(root='Alveolata') function, the output of which is below.
-
-
-```{r, warning=FALSE, message=FALSE}
-library(OmaDB)
-
-load('../data/taxonomy.rda')
-
-getObjectAttributes(taxonomy)
-
-
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
 ```
 
-The tree can be further analysed and annotated using the ggtree package also available in Bioconductor. This can easily be done using the getTree() function in OmaDB.
+# Introduction
 
+The OMA Browser organises its genomes in a taxonomy derived from the NCBI
+taxonomy. The taxonomic levels of this tree are the levels at which
+Hierarchical Orthologous Groups and ancestral genomes are defined. This
+vignette shows how to retrieve the taxonomy with `OmaDB` and how to use it
+with the `r CRANpkg("ape")` package. See the vignette "Get started with
+OmaDB" for an introduction to the package.
+
+# Installation
+
+```{r install, eval = FALSE}
+if (!requireNamespace("BiocManager", quietly = TRUE)) {
+    install.packages("BiocManager")
+}
+BiocManager::install("OmaDB")
+```
+
+```{r load, message = FALSE}
+library(OmaDB)
+```
+
+# Retrieving the taxonomy
+
+`getTaxonomy()` returns the taxonomy in newick format. It can be
+restricted to a subtree with the argument `root`, or to the taxonomy
+induced by a set of genomes or taxonomic levels with `members`:
+
+```{r taxonomy}
+taxonomy <- getTaxonomy(members = c("YEAST", "ASHGO", "SCHPO", "HUMAN",
+    "MOUSE", "DROME", "ARATH"))
+taxonomy$root_taxon
+taxonomy$newick
+```
+
+With `newick = FALSE`, the taxonomy is returned as a nested structure that
+includes the NCBI taxon ids of all levels:
+
+```{r dictionary}
+tax <- getTaxonomy(members = c("YEAST", "ASHGO", "SCHPO"), newick = FALSE)
+tax$name
+tax$children[, c("name", "id")]
+```
+
+# Working with the tree
+
+`getTree()` converts the taxonomy into a `phylo` object of the
+`r CRANpkg("ape")` package, which can be visualised and analysed with ape
+or other packages such as `r Biocpkg("ggtree")`.
+
+```{r tree, fig.width = 7, fig.height = 4}
+tree <- getTree(taxonomy)
+tree
+plot(tree, show.node.label = TRUE, cex = 0.7, no.margin = TRUE,
+    x.lim = 12)
+```
+
+The internal node labels are the taxonomic levels that can be used in the
+other functions of the package, e.g. to retrieve the ancestral genome at a
+level with `getHOGs()`:
+
+```{r levels}
+tree$node.label
+```
+
+# Session information
+
+```{r session-info}
+sessionInfo()
+```

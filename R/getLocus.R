@@ -1,37 +1,49 @@
 #' Get loci for a given list of proteins
 #'
-#' Function to obtain loci in genomic range format for a given list of proteins
+#' Function to obtain the genomic loci of a set of proteins as a GRanges
+#' object.
 #'
-#' @param proteins the dataframe or a list of dataframes containing the protein data of interest. this can either be the members df or a list of protein ids.
-#' @return genomic range object from the GenomicRanges package in Bioconductor
+#' @param proteins the proteins of interest. Either a character vector of
+#'     protein ids, a data.frame with protein data (e.g. the members of an
+#'     OMA group or HOG, which have the columns \code{omaid},
+#'     \code{chromosome}, \code{locus.start}, \code{locus.end} and
+#'     \code{locus.strand}), a list of such data.frames or an
+#'     \code{\link{omadb_obj}} of a protein.
+#' @return a \code{\link[GenomicRanges]{GRanges}} object with the loci of the
+#'     proteins. The seqnames are the chromosomes, the names are the OMA ids
+#'     of the proteins.
 #' @export
-#' @importFrom GenomicRanges makeGRangesFromDataFrame
 #' @examples
-#' loci = getLocus(proteins = getOMAGroup('YEAST58')['members'])
-
+#' loci <- getLocus(proteins = getOMAGroup("YEAST58")$members)
+#' loci
+#' getLocus(c("YEAST00001", "YEAST00002"))
 getLocus <- function(proteins) {
-
-    # if a list of dataframes is given.
-    if (class(proteins) == "list") {
-        if (class(proteins[[1]]) == "data.frame") {
-
-            df <- plyr::rbind.fill(proteins)
-
-        } else {
-
-            df <- getProtein(id = proteins, attribute = "locus")
-
-        }
-
+    if (is.character(proteins)) {
+        return(getProtein(id = proteins, attribute = "locus"))
     }
-
-    df$locus.strand[df$locus.strand == "1"] <- "+"
-    df$locus.strand[df$locus.strand == "-1"] <- "-"
-
-    grange <- GenomicRanges::makeGRangesFromDataFrame(df, start.field = "start",
-        end.field = "end", seqnames.field = "omaid")
-
-    return(grange)
-
+    if (is(proteins, "omadb_obj")) {
+        return(.subset2(proteins, "locus"))
+    }
+    if (is.list(proteins) && !is.data.frame(proteins)) {
+        if (!all(vapply(proteins, is.data.frame, logical(1)))) {
+            stop("proteins must be ids, a data.frame or a list of ",
+                "data.frames.")
+        }
+        proteins <- .rbindFill(proteins)
+    }
+    required <- c("omaid", "locus.start", "locus.end", "locus.strand")
+    if (!is.data.frame(proteins) || !all(required %in% names(proteins))) {
+        stop("proteins must contain the columns ",
+            paste(required, collapse = ", "), ".")
+    }
+    chromosome <- proteins[["chromosome"]]
+    if (is.null(chromosome)) {
+        chromosome <- rep("unknown", nrow(proteins))
+    }
+    chromosome[is.na(chromosome)] <- "unknown"
+    GenomicRanges::GRanges(
+        seqnames = chromosome,
+        ranges = IRanges::IRanges(start = as.integer(proteins$locus.start),
+            end = as.integer(proteins$locus.end), names = proteins$omaid),
+        strand = .toStrand(proteins$locus.strand))
 }
-

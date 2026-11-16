@@ -1,46 +1,95 @@
 ---
-title: "Sequence Analysis with OmaDB"
-author: "Klara Kaleb"
-date: "`r Sys.Date()`"
-output: rmarkdown::html_vignette
+title: "Sequence analysis with OmaDB"
+author:
+- name: Klara Kaleb
+- name: Adrian Altenhoff
+  affiliation: ETH Zurich and SIB Swiss Institute of Bioinformatics
+date: "`r format(Sys.Date(), '%B %d, %Y')`"
+package: OmaDB
+output:
+  BiocStyle::html_document:
+    toc: true
 vignette: >
   %\VignetteIndexEntry{Sequence Mapping with OmaDB}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 
-Another useful function of the OmaDB package is its functionality to exactly and partially match sequences. We will explore this further in this vignette. 
-
-Let's say we have a sequence of interest that we want to map, in this case:
-
-```{r}
- sequence = "MNDPSLLGYPNVGPQQQQQQQQQQHAGLLGKGTPNALQQQLHMNQLTGIPPPGLMNNSDVHTSSNNNSRQLLDQLANGNANMLNMNMDNNNNNNNNNNNNNNNGGGSGVMMNASTAAVNSIGMVPTVGTPVNINVNASNPLLHPHLDDPSLLNNPIWKLQLHLAAVSAQSLGQPNIYARQNAMKKYLATQQAQQAQQQAQQQAQQQVPGPFGPGPQAAPPALQPTDFQQSHIAEASKSLVDCTKQALMEMADTLTDSKTAKKQQPTGDSTPSGTATNSAVSTPLTPKIELFANGKDEANQALLQHKKLSQYSIDEDDDIENRMVMPKDSKYDDQLWHALDLSNLQIFNISANIFKYDFLTRLYLNGNSLTELPAEIKNLSNLRVLDLSHNRLTSLPAELGSCFQLKYFYFFDNMVTTLPWEFGNLCNLQFLGVEGNPLEKQFLKILTEKSVTGLIFYLRDNRPEIPLPHER"
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
 ```
 
-We can pass it to the mapSequence() function which returns a list of targets. From this list we can then construct protein objects for which we can obtain further infromation - such as its oma group or its domains. The example response object, generated via mapSequence(sequence), is below.
+# Introduction
 
-```{r, warning=FALSE, message=FALSE}
+Often, a protein of interest is only known by its sequence, e.g. because it
+comes from a newly sequenced genome. `OmaDB` provides two functions for
+such sequences: `mapSequence()` identifies the proteins in the OMA Browser
+that match a sequence exactly or approximately, and `annotateSequence()`
+predicts Gene Ontology annotations for a sequence based on the
+annotations of the closest proteins in OMA (OMA FastMap). See the vignette
+"Get started with OmaDB" for an introduction to the package.
+
+# Installation
+
+```{r install, eval = FALSE}
+if (!requireNamespace("BiocManager", quietly = TRUE)) {
+    install.packages("BiocManager")
+}
+BiocManager::install("OmaDB")
+```
+
+```{r load, message = FALSE}
 library(OmaDB)
-
-load('../data/sequence_map.rda')
-
-getObjectAttributes(sequence_map)
-
-targets = getAttribute(sequence_map,'targets')
-
-length(targets) 
-
-protein = targets[[1]][['entry_url']]
-
 ```
 
-One can also directly obtain GO annotations for a given query sequence (protein$ogene_ontology), which results in an object as below:
+# Mapping a sequence
 
-```{r, warning=FALSE, message=FALSE}
+The query can be a character string or an `AAString` object of the
+`r Biocpkg("Biostrings")` package:
 
-load('../data/sequence_annotation.rda')
-
-sequence_annotation 
-
+```{r sequence}
+sequence <- Biostrings::AAString(paste0(
+    "MNDPSLLGYPNVGPQQQQQQQQQQHAGLLGKGTPNALQQQLHMNQLTGIPPPGLMNNSDVHTSSNNNS",
+    "RQLLDQLANGNANMLNMNMDNNNNNNNNNNNNNNNGGGSGVMMNASTAAVNSIGMVPTVGTPVNINVN",
+    "ASNPLLHPHLDDPSLLNNPIWKLQLHLAAVSAQSLGQPNIYARQNAMKKYLATQQAQQAQQQAQQQAQ",
+    "QQVPGPFGPGPQAAPPALQPTDFQQSHIAEASKSLVDCTKQALMEMADTLTDSKTAKKQQPTGDSTPS",
+    "GTATNSAVSTPLTPKIELFANGKDEANQALLQHKKLSQYSIDEDDDIENRMVMPKDSKYDDQLWHALD",
+    "LSNLQIFNISANIFKYDFLTRLYLNGNSLTELPAEIKNLSNLRVLDLSHNRLTSLPAELGSCFQLKYF",
+    "YFFDNMVTTLPWEFGNLCNLQFLGVEGNPLEKQFLKILTEKSVTGLIFYLRDNRPEIPLPHER"))
+sequence
 ```
 
+```{r map}
+res <- mapSequence(sequence)
+res$identified_by
+res$targets[, c("omaid", "canonicalid", "species.species")]
+```
+
+The search strategy can be set to `"exact"`, `"approximate"` or `"mixed"`
+(the default: approximate search is only used if no exact match is
+found). The matching protein can then be explored further, e.g. its
+orthologs:
+
+```{r orthologs}
+target <- getProtein(res$targets$omaid[1])
+head(target$orthologs[, c("omaid", "species.species", "rel_type")])
+```
+
+# Function prediction
+
+`annotateSequence()` predicts Gene Ontology annotations of a sequence,
+which does not need to be in the OMA Browser. The predictions are returned
+in the columns of the GAF format; the column `With` indicates the protein
+the annotation is derived from.
+
+```{r annotate}
+go <- annotateSequence(sequence)
+nrow(go)
+head(go[, c("GO_ID", "GO_name", "Aspect", "With")])
+```
+
+# Session information
+
+```{r session-info}
+sessionInfo()
+```

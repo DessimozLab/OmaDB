@@ -7,17 +7,25 @@
 formatTopGO(geneList, format)
 }
 \arguments{
-\item{geneList}{the list of OmaDB protein objects or a dataframe of ontologies to be included in the analysis - this is where the GO annotations are extracted from.}
+\item{geneList}{either a list of protein objects (as returned by
+\code{\link{getProtein}} for several ids), or a data.frame of GO
+annotations, e.g. as returned by \code{getProtein(ids, attribute =
+"gene_ontology")} or \code{getHOG(id, attribute = "gene_ontology")}.
+For a data.frame, the genes are identified by the column
+\code{query_id} if present, \code{id} otherwise.}
 
-\item{format}{format for the data to be returned in - either 'GO2geneID' or 'geneID2GO'}
+\item{format}{format for the data to be returned in - either 'GO2geneID'
+or 'geneID2GO'}
 }
 \value{
-a list containing the GO2geneID or geneID2GO information
+a named list containing the GO2geneID or geneID2GO information
 }
 \description{
-The function to create a list of GO annotations that is compatible with topGO from protein objects in roma
+The function creates a list of GO annotations that is compatible with
+topGO from proteins or GO annotations retrieved from the OMA Browser.
 }
 \examples{
-geneList = list(getProtein(id='YEAST01'),getProtein(id='YEAST03'))
-annotations = formatTopGO(geneList,format='geneID2GO')
+geneList <- getProtein(id = c("YEAST00001", "YEAST00003"))
+annotations <- formatTopGO(geneList, format = "geneID2GO")
+lengths(annotations)
 }

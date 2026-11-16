@@ -12,3 +12,7 @@
 ^\.git$
 ^\.Rhistory$
 ^LICENSE\.md$
+^CLAUDE\.md$
+^\.\.Rcheck$
+^.*\.Rcheck$
+^.*\.tar\.gz$

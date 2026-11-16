@@ -1,19 +1,48 @@
 Package: OmaDB
 Title: R wrapper for the OMA REST API
-Version: 2.29.0
-Author: Klara Kaleb 
-Maintainer: Klara Kaleb <klara.kaleb18@ic.ac.uk>, Adrian Altenhoff <adrian.altenhoff@inf.ethz.ch>
-Description: A package for the orthology prediction data download from OMA database.
-Depends: R (>= 3.5), httr (>= 1.2.1), plyr(>= 1.8.4)
-Imports: utils, ape, Biostrings, GenomicRanges, IRanges, methods, topGO, jsonlite
-URL: https://github.com/DessimozLab/OmaDB
+Version: 2.29.1
+Authors@R: c(
+    person("Klara", "Kaleb", role = "aut"),
+    person("Adrian", "Altenhoff", email = "adrian.altenhoff@inf.ethz.ch",
+        role = c("aut", "cre")))
+Description: A package for the orthology prediction data download from the
+    OMA browser database (https://omabrowser.org). It provides access to
+    proteins, genomes, Hierarchical Orthologous Groups (HOGs), OMA Groups,
+    pairwise orthologs, the taxonomy and (ancestral) synteny via the OMA
+    REST API. The results are returned as data.frames or objects using
+    standard Bioconductor classes such as GRanges and AAString, and can be
+    used for downstream analyses, e.g. Gene Ontology enrichment with topGO.
+    Responses are cached in memory and optionally on disk.
+Depends: R (>= 4.6.0)
+Imports:
+    ape,
+    Biostrings,
+    cachem,
+    GenomicRanges,
+    httr2 (>= 1.0.0),
+    IRanges,
+    jsonlite,
+    methods,
+    rlang,
+    stats,
+    tools,
+    topGO,
+    utils
+Suggests:
+    BiocStyle,
+    httptest2,
+    igraph,
+    knitr,
+    rmarkdown,
+    testthat (>= 3.0.0),
+    withr
+URL: https://github.com/DessimozLab/OmaDB, https://omabrowser.org
 BugReports: https://github.com/DessimozLab/OmaDB/issues
 Encoding: UTF-8
 License: GPL-3
-LazyData: true
-Suggests: knitr,
-    rmarkdown, 
-    testthat
+LazyData: false
 VignetteBuilder: knitr
-biocViews: Software, ComparativeGenomics, FunctionalGenomics, Genetics, Annotation, GO, FunctionalPrediction
-RoxygenNote: 7.1.1
+biocViews: Software, ComparativeGenomics, FunctionalGenomics, Genetics, Annotation, GO, FunctionalPrediction, ThirdPartyClient
+Config/testthat/edition: 3
+Roxygen: list(markdown = FALSE)
+Config/roxygen2/version: 8.1.1

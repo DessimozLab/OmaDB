@@ -2,19 +2,26 @@
 % Please edit documentation in R/searchProtein.R
 \name{searchProtein}
 \alias{searchProtein}
-\title{Get the CrossReferences in the OMA database for a pattern}
+\title{Search for proteins by a (partial) identifier}
 \usage{
 searchProtein(pattern)
 }
 \arguments{
-\item{pattern}{the pattern to query the OMA database with - needs to be at least 3 characters long}
+\item{pattern}{the pattern to query the OMA database with - needs to be
+at least 3 characters long. If the pattern matches too many
+cross-references, an error is raised.}
 }
 \value{
-a data.frame containing information on the cross references for a given pattern
+a data.frame containing information on the cross references
+    matching the pattern, including the OMA id of the protein (column
+    \code{omaid}).
 }
 \description{
-The function to list all the crossreferences that match a certain defined pattern.
+The function lists all the cross-references to other databases (e.g.
+UniProtKB, RefSeq, Ensembl) of proteins in the OMA Browser that match a
+pattern.
 }
 \examples{
-searchProtein(pattern='MAL')
+res <- searchProtein(pattern = "P53_RAT")
+res[, c("xref", "source", "omaid")]
 }

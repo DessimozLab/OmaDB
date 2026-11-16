@@ -4,36 +4,60 @@
 \alias{getHOG}
 \title{Retrieve a HOG from the OMA Browser}
 \usage{
-getHOG(id, level = NULL, members = FALSE)
+getHOG(id, level = NULL, members = FALSE, attribute = NULL, max_results = NULL)
 }
 \arguments{
-\item{id}{an identifier for the HOG to be returned - either its HOG ID or a protein id.}
+\item{id}{an identifier for the HOG to be returned - either its HOG ID or
+a protein id.}
 
-\item{level}{a specific level for the HOG to be restricted to. level can either be 'root', or the name of a taxonomic level that is part of the HOG, e.g. 'Fungi'. By default it will retrieve the depest level of the most specific subhog for the given ID.}
+\item{level}{a specific level for the HOG to be restricted to. level can
+either be 'root', or the name of a taxonomic level that is part of the
+HOG, e.g. 'Fungi'. By default it will retrieve the deepest level of the
+most specific subhog for the given ID.}
 
-\item{members}{boolean that when set to TRUE returns a dataframe containg the protein members at a given hog level}
+\item{members}{logical, if \code{TRUE} returns a data.frame containing
+the member proteins of the HOG at the given level. This is equivalent
+to \code{attribute = "members"}.}
+
+\item{attribute}{an extra attribute of the HOG to be returned, see
+details.}
+
+\item{max_results}{for \code{attribute = "similar_profile_hogs"}, the
+maximum number of similar HOGs to return.}
 }
 \value{
-an object containing HOG attributes, or a list of those
+Without \code{attribute}, a data.frame with one row per HOG
+    matching the query (a HOG ID can refer to several sub-HOGs at a given
+    level), each with information on the HOG at the given level. With
+    \code{attribute} (or \code{members = TRUE}), a data.frame with the
+    requested data.
 }
 \description{
-The function retrieves a specific Hierarchical Orthologous Group (HOG) from
-the OMA Browser database. A HOG is a set of genes that have all decendet from
-a single ancestral gene at a specific taxonomic level.
+The function retrieves a specific Hierarchical Orthologous Group (HOG)
+from the OMA Browser database. A HOG is a set of genes that have all
+descended from a single ancestral gene at a specific taxonomic level.
 }
 \details{
 A HOG can be identified by its member proteins and a taxonomic level, or
 a HOG ID. As a taxonomic level, you can use either 'root' to retrieve the
 HOG at its deepest level, or the name of NCBI taxonomy level, or leave it
-out in which case the deepest level that doesn't include a duplication node
-is used.
+out in which case the deepest level that doesn't include a duplication
+node is used.
 
-The function either returns a single hog object or a list of hog
-objects. The later happens if the HOG ID you provide has already split into
-several sub-hogs at the level you indicate.
+The optional argument attribute can be used to directly retrieve
+\describe{
+    \item{members}{the member proteins of the HOG at the given level}
+    \item{gene_ontology}{the Gene Ontology annotations of the HOG, i.e. of
+    the ancestral gene at the given level, with a score}
+    \item{similar_profile_hogs}{HOGs with a similar phylogenetic profile,
+    i.e. similar pattern of gene losses and duplications}
+}
 }
 \examples{
-getHOG(id = 'YEAST590')
-getHOG(id = 'YEAST590', level='root')
-getHOG(id = 'YEAST590', level='Saccharomycetaceae', members=TRUE)
+getHOG(id = "YEAST00001")
+getHOG(id = "YEAST00001", level = "root")[, c("hog_id", "level")]
+members <- getHOG(id = "HOG:F0411479", level = "Saccharomycetaceae",
+    members = TRUE)
+head(members$omaid)
+getHOG(id = "HOG:F0411479", attribute = "gene_ontology")
 }

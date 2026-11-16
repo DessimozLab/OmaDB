@@ -1,88 +1,207 @@
 ---
 title: "Get started with OmaDB"
-author: "Klara Kaleb"
-date: "`r Sys.Date()`"
-output: rmarkdown::html_vignette
+author:
+- name: Klara Kaleb
+- name: Adrian Altenhoff
+  affiliation: ETH Zurich and SIB Swiss Institute of Bioinformatics
+date: "`r format(Sys.Date(), '%B %d, %Y')`"
+package: OmaDB
+output:
+  BiocStyle::html_document:
+    toc: true
 vignette: >
   %\VignetteIndexEntry{Get started with OmaDB}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 
-This little vignette shows you how to get started with the `OmaDB` package. OmaDB is a wrapper for the REST API for the Orthologous MAtrix project (OMA) which is a  database for the inference of orthologs among complete genomes. 
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+```
 
-For more details on the OMA project, see https://omabrowser.org/oma/home/.
+# Introduction
 
-Note that each function in the package has its own individual documentation, which can be accessed by putting a question mark (?) in front of the function name e.g. ?getProtein() .
+The Orthologous MAtrix (OMA) project is a method and database for the
+inference of orthologs among complete genomes
+([omabrowser.org](https://omabrowser.org)). The OMA Browser provides several
+types of orthology predictions for thousands of genomes across the tree of
+life:
 
-## Some useful functions
-The package contains a range of functions that are used to query the database in an R friendly way. 
-This vignette highlights some of them, whereas some others are described in more detail in other vignettes:
+- pairwise orthologs between proteins of two genomes,
+- OMA Groups, i.e. groups of proteins that are all orthologous to each
+    other, and
+- Hierarchical Orthologous Groups (HOGs), i.e. groups of genes that
+    descended from a single ancestral gene at a given taxonomic level.
 
-[Exploring Hierarchical orthologous groups with roma](exploring_hogs.html)
+`OmaDB` gives access to the data of the OMA Browser from R, using its REST
+API. It returns the data as data.frames and objects using standard
+Bioconductor classes (e.g. `GRanges`, `AAString`), so that it can be
+directly used in downstream analyses. A similar package exists for Python
+([pyomadb](https://github.com/DessimozLab/pyomadb)). Other Bioconductor
+packages provide orthology information for a limited set of model
+organisms (e.g. the `Orthology.eg.db` annotation package) or gene trees
+from other resources (e.g. `biomaRt` for Ensembl Compara), while `OmaDB`
+covers all genomes in OMA and gives access to the hierarchical orthologous
+groups and the ancestral genomes inferred by OMA.
 
-[Exploring Taxonomic trees with roma](tree_visualisation.html)
+As `OmaDB` queries the OMA Browser, it requires an internet connection.
 
-[Sequence Analysis with roma](sequence_mapping.html)
+This vignette gives an overview of the package. More details are given in
+the vignettes on HOGs, the taxonomy and sequence analyses.
 
-Note that all of the vignettes focus on exploring the example responses generated previously, allowing them to build with or without an internet connection. For each example response, the query that generated it is given. 
+# Installation
 
-### searchProtein
+`OmaDB` is available from Bioconductor and can be installed as follows:
 
-This function searches the OMA database for entries containing the pattern defined and returns the results in a dataframe. Hence, it is usually a good starting place. Example response, generated via searchProtein('MAL'), is below.
+```{r install, eval = FALSE}
+if (!requireNamespace("BiocManager", quietly = TRUE)) {
+    install.packages("BiocManager")
+}
+BiocManager::install("OmaDB")
+```
 
-```{r, warning=FALSE, message=FALSE}
+```{r load, message = FALSE}
 library(OmaDB)
-
-xref = load('../data/xref.rda')
-
-head(xref)
-
 ```
 
-### getGenomePairs
+# Overview of the package
 
-This function serves to obtain the orthologs for 2 whole genomes. The result is a dataframe containing information on each member in the pair and their relationship. Below is the representation of the example response, generated using getGenomePairs('YEAST','ASHGO').
+The functions of the package correspond to the main entities of the OMA
+Browser:
 
-```{r, warning=FALSE, message=FALSE}
+| Function | Retrieves |
+|---|---|
+| `getProtein()` | proteins, their orthologs, GO annotations, ... |
+| `searchProtein()` | proteins matching an identifier |
+| `mapSequence()` | proteins matching a sequence |
+| `getOMAGroup()` | OMA Groups |
+| `getHOG()`, `getHOGs()`, `getOrthoXML()` | Hierarchical Orthologous Groups |
+| `getGenome()` | genomes and their proteins |
+| `getGenomePairs()`, `getSharedAncestry()` | orthologs between two genomes |
+| `getTaxonomy()` | the taxonomy of the genomes |
+| `getSynteny()` | (ancestral) gene order |
+| `annotateSequence()` | predicted GO annotations for a sequence |
 
-load('../data/pairs.rda')
+The results follow simple rules: an entity (e.g. a protein or a genome) is
+returned as an object of class `omadb_obj`, a list of entities (e.g. the
+orthologs of a protein) is returned as a data.frame.
 
-head(pairs)
-
+```{r version}
+getVersion()
 ```
 
-### getProtein
+# Proteins
 
-This function serves to obtain the information for either a single protein entry or multiple protein entries in a database. For more info, see ?getProtein(). There are similar functions to obtain information on genomes, OMA groups and HOGs i.e. getGenome(), getOMAGroup() and getHOG() respectively. 
+Proteins can be retrieved with any unique identifier, e.g. a UniProtKB
+accession, an OMA id or a RefSeq id. If an identifier is not unique,
+`searchProtein()` lists all matching proteins.
 
-### getObjectAttributes
+```{r search}
+hits <- searchProtein("P53_HUMAN")
+hits[, c("xref", "source", "omaid")]
+```
 
-Single entries in the database are represented as S3 objects, with their attributes corresponding to the information requested. These attributes vary greatly from object to object, and the helper function getObjectAttributes() allows the user to list all the object attributes and their corresponding data types. 
+```{r protein}
+p53 <- getProtein("P53_HUMAN")
+p53
+```
 
-### getAttribute
+The protein sequence is an `AAString` and the genomic locus a `GRanges`
+object:
 
-The specific attributes of the created object can be accessed via $ or via the getAttribute() function. Below is an example of object containing information about an OMA group. 
+```{r protein-attributes}
+p53$sequence
+p53$locus
+```
 
-Below is the exploration of the example OMA group entry response, obtained via getOMAGroup('737636').
+Some attributes, such as the orthologs or the GO annotations, are loaded
+from the OMA Browser when they are accessed (they are shown as
+`<loaded on access>` above):
 
-```{r, warning=FALSE, message=FALSE}
+```{r lazy}
+orthologs <- p53$orthologs
+dim(orthologs)
+head(orthologs[, c("omaid", "species.species", "rel_type")])
+table(orthologs$rel_type)
+```
 
-load('../data/group.rda')
+The same data can be retrieved directly with the `attribute` argument,
+also for several proteins at once. For several proteins, the column
+`query_id` contains the queried identifier:
 
-object_attributes = getObjectAttributes(group)
+```{r attribute}
+go <- getProtein(c("P53_HUMAN", "P53_MOUSE"), attribute = "gene_ontology")
+head(go[, c("query_id", "GO_term", "name", "aspect")])
+```
 
+The function `getObjectAttributes()` lists the attributes of an object and
+`as.data.frame()` converts it into a data.frame with a single row:
+
+```{r as-data-frame}
+head(getObjectAttributes(p53))
+df <- as.data.frame(p53)
+df[, c("omaid", "canonicalid", "species.code", "oma_group")]
+```
+
+# OMA Groups
+
+OMA Groups are cliques of proteins that are all orthologous to each other.
+As they contain at most one protein per species, they are often used as
+marker genes for phylogenetic analyses.
+
+```{r group}
+group <- getOMAGroup(p53$oma_group)
 group$fingerprint
-
-getAttribute(group, 'fingerprint')
-
-
+nrow(group$members)
+head(group$members[, c("omaid", "canonicalid", "species.species")])
 ```
 
-### lazy loading
+`getLocus()` converts the loci of a set of proteins into a `GRanges`
+object:
 
-In most cases there is great quantity of information available for a given entry and this impacts the data retrival time. Due to this, the information available for such entries is split into a number of endpoints and these are included appropriatelly as redirects in URL form. These are automatically loaded upon $ or getAttribute() accession. 
+```{r locus}
+getLocus(head(group$members, 5))
+```
 
+# Genomes and their orthologs
 
-For further information on the OMA REST API please visit [OMA REST API DOCUMENTATION](http://omadev.cs.ucl.ac.uk/api/docs).
+`getGenome()` lists all genomes in the OMA Browser or retrieves a single
+genome.
 
+```{r genome}
+genome <- getGenome("ASHGO")
+genome$species
+genome$chromosomes
+```
+
+The orthologs between two genomes can be retrieved with `getGenomePairs()`,
+optionally restricted to certain chromosomes and types of orthology.
+`getSharedAncestry()` summarises the number of orthologs between two
+genomes.
+
+```{r pairs}
+pairs <- getGenomePairs("YEAST", "ASHGO", chr2 = "I")
+table(pairs$rel_type)
+head(pairs[, c("entry_1.omaid", "entry_2.omaid", "rel_type")])
+getSharedAncestry("YEAST", "ASHGO")$details
+```
+
+# Caching
+
+All responses of the OMA Browser are cached in memory, so repeated queries
+are fast and do not burden the server. The cache can also be stored on
+disk to reuse it across R sessions. It is cleared automatically when a new
+release of the OMA Browser is available.
+
+```{r cache, eval = FALSE}
+setOmaCache(persistent = TRUE)
+```
+
+The OMA Browser REST API is documented at
+<https://omabrowser.org/api/docs>.
+
+# Session information
+
+```{r session-info}
+sessionInfo()
+```

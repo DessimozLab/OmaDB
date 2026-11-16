@@ -7,16 +7,18 @@
 getTree(newick)
 }
 \arguments{
-\item{newick}{The newick tree to be instantiated.}
+\item{newick}{The newick tree to be instantiated, or the result of
+\code{\link{getTaxonomy}} with \code{newick = TRUE}.}
 }
 \value{
-a tree object
+a tree object of class \code{phylo}
 }
 \description{
-A convenience function to obtain a tree object from newick tree,
-essentially wraps read.tree from the ape package.
+A convenience function to obtain a tree object from a newick tree,
+essentially wraps \code{\link[ape]{read.tree}} from the ape package.
 }
 \examples{
-taxonomy = getTaxonomy(root='Alveolata')
-getTree(newick=taxonomy$newick)
+taxonomy <- getTaxonomy(root = "Alveolata")
+tree <- getTree(newick = taxonomy)
+head(tree$tip.label)
 }

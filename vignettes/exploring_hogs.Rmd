@@ -1,51 +1,177 @@
 ---
-title: "Exploring Hierarchical orthologous groups with OmaDB"
-author: "Klara Kaleb"
-date: "`r Sys.Date()`"
-output: rmarkdown::html_vignette
+title: "Exploring Hierarchical Orthologous Groups with OmaDB"
+author:
+- name: Klara Kaleb
+- name: Adrian Altenhoff
+  affiliation: ETH Zurich and SIB Swiss Institute of Bioinformatics
+date: "`r format(Sys.Date(), '%B %d, %Y')`"
+package: OmaDB
+output:
+  BiocStyle::html_document:
+    toc: true
 vignette: >
-  %\VignetteIndexEntry{Exploring Hierarchical orthologous groups with OmaDB}
+  %\VignetteIndexEntry{Exploring Hierarchical Orthologous Groups with OmaDB}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 
-This little vignette shows you how to get started with the data available for HOGs in the `OmaDB` package.
-
-## The HOGs
-
-Hierarchical orthologous groups (also known as HOGs) are sets of genes that are defined with respect to particular taxonomic ranges of interest[1]. They group genes that have descended from a single common ancestral genes in that taxonomic range. 
-
-HOGs hold a lot of useful information and have many applications in various contexts, including inference of gene function, study of gene evolution dynamics and comparative genomics. Each HOG has a taxonomic range - within it, a given HOG can branch into constructs known as subHOGs which arise in an event of gene duplication.
-
-HOGs can be retrived either by their hog id or by one of their members. Let's say we are interested in a gene that goes by the name of HUMAN22168, which can be simply accessed using getHOG("HOG:0273533.1b"). The exploration of the example response object is below.
-
-```{r, warning=FALSE, message=FALSE}
-library(OmaDB)
-
-load('../data/hog.rda')
-
-print(hog)
-
-getObjectAttributes(hog)
-
-hog_id = getAttribute(hog,'hog_id')
-
-parent_hogs = getAttribute(hog,'parent_hogs')
-
-dim(parent_hogs)
-
-parent_hog_id = parent_hogs[[hog_id]]
-
-children_hogs = getAttribute(hog,'children_hogs')
-
-children_hogs
-
-child_hog_ids  = children_hogs[['hog_id']]
-
-
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
 ```
-From above, we can recognise that  HOG:0261495.1a is a subhog of its parent hog HOG:0261495 and that it further splits into 2 children subhogs, HOG:0261495.1a.1a and HOG:0261495.1a.1b respectively. We further investigate at what taxonomic level this split has occured by looking at the root levels of the children subhogs.
 
-We have just detected a gene duplication - it would be interesting to see if there is any gene differentiation as a consenquence. We can check this by looking at the member protein annotations for each subhog_id and perform a GO enrichment analysis on this by using the Bioconductor package topGO.
+# Introduction
 
-(1) Altenhoff, A., Gil, M., Gonnet, G., & Dessimoz, C. (2013). Inferring Hierarchical Orthologous Groups from Orthologous Gene Pairs PLoS ONE, 8 DOI: 10.1371/journal.pone.0053786
+Hierarchical Orthologous Groups (HOGs) are sets of genes that have
+descended from a single common ancestral gene within a taxonomic range of
+interest (Altenhoff et al. 2013). Each HOG is defined with respect to a
+taxonomic level; going towards more recent levels, a HOG can split into
+several sub-HOGs if the ancestral gene was duplicated. HOGs thus capture
+the full history of gene duplications and losses of a gene family, and they
+correspond to the genes of ancestral genomes.
+
+This vignette shows how to explore HOGs, ancestral genomes and their
+synteny with `OmaDB`. See the vignette "Get started with OmaDB" for an
+introduction to the package.
+
+# Installation
+
+```{r install, eval = FALSE}
+if (!requireNamespace("BiocManager", quietly = TRUE)) {
+    install.packages("BiocManager")
+}
+BiocManager::install("OmaDB")
+```
+
+```{r load, message = FALSE}
+library(OmaDB)
+```
+
+# Retrieving HOGs
+
+HOGs can be retrieved by their HOG ID or by one of their member proteins.
+Without a level, the most specific HOG of a protein is returned, with
+`level = "root"` the HOG at its deepest level.
+
+```{r hog}
+hog <- getHOG("YEAST00001")
+hog[, c("hog_id", "level", "description")]
+
+root <- getHOG("YEAST00001", level = "root")
+root[, c("hog_id", "level")]
+```
+
+The HOG ID encodes the duplications: `r root$hog_id` is the root HOG,
+`r hog$hog_id` one of its sub-HOGs. The sub-HOGs of the root HOG can be
+found in its `children_hogs` attribute:
+
+```{r children}
+children <- root$children_hogs[[1]]
+children$hog_id
+```
+
+The root HOG at the level of the *Saccharomycetaceae* thus split into two
+sub-HOGs, due to a duplication of the ancestral gene. These are the
+paralogs that arose from the whole genome duplication in the ancestor of
+*Saccharomyces cerevisiae*.
+
+# Members and functional annotations
+
+The members of a HOG at a given level are retrieved with `members = TRUE`:
+
+```{r members}
+members <- getHOG(root$hog_id, level = "Saccharomycetaceae", members = TRUE)
+nrow(members)
+head(members[, c("omaid", "canonicalid", "oma_hog_id")])
+table(members$species.code)
+```
+
+The Gene Ontology annotations of the ancestral gene can be retrieved with
+`attribute = "gene_ontology"`. The score indicates how well the annotation
+is supported by the annotations of the members of the HOG.
+
+```{r hog-go}
+go <- getHOG(root$hog_id, attribute = "gene_ontology")
+go[, c("GO_term", "name", "aspect", "score")]
+```
+
+To test whether the GO annotations of a sub-HOG are enriched compared to
+the whole family, the annotations of the members can be analysed with the
+`r Biocpkg("topGO")` package:
+
+```{r topgo, message = FALSE}
+library(topGO)
+memberGO <- getProtein(members$omaid, attribute = "gene_ontology")
+annotations <- formatTopGO(memberGO, format = "geneID2GO")
+subhog <- members$omaid[startsWith(members$oma_hog_id, children$hog_id[1])]
+GOdata <- getTopGO(annotations, foregroundGenes = subhog,
+    format = "geneID2GO", ontology = "BP")
+GOdata
+```
+
+HOGs with a similar phylogenetic profile, i.e. a similar pattern of gene
+losses and duplications, can be found with
+`attribute = "similar_profile_hogs"`:
+
+```{r similar}
+similar <- getHOG(root$hog_id, attribute = "similar_profile_hogs",
+    max_results = 5)
+similar[, c("hog_id", "jaccard_similarity")]
+```
+
+The complete structure of a HOG, with all speciation and duplication
+events, is available in the OrthoXML format:
+
+```{r orthoxml}
+xml <- getOrthoXML(root$hog_id)
+cat(substr(xml, 1, 300))
+```
+
+# Ancestral genomes
+
+All HOGs defined at a taxonomic level correspond to the genes of the
+ancestral genome at that level:
+
+```{r ancestral}
+ancestral <- getHOGs(level = "Saccharomycetaceae")
+nrow(ancestral)
+summary(ancestral$completeness_score)
+```
+
+The members of these HOGs can be loaded using the urls in the column
+`members_url` with `resolveURL()`:
+
+```{r resolve}
+head(resolveURL(ancestral$members_url[1])$members$omaid)
+```
+
+# Synteny
+
+The OMA Browser also infers the gene order of ancestral genomes.
+`getSynteny()` retrieves the neighbourhood of a HOG at a given level as a
+graph, with the HOGs as nodes and edges between neighbouring HOGs:
+
+```{r synteny}
+synteny <- getSynteny(level = "Saccharomycetaceae", id = root$hog_id,
+    context = 2)
+synteny$nodes
+synteny$links[, c("source", "target", "weight", "orientation")]
+```
+
+The graph can be analysed with graph packages such as igraph:
+
+```{r igraph, eval = requireNamespace("igraph", quietly = TRUE)}
+g <- igraph::graph_from_data_frame(synteny$links, directed = FALSE)
+igraph::degree(g)
+```
+
+# References
+
+Altenhoff AM, Gil M, Gonnet GH, Dessimoz C (2013). Inferring hierarchical
+orthologous groups from orthologous gene pairs. PLoS ONE 8(1): e53786.
+<https://doi.org/10.1371/journal.pone.0053786>
+
+# Session information
+
+```{r session-info}
+sessionInfo()
+```

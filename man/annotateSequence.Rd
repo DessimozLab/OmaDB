@@ -7,20 +7,23 @@
 annotateSequence(query)
 }
 \arguments{
-\item{query}{the sequence to be annotated, it can be either a string or an
-AAString object from the Biostrings package}
+\item{query}{the sequence to be annotated, it can be either a string or
+an AAString object from the Biostrings package}
 }
 \value{
-a data.frame containing the the GO annotation information of the
-       most similar protein to the query sequence
+a data.frame containing the GO annotations (in GAF format
+    columns) of the most similar protein to the query sequence
 }
 \description{
 This function obtain Gene Ontology annotation for a given sequence that
 does not need to exist in the OMA Browser so far. The query sequence will
-analysed and a fast homology detection approach based on kmers will be used
-to detect the closest sequences in OMA. GO annotations for these top hits
-will be used to annotated the query sequence.
+analysed and a fast homology detection approach based on kmers will be
+used to detect the closest sequences in OMA. GO annotations for these top
+hits will be used to annotated the query sequence.
 }
 \examples{
-annotateSequence(query='MNDPSLLGYPNVGPQQQQQQQQQQHAGLLGKGTPNALQQQLHMNQLTGIPPPGLMNNSDVHTSSNNNSRQLLDQLANGNANMLNMNMDNNNNNNNNNNNNNNNGGGSGVMMNASTAAVNSIGMVPTVGTPVNINVNASNPLLHPHLDDPSLLNNPIWKLQLHLAAVSAQSLGQPNIYARQNAMKKYLATQQAQQAQQQAQQQAQQQVPGPFGPGPQAAPPALQPTDFQQSHIAEASKSLVDCTKQALMEMADTLTDSKTAKKQQPTGDSTPSGTATNSAVSTPLTPKIELFANGKDEANQALLQHKKLSQYSIDEDDDIENRMVMPKDSKYDDQLWHALDLSNLQIFNISANIFKYDFLTRLYLNGNSLTELPAEIKNLSNLRVLDLSHNRLTSLPAELGSCFQLKYFYFFDNMVTTLPWEFGNLCNLQFLGVEGNPLEKQFLKILTEKSVTGLIFYLRDNRPEIPLPHERRFIEINTDGEPQREYDSLQQSTEHLATDLAKRTFTVLSYNTLCQHYATPKMYRYTPSWALSWDYRRNKLKEQILSYDSDLLCLQEVESKTFEEYWVPLLDKHGYTGIFHAKARAKTMHSKDSKKVDGCCIFFKRDQFKLITKDAMDFSGAWMKHKKFQRTEDYLNRAMNKDNVALFLKLQHIPSGDTIWAVTTHLHWDPKFNDVKTFQVGVLLDHLETLLKEETSHNFRQDIKKFPVLICGDFNSYINSAVYELINTGRVQIHQEGNGRDFGYMSEKNFSHNLALKSSYNCIGELPFTNFTPSFTDVIDYIWFSTHALRVRGLLGEVDPEYVSKFIGFPNDKFPSDHIPLLARFEFMKTNTGSKKV')
+seq <- paste0("MNDPSLLGYPNVGPQQQQQQQQQQHAGLLGKGTPNALQQQLHMNQLTGIPPPGLMN",
+    "NSDVHTSSNNNSRQLLDQLANGNANMLNMNMDNNNNNNNNNNNNNNNGGGSGVMMNASTAAVNSIGM")
+go <- annotateSequence(query = seq)
+head(go[, c("GO_ID", "GO_name", "Aspect")])
 }

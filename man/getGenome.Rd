@@ -7,29 +7,38 @@
 getGenome(id = NULL, attribute = NULL)
 }
 \arguments{
-\item{id}{A genome identifier. By default, all available genomes will be returned.}
+\item{id}{A genome identifier. By default, all available genomes will be
+returned.}
 
-\item{attribute}{An extra attribute to be returned (proteins)}
+\item{attribute}{An extra attribute to be returned ('proteins' or
+'genes').}
 }
 \value{
-an object containing the JSON keys as attributes or a dataframe
+If no id is given, a data.frame with all genomes. Otherwise an
+    \code{\link{omadb_obj}} with the genome's attributes, or - if
+    \code{attribute} is given - a data.frame with the proteins or genes of
+    the genome.
 }
 \description{
-This function obtains the basic information for one specific genome available
-on the OMA Browser, or - if no id is provided - a dataframe with all available
-genomes.
+This function obtains the basic information for one specific genome
+available on the OMA Browser, or - if no id is provided - a data.frame
+with all available genomes.
 }
 \details{
-Ids can be either the scientific name of a species, the NCBI taxonomy id or
-the UniProtKB mnemonic species code.
+Ids can be either the scientific name of a species, the NCBI taxonomy id
+or the UniProtKB mnemonic species code.
 
 The optional argument attribute can be used to directly load the proteins
-belonging to the genome. Alternatively, you can access the proteins attribute
-of the result which will transparently load the proteins from the OMA Browser.
+(all proteins, including alternative splicing isoforms) or the genes
+(only the main isoform of each gene) of the genome. Alternatively, you can
+access the \code{proteins} attribute of the result which will
+transparently load the proteins from the OMA Browser.
 }
 \examples{
-getGenome()
-getGenome(id='HUMAN')
-getGenome(id=9606)
-getGenome(id='HUMAN',attribute='proteins')
+genomes <- getGenome()
+head(genomes[, c("code", "taxon_id", "species")])
+getGenome(id = "HUMAN")
+getGenome(id = 9606)
+prots <- getGenome(id = "ASHGO", attribute = "proteins")
+nrow(prots)
 }

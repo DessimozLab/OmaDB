@@ -1,65 +1,57 @@
-
 #' Format the GO annotations data
 #'
-#' The function to create a list of GO annotations that is compatible with topGO from protein objects in roma
+#' The function creates a list of GO annotations that is compatible with
+#' topGO from proteins or GO annotations retrieved from the OMA Browser.
 #'
-#' @param geneList the list of OmaDB protein objects or a dataframe of ontologies to be included in the analysis - this is where the GO annotations are extracted from.
-#' @param format format for the data to be returned in - either 'GO2geneID' or 'geneID2GO'
-#' @return a list containing the GO2geneID or geneID2GO information
+#' @param geneList either a list of protein objects (as returned by
+#'     \code{\link{getProtein}} for several ids), or a data.frame of GO
+#'     annotations, e.g. as returned by \code{getProtein(ids, attribute =
+#'     "gene_ontology")} or \code{getHOG(id, attribute = "gene_ontology")}.
+#'     For a data.frame, the genes are identified by the column
+#'     \code{query_id} if present, \code{id} otherwise.
+#' @param format format for the data to be returned in - either 'GO2geneID'
+#'     or 'geneID2GO'
+#' @return a named list containing the GO2geneID or geneID2GO information
 #' @export
 #' @examples
-#' geneList = list(getProtein(id='YEAST01'),getProtein(id='YEAST03'))
-#' annotations = formatTopGO(geneList,format='geneID2GO')
-
-
-
+#' geneList <- getProtein(id = c("YEAST00001", "YEAST00003"))
+#' annotations <- formatTopGO(geneList, format = "geneID2GO")
+#' lengths(annotations)
 formatTopGO <- function(geneList, format) {
-
-    if (!(format %in% list("GO2geneID", "geneID2GO"))) {
+    if (missing(format) || !(format %in% c("GO2geneID", "geneID2GO"))) {
         stop("Invalid format. Must be either 'GO2geneID' or 'geneID2GO'")
     }
-
-    if (class(geneList) == "data.frame") {
-
-        geneNames <- unique(geneList$entry_nr)
-        geneListFormatted <- lapply(geneNames, function(x) geneList[geneList$entry_nr ==
-            x, ]$GO_term)
-
-        names(geneListFormatted) <- geneNames
-
-        geneID2GO <- geneListFormatted
-
-    } else {
-        geneID2GO <- lapply(geneList, FUN = function(protein) {
-
-            if (startsWith(protein[["gene_ontology"]], "https://")) {
-                annotation <- protein$gene_ontology
-
-                if (class(annotation) == "data.frame") {
-                  unlist(as.list(annotation[["GO_term"]]))
-                } else {
-                  annotation
-                }
+    if (is.data.frame(geneList)) {
+        geneID2GO <- .goFromDataFrame(geneList)
+    } else if (is.list(geneList)) {
+        geneList <- Filter(Negate(is.null), geneList)
+        geneID2GO <- lapply(geneList, function(protein) {
+            go <- protein$gene_ontology
+            if (is.data.frame(go) && "GO_term" %in% names(go)) {
+                unique(go$GO_term)
             } else {
-                if (class(annotation) == "data.frame") {
-                  unlist(as.list(protein[["gene_ontology"]][["GO_term"]]))
-                } else {
-                  annotation
-                }
+                character(0)
             }
         })
-
-        names(geneID2GO) <- lapply(geneList, FUN = function(protein) {
-            protein$omaid
-        })
-
+        names(geneID2GO) <- vapply(geneList, function(protein) {
+            as.character(.subset2(protein, "omaid"))
+        }, character(1))
+    } else {
+        stop("geneList must be a list of proteins or a data.frame.")
     }
-
-
     if (format == "geneID2GO") {
         return(geneID2GO)
     }
-    if (format == "GO2geneID") {
-        return(topGO::inverseList(geneID2GO))
+    topGO::inverseList(geneID2GO)
+}
+
+.goFromDataFrame <- function(df) {
+    idCol <- intersect(c("query_id", "id"), names(df))
+    if (length(idCol) == 0L || !("GO_term" %in% names(df))) {
+        stop("The data.frame must have the columns GO_term and ",
+            "query_id or id.")
     }
+    genes <- as.character(df[[idCol[1]]])
+    lapply(split(as.character(df$GO_term), factor(genes, unique(genes))),
+        unique)
 }

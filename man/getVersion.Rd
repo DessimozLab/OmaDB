@@ -2,15 +2,17 @@
 % Please edit documentation in R/getVersion.R
 \name{getVersion}
 \alias{getVersion}
-\title{Get the API and database version function}
+\title{Get the API and database version}
 \usage{
 getVersion()
 }
 \value{
-S3 object
+an \code{\link{omadb_obj}} with the attributes
+    \code{oma_version} and \code{api_version}
 }
 \description{
-The function to obtain the API and database version that the package is using.
+The function obtains the version of the OMA Browser database release
+and of the REST API that the package is using.
 }
 \examples{
 getVersion()
