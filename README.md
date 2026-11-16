@@ -31,6 +31,10 @@ The current version of the package requires R version >= 4.6.
 The latest version of the OmaDB package can also be directly installed from the github repository as below:
 
 ```
+if (!requireNamespace("BiocManager"))
+    install.packages("BiocManager")
+if (!requireNamespace("remotes"))
+    install.packages("remotes")
 BiocManager::install('DessimozLab/OmaDB')
 ```
 

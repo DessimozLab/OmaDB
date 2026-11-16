@@ -3,8 +3,10 @@ Title: R wrapper for the OMA REST API
 Version: 2.29.1
 Authors@R: c(
     person("Klara", "Kaleb", role = "aut"),
-    person("Adrian", "Altenhoff", email = "adrian.altenhoff@inf.ethz.ch",
-        role = c("aut", "cre")))
+    person("Adrian", "Altenhoff", 
+        email = "adrian.altenhoff@inf.ethz.ch",
+        role = c("aut", "cre"),
+        comment = c(ORCID = "0000-0001-7492-1273")))
 Description: A package for the orthology prediction data download from the
     OMA browser database (https://omabrowser.org). It provides access to
     proteins, genomes, Hierarchical Orthologous Groups (HOGs), OMA Groups,
