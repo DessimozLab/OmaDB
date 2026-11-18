@@ -1,6 +1,6 @@
 Package: OmaDB
 Title: R wrapper for the OMA REST API
-Version: 2.29.1
+Version: 2.29.2
 Authors@R: c(
     person("Klara", "Kaleb", role = "aut"),
     person("Adrian", "Altenhoff", 

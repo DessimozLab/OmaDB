@@ -1,3 +1,7 @@
+Changes in version 2.29.2 (2026-11-18)
++ BUG FIXES
+  o CITATION file uses bibentry() and includes the DOI of the publication
+
 Changes in version 2.29.1 (2026-11-13)
 + NEW FEATURES
   o caching of all API responses in memory, and optionally on disk with
