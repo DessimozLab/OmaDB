@@ -16,3 +16,4 @@
 ^\.\.Rcheck$
 ^.*\.Rcheck$
 ^.*\.tar\.gz$
+^\.github$
