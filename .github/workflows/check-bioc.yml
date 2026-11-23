@@ -58,6 +58,10 @@ jobs:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
         r: [release, devel]
+        exclude:
+          # no macOS binaries for R-devel; building from source fails
+          - os: macos-latest
+            r: devel
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     steps:
